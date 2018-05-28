@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center|top"
+    tools:context=".AddExpense">
+
+
+    <TextView
+        android:layout_marginTop="15dp"
+        android:textSize="20sp"
+        android:text="Add new expense"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/description"
+        android:layout_marginTop="20dp"
+        android:inputType="text"
+        android:hint="Description"
+        android:layout_width="200dp"
+        android:layout_height="50dp" />
+
+
+
+    <DatePicker
+        android:id="@+id/date"
+        android:layout_marginTop="0dp"
+        android:layout_width="300dp"
+        android:layout_height="100dp"
+        android:datePickerMode="spinner"
+        android:calendarViewShown="false"
+        android:scaleX="1.0"
+        android:scaleY="1.0"
+        />
+
+    <EditText
+        android:inputType="numberDecimal"
+        android:id="@+id/amount"
+        android:layout_marginTop="10dp"
+        android:hint="Amount"
+        android:layout_width="200dp"
+        android:layout_height="50dp" />
+    
+    <EditText
+        android:id="@+id/category"
+        android:layout_marginTop="10dp"
+        android:hint="Category"
+        android:layout_width="200dp"
+        android:layout_height="50dp" />
+    
+    <Button
+        android:id="@+id/submitButton"
+        android:text="Submit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+</LinearLayout>
