@@ -1,0 +1,14 @@
+<resources>
+    <string name="order_id_mock" translatable="false"># 1234–5678</string>
+    <string name="price_mock" translatable="false">$25</string>
+    <string name="weight_mock" translatable="false">$150</string>
+    <string name="weight_badge" translatable="false">Amount</string>
+    <string name="pledge_mock" translatable="false">Clothes</string>
+    <string name="pledge_badge" translatable="false">Category</string>
+    <string name="request_btn_text" translatable="false">DELETE</string>
+    <string name="content_from1_mock">W 90th St</string>
+    <string name="content_from2_mock">New York, NY 10025</string>
+    <string name="content_to1_mock">46th Ave</string>
+    <string name="content_to2_mock">Woodside, NY 11101</string>
+    <string name="title_activity_main2">Main2Activity</string>
+</resources>

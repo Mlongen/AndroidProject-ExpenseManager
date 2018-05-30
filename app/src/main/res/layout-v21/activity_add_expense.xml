@@ -16,14 +16,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
+    <com.github.florent37.materialtextfield.MaterialTextField
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        app:mtf_labelColor="#666"
+        >
+
     <EditText
         android:id="@+id/description"
-        android:layout_marginTop="20dp"
         android:inputType="text"
         android:hint="Description"
         android:layout_width="200dp"
-        android:layout_height="50dp" />
-
+        android:layout_height="wrap_content" />
+    </com.github.florent37.materialtextfield.MaterialTextField>
 
 
     <DatePicker

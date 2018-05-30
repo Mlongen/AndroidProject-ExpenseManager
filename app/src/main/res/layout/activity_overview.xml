@@ -39,12 +39,21 @@
         android:isScrollContainer="true" />
 
     <android.support.design.widget.FloatingActionButton
-        android:src="@mipmap/ic_launcher_round"
         android:layout_marginTop="20dp"
         android:id="@+id/fab"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_gravity="end|bottom"
 />
+    <Button
+        android:id="@+id/detailsButton"
+        android:text="details"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
+    <Button
+        android:text="graphs"
+        android:id="@+id/graphsButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 </LinearLayout>

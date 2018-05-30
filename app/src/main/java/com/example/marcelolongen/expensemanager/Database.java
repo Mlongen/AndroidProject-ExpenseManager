@@ -8,19 +8,19 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Database {
-    private ArrayList<Entry> entryObjects;
+    private ArrayList<Item> itemObjects;
     private ArrayList categories;
 
     public Database() {
-        entryObjects = new ArrayList<>();
+        itemObjects = new ArrayList<>();
     }
 
-    public ArrayList<Entry> getEntryObjects() {
-        return entryObjects;
+    public ArrayList<Item> getItemObjects() {
+        return itemObjects;
     }
 
-    public void setEntryObjects(ArrayList<Entry> entryObjects) {
-        this.entryObjects = entryObjects;
+    public void setItemObjects(ArrayList<Item> itemObjects) {
+        this.itemObjects = itemObjects;
     }
 
     public ArrayList getCategories() {
@@ -40,8 +40,8 @@ public class Database {
         String text = scan2.nextLine();
         String[] splitted = text.split(";");
         for (int i = 0; i < splitted.length; i += 4) {
-            Entry a = new Entry(1, splitted[i], Double.valueOf(splitted[i + 1]), Integer.valueOf(splitted[i + 2].substring(0, 1)), Integer.valueOf(splitted[i + 2].substring(2, 4)), Integer.valueOf(splitted[i + 2].substring(5, 9)), splitted[i + 3]);
-            entryObjects.add(a);
+            Item a = new Item(1, splitted[i], Double.valueOf(splitted[i + 1]), Integer.valueOf(splitted[i + 2].substring(0, 1)), Integer.valueOf(splitted[i + 2].substring(2, 4)), Integer.valueOf(splitted[i + 2].substring(5, 9)), splitted[i + 3]);
+            itemObjects.add(a);
         }
         scan2.close();
     }

@@ -2,25 +2,20 @@ package com.example.marcelolongen.expensemanager;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class Overview extends AppCompatActivity {
     Database db;
@@ -37,8 +32,32 @@ public class Overview extends AppCompatActivity {
         }
 
         ListView lv = findViewById(R.id.lv);
-        MyAdapter mAdapter = new MyAdapter(this, R.layout.mylist_layout, db.getEntryObjects());
+        MyAdapter mAdapter = new MyAdapter(this, R.layout.mylist_layout, db.getItemObjects());
         lv.setAdapter(mAdapter);
+
+        Button detailsButton = findViewById(R.id.detailsButton);
+
+        detailsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getBaseContext(), DetailsActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        Button graphButton = findViewById(R.id.graphsButton);
+
+        graphButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getBaseContext(), GraphView.class);
+                startActivity(intent);
+            }
+        });
+
+
+
+
 
         FloatingActionButton fb = findViewById(R.id.fab);
 
@@ -56,10 +75,10 @@ public class Overview extends AppCompatActivity {
 
     private class MyAdapter extends ArrayAdapter {
         private int layoutResourceId;
-        private ArrayList<Entry> data;
+        private ArrayList<Item> data;
         // constructor
 
-        public MyAdapter(@NonNull Context context, int resource,  @NonNull ArrayList<Entry> data) {
+        public MyAdapter(@NonNull Context context, int resource,  @NonNull ArrayList<Item> data) {
             super(context, resource, data);
             this.layoutResourceId = resource;
             this.data = data;
