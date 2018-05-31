@@ -4,8 +4,8 @@ android {
     compileSdkVersion 26
     defaultConfig {
         applicationId "com.example.marcelolongen.expensemanager"
-        minSdkVersion 17
-        targetSdkVersion 17
+        minSdkVersion 26
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -35,4 +35,5 @@ dependencies {
     implementation 'com.github.AnyChart:AnyChart-Android:0.2.1'
     implementation 'com.github.florent37:materialtextfield:1.0.7'
     implementation 'com.ramotion.foldingcell:folding-cell:1.2.2'
+    implementation 'com.nightonke:boommenu:2.1.1'
 }

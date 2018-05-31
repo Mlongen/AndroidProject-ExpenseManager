@@ -1,5 +1,6 @@
 package com.example.marcelolongen.expensemanager;
 
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -9,12 +10,16 @@ import android.widget.Toast;
 
 import com.ramotion.foldingcell.FoldingCell;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
 
 public class DetailsActivity extends AppCompatActivity {
     private Database db;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,24 +39,10 @@ public class DetailsActivity extends AppCompatActivity {
         }
 
 
-        // add custom btn handler to first list item
-        db.getItemObjects().get(0).setRequestBtnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "CUSTOM HANDLER FOR FIRST BUTTON", Toast.LENGTH_SHORT).show();
-            }
-        });
+
 
         // create custom adapter that holds elements and their state (we need hold a id's of unfolded elements for reusable elements)
         final FoldingCellListAdapter adapter = new FoldingCellListAdapter(this, db.getItemObjects());
-
-        // add default btn handler for each request btn on each item if custom handler not found
-        adapter.setDefaultRequestBtnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "DEFAULT HANDLER FOR ALL BUTTONS", Toast.LENGTH_SHORT).show();
-            }
-        });
 
         // set elements to adapter
         theListView.setAdapter(adapter);
@@ -66,5 +57,58 @@ public class DetailsActivity extends AppCompatActivity {
                 adapter.registerToggle(pos);
             }
         });
+
+
+        // add custom btn handler to first list item
+        deleteButtonClick(adapter);
+
     }
+
+    private void deleteButtonClick(final FoldingCellListAdapter adapter) {
+        for (int i = 0; i < db.getItemObjects().size();i++) {
+            final int finalI = i;
+            db.getItemObjects().get(i).setRequestBtnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    db.getItemObjects().remove(finalI);
+                    String formatted = db.getObjectsAsFormattedString();
+                    String MYFILE = Environment.getExternalStorageDirectory().toString();
+
+                    String fileName = "entries.txt";
+                    File f = new File(MYFILE,fileName);
+
+                    try (FileOutputStream fop = new FileOutputStream(f, false)) {
+
+                        // if file doesn't exists, then create it
+                        if (!f.exists()) {
+                            f.createNewFile();
+                        }
+
+                        // get the content in bytes
+                        byte[] contentInBytes = formatted.getBytes();
+
+                        fop.write(contentInBytes);
+                        fop.flush();
+                        fop.close();
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    toast("Item removed.");
+                    adapter.notifyDataSetChanged();
+                    deleteButtonClick(adapter);
+                }
+
+
+
+            });
+        }
+    }
+
+    private void toast(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
 }

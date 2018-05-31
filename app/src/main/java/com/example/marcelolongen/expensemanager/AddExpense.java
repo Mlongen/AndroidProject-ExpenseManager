@@ -44,7 +44,11 @@ public class AddExpense extends AppCompatActivity {
         TextView amountText = findViewById(R.id.amount);
         DatePicker datePicker = findViewById(R.id.date);
         String description = descriptionText.getText().toString();
-        String date = String.valueOf(datePicker.getMonth() + "/" + datePicker.getDayOfMonth() + "/" + datePicker.getYear());
+
+        String date = String.valueOf(
+                datePicker.getMonth() + "/" +
+                        datePicker.getDayOfMonth() + "/" +
+                        datePicker.getYear());
         String amount = amountText.getText().toString();
         String category = categoryText.getText().toString();
         String formatted = description + ";" + amount + ";" + date + ";" + category + ";";
