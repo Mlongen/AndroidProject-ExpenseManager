@@ -44,7 +44,7 @@ public class Database {
                 String[] splitted = text.split(";");
                 if (splitted.length > 3) {
                     for (int i = 0; i < splitted.length; i += 4) {
-                        Item a = new Item(1, splitted[i], Double.valueOf(splitted[i + 1]), Integer.valueOf(splitted[i + 2].substring(0, 1)), Integer.valueOf(splitted[i + 2].substring(2, 4)), Integer.valueOf(splitted[i + 2].substring(5, 9)), splitted[i + 3]);
+                        Item a = new Item(1, splitted[i], Double.valueOf(splitted[i + 1]), Integer.valueOf(splitted[i + 2].substring(0, 1)), Integer.valueOf(splitted[i + 2].substring(2, 3)), Integer.valueOf(splitted[i + 2].substring(4, 8)), splitted[i + 3]);
                         itemObjects.add(a);
                     }
                 }

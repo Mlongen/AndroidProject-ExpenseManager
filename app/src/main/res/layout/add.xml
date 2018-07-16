@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@drawable/background"
+    android:layout_width="match_parent"
+    android:layout_height="480dp">
+
+    <TextView
+        android:layout_marginTop="15dp"
+        android:textSize="26sp"
+        android:layout_marginLeft="40dp"
+        android:text="Add new Expense"
+        android:fontFamily="@font/din_condensed"
+        android:textColor="@color/colorPrimary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="0dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+
+
+        <studio.carbonylgroup.textfieldboxes.TextFieldBoxes
+            app:panelBackgroundColor="@color/bgContent"
+            android:scaleX="0.8"
+            android:scaleY="0.8"
+            android:layout_width="179dp"
+            android:layout_height="60dp"
+            android:paddingTop="-20dp"
+            app:labelText="Description">
+
+            <studio.carbonylgroup.textfieldboxes.ExtendedEditText
+                android:id="@+id/description"
+                android:layout_width="108dp"
+                android:layout_height="30dp"
+                android:inputType="text" />
+
+        </studio.carbonylgroup.textfieldboxes.TextFieldBoxes>
+
+        <studio.carbonylgroup.textfieldboxes.TextFieldBoxes
+            app:panelBackgroundColor="@color/bgContent"
+            android:scaleX="0.8"
+            android:scaleY="0.8"
+            android:layout_width="179dp"
+            android:layout_height="60dp"
+            android:layout_marginLeft="5dp"
+            app:labelText="Amount">
+
+            <studio.carbonylgroup.textfieldboxes.ExtendedEditText
+                android:id="@+id/amount"
+
+                app:prefix="$"
+                android:inputType="numberDecimal"
+                android:layout_width="112dp"
+                android:layout_height="30dp" />
+
+        </studio.carbonylgroup.textfieldboxes.TextFieldBoxes>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+
+        android:layout_marginLeft="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+
+
+        <DatePicker
+            android:id="@+id/date"
+            android:layout_width="385dp"
+            android:layout_height="80dp"
+            android:layout_gravity="start"
+            android:layout_marginLeft="-0dp"
+            android:layout_marginTop="-0dp"
+            android:calendarViewShown="false"
+            android:datePickerMode="spinner"
+            android:scaleX="1.2"
+            android:scaleY="1.2"
+
+
+            />
+
+
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginLeft="25dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="165dp"
+            android:layout_height="50dp"
+            android:entries="@array/spinner"
+
+            />
+        <Button
+            style="@style/Base.Widget.AppCompat.Button.Colored"
+            android:id="@+id/submitButton"
+            android:layout_width="150dp"
+            android:layout_height="60dp"
+            android:layout_marginLeft="25dp"
+            android:text="Submit" />
+
+
+
+
+
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

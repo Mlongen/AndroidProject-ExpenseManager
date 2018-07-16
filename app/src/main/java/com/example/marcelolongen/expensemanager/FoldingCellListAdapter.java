@@ -1,17 +1,22 @@
 package com.example.marcelolongen.expensemanager;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ramotion.foldingcell.FoldingCell;
 
 import java.util.HashSet;
 import java.util.List;
+
+import static android.graphics.Color.BLACK;
 
 /**
  * Simple example of ListAdapter for using with Folding Cell
@@ -50,6 +55,9 @@ public class FoldingCellListAdapter extends ArrayAdapter<Item> {
             viewHolder.category = cell.findViewById(R.id.title_pledge);
             viewHolder.category2 = cell.findViewById(R.id.head_image_center_text);
             viewHolder.contentRequestBtn = cell.findViewById(R.id.deleteEntryButton);
+            viewHolder.layout = cell.findViewById(R.id.leftTitle);
+            viewHolder.layout2 = cell.findViewById(R.id.insideTitle);
+            viewHolder.headImage = cell.findViewById(R.id.head_image);
             cell.setTag(viewHolder);
         } else {
             // for existing cell set valid valid state(without animation)
@@ -74,6 +82,34 @@ public class FoldingCellListAdapter extends ArrayAdapter<Item> {
         viewHolder.category.setText(item.getCategory());
         viewHolder.category2.setText(item.getCategory());
         viewHolder.description2.setText(item.getDescription());
+
+        if (item.getCategory().equals("Food")) {
+            viewHolder.layout.setBackgroundColor(0xFFFFA500);
+            viewHolder.layout2.setBackgroundColor(0xFFFFA500);
+            viewHolder.headImage.setImageResource(R.drawable.food);
+        } else if (item.getCategory().equals("Bills")) {
+            viewHolder.layout.setBackgroundColor(Color.RED);
+            viewHolder.layout2.setBackgroundColor(Color.RED);
+            viewHolder.headImage.setImageResource(R.drawable.bills);
+        } else if (item.getCategory().equals("Housing")) {
+            viewHolder.layout.setBackgroundColor(Color.GRAY);
+            viewHolder.layout2.setBackgroundColor(Color.GRAY);
+            viewHolder.headImage.setImageResource(R.drawable.housing);
+
+        } else if (item.getCategory().equals("Health")) {
+            viewHolder.layout.setBackgroundColor(0xFF008000);
+            viewHolder.layout2.setBackgroundColor(0xFF008000);
+            viewHolder.headImage.setImageResource(R.drawable.health);
+        } else if (item.getCategory().equals("Beauty")) {
+            viewHolder.layout.setBackgroundColor(0xFF800080);
+            viewHolder.layout2.setBackgroundColor(0xFF800080);
+            viewHolder.headImage.setImageResource(R.drawable.beauty);
+        } else if (item.getCategory().equals("Social Life")) {
+            viewHolder.headImage.setImageResource(R.drawable.party);
+            viewHolder.layout.setBackgroundColor(0xFFFF80FF);
+            viewHolder.layout2.setBackgroundColor(0xFFFF80FF);
+        }
+
 
         // set custom btn handler for list item from that item
         if (item.getRequestBtnClickListener() != null) {
@@ -122,5 +158,8 @@ public class FoldingCellListAdapter extends ArrayAdapter<Item> {
         TextView date;
         TextView date2;
         TextView time;
+        RelativeLayout layout;
+        RelativeLayout layout2;
+        ImageView headImage;
     }
 }

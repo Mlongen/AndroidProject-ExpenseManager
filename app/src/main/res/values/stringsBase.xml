@@ -1,4 +1,31 @@
 <resources>
     <string name="app_name">ExpenseManager</string>
+    <string-array name="spinner">
+        <item>Category:</item>
+        <item>Food</item>
+        <item>Bills</item>
+        <item>Housing</item>
+        <item>Health</item>
+        <item>Social Life</item>
+        <item>Apparel</item>
+        <item>Beauty</item>
+        <item>Education</item>
+        <item>Other</item>
+    </string-array>
 
+    <string-array name="monthspinner">
+        <item>All</item>
+        <item>January</item>
+        <item>February</item>
+        <item>March</item>
+        <item>April</item>
+        <item>May</item>
+        <item>June</item>
+        <item>July</item>
+        <item>August</item>
+        <item>September</item>
+        <item>October</item>
+        <item>November</item>
+        <item>December</item>
+    </string-array>
 </resources>

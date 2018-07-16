@@ -7,6 +7,7 @@
 
     <!-- content header line -->
     <RelativeLayout
+        android:id="@+id/insideTitle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/bgContentTop"
@@ -21,7 +22,6 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="@string/order_id_mock"
-            android:textColor="@android:color/white"
             android:textSize="20sp" />
 
         <TextView
@@ -57,7 +57,8 @@
             android:layout_width="match_parent"
             android:layout_height="90dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/head_image" />
+            android:src="@drawable/head_image"
+            />
 
 
         <TextView
@@ -69,6 +70,8 @@
             android:layout_alignEnd="@id/head_image"
             android:layout_alignRight="@id/head_image"
             android:paddingBottom="10dp"
+            android:textColor="#000000"
+
             android:paddingEnd="20dp"
             android:paddingRight="20dp"
             android:text="@string/weight_mock" />
@@ -80,22 +83,28 @@
             android:layout_above="@id/head_image_right_text"
             android:layout_alignLeft="@id/head_image_right_text"
             android:layout_alignStart="@id/head_image_right_text"
+            android:textColor="#000000"
             android:text="@string/weight_badge" />
 
         <TextView
             android:id="@+id/head_image_center_text"
             style="@style/ContentImageBadgeText"
+            android:textColor="#000000"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@id/head_image"
             android:layout_centerHorizontal="true"
             android:paddingBottom="10dp"
+            android:textStyle="bold"
             android:text="@string/pledge_mock" />
 
         <TextView
             style="@style/ContentImageBadgeTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="#000000"
+            android:shadowColor="@color/colorPrimaryDark"
+            android:textStyle="bold"
             android:layout_above="@id/head_image_center_text"
             android:layout_alignLeft="@id/head_image_center_text"
             android:layout_alignStart="@id/head_image_center_text"

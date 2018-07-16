@@ -8,8 +8,9 @@
 
     <!-- LEFT TITLE PART -->
     <RelativeLayout
+        android:id="@+id/leftTitle"
         android:layout_width="match_parent"
-        android:layout_height="110dp"
+        android:layout_height="109dp"
         android:layout_weight="3"
         android:background="@color/bgTitleLeft"
         android:gravity="center_horizontal"

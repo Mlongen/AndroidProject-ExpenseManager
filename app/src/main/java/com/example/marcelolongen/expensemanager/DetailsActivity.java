@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.ramotion.foldingcell.FoldingCell;
@@ -15,11 +17,14 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 
 
 public class DetailsActivity extends AppCompatActivity {
     private Database db;
 
+    private ArrayList<Item> displayedItems;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,11 +43,13 @@ public class DetailsActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        displayedItems = new ArrayList<>();
+        displayedItems.addAll(db.getItemObjects());
 
 
 
         // create custom adapter that holds elements and their state (we need hold a id's of unfolded elements for reusable elements)
-        final FoldingCellListAdapter adapter = new FoldingCellListAdapter(this, db.getItemObjects());
+        final FoldingCellListAdapter adapter = new FoldingCellListAdapter(this, displayedItems);
 
         // set elements to adapter
         theListView.setAdapter(adapter);
@@ -61,6 +68,140 @@ public class DetailsActivity extends AppCompatActivity {
 
         // add custom btn handler to first list item
         deleteButtonClick(adapter);
+        RelativeLayout details = findViewById(R.id.leftTitle);
+
+        final Spinner monthSpinner = findViewById(R.id.monthSpinner);
+
+
+        monthSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (monthSpinner.getSelectedItem().toString().equals("All")) {
+                    displayedItems.clear();
+                    displayedItems.addAll(db.getItemObjects());
+                    adapter.notifyDataSetChanged();
+
+
+
+                }
+                else if (monthSpinner.getSelectedItem().toString().equals("January")) {
+                    displayedItems.clear();
+                    for (int i = 0; i < db.getItemObjects().size(); i++) {
+                        if (db.getItemObjects().get(i).getMonth() == 1) {
+                            displayedItems.add(db.getItemObjects().get(i));
+                        }
+
+                    }
+                }
+                else if (monthSpinner.getSelectedItem().toString().equals("February")) {
+                    displayedItems.clear();
+                    for (int i = 0; i < db.getItemObjects().size(); i++) {
+                        if (db.getItemObjects().get(i).getMonth() == 2) {
+                            displayedItems.add(db.getItemObjects().get(i));
+                        }
+
+                    }
+                }
+                else if (monthSpinner.getSelectedItem().toString().equals("March")) {
+                    displayedItems.clear();
+                    for (int i = 0; i < db.getItemObjects().size(); i++) {
+                        if (db.getItemObjects().get(i).getMonth() == 3) {
+                            displayedItems.add(db.getItemObjects().get(i));
+                        }
+
+                    }
+                }
+                else if (monthSpinner.getSelectedItem().toString().equals("April")) {
+                    displayedItems.clear();
+                    for (int i = 0; i < db.getItemObjects().size(); i++) {
+                        if (db.getItemObjects().get(i).getMonth() == 4) {
+                            displayedItems.add(db.getItemObjects().get(i));
+                        }
+
+                    }
+                }
+                else if (monthSpinner.getSelectedItem().toString().equals("May")) {
+                    displayedItems.clear();
+                    for (int i = 0; i < db.getItemObjects().size(); i++) {
+                        if (db.getItemObjects().get(i).getMonth() == 5) {
+                            displayedItems.add(db.getItemObjects().get(i));
+                        }
+
+                    }
+                }
+                else if (monthSpinner.getSelectedItem().toString().equals("June")) {
+                    displayedItems.clear();
+                    for (int i = 0; i < db.getItemObjects().size(); i++) {
+                        if (db.getItemObjects().get(i).getMonth() == 6) {
+                            displayedItems.add(db.getItemObjects().get(i));
+                        }
+
+                    }
+                }
+                else if (monthSpinner.getSelectedItem().toString().equals("July")) {
+                    displayedItems.clear();
+                    for (int i = 0; i < db.getItemObjects().size(); i++) {
+                        if (db.getItemObjects().get(i).getMonth() == 7) {
+                            displayedItems.add(db.getItemObjects().get(i));
+                        }
+
+                    }
+                }
+                else if (monthSpinner.getSelectedItem().toString().equals("August")) {
+                    displayedItems.clear();
+                    for (int i = 0; i < db.getItemObjects().size(); i++) {
+                        if (db.getItemObjects().get(i).getMonth() == 8) {
+                            displayedItems.add(db.getItemObjects().get(i));
+                        }
+
+                    }
+                }
+                else if (monthSpinner.getSelectedItem().toString().equals("September")) {
+                    displayedItems.clear();
+                    for (int i = 0; i < db.getItemObjects().size(); i++) {
+                        if (db.getItemObjects().get(i).getMonth() == 9) {
+                            displayedItems.add(db.getItemObjects().get(i));
+                        }
+
+                    }
+                }
+                else if (monthSpinner.getSelectedItem().toString().equals("October")) {
+                    displayedItems.clear();
+                    for (int i = 0; i < db.getItemObjects().size(); i++) {
+                        if (db.getItemObjects().get(i).getMonth() == 10) {
+                            displayedItems.add(db.getItemObjects().get(i));
+                        }
+
+                    }
+                }
+                else if (monthSpinner.getSelectedItem().toString().equals("November")) {
+                    displayedItems.clear();
+                    for (int i = 0; i < db.getItemObjects().size(); i++) {
+                        if (db.getItemObjects().get(i).getMonth() == 11) {
+                            displayedItems.add(db.getItemObjects().get(i));
+                        }
+
+                    }
+                }
+
+                else if (monthSpinner.getSelectedItem().toString().equals("December")) {
+                    displayedItems.clear();
+                    for (int i = 0; i < db.getItemObjects().size(); i++) {
+                        if (db.getItemObjects().get(i).getMonth() == 12) {
+                            displayedItems.add(db.getItemObjects().get(i));
+                        }
+
+                    }
+                }
+                Collections.reverse(displayedItems);
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
     }
 
@@ -97,6 +238,7 @@ public class DetailsActivity extends AppCompatActivity {
                     }
 
                     toast("Item removed.");
+                    displayedItems.remove(finalI);
                     adapter.notifyDataSetChanged();
                     deleteButtonClick(adapter);
                 }

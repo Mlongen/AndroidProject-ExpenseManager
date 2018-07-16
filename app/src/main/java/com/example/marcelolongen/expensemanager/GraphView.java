@@ -23,40 +23,6 @@ public class GraphView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.graphview);
 
-        AnyChartView anyChartView = findViewById(R.id.any_chart_view);
 
-        Pie pie = AnyChart.pie();
-
-        pie.setOnClickListener(new ListenersInterface.OnClickListener(new String[]{"x", "value"}) {
-            @Override
-            public void onClick(Event event) {
-
-            }
-        });
-
-        List<DataEntry> data = new ArrayList<>();
-        data.add(new ValueDataEntry("Clothes", 664));
-        data.add(new ValueDataEntry("Utilities", 522));
-        data.add(new ValueDataEntry("Rent", 721));
-        data.add(new ValueDataEntry("Beer", 148));
-        data.add(new ValueDataEntry("Food", 420));
-
-        pie.setData(data);
-
-        pie.setTitle("Detailed expenses in the month of May:");
-
-        pie.getLabels().setPosition("outside");
-
-        pie.getLegend().getTitle().setEnabled(true);
-        pie.getLegend().getTitle()
-                .setText("Categories")
-                .setPadding(0d, 0d, 10d, 0d);
-
-        pie.getLegend()
-                .setPosition("center-bottom")
-                .setItemsLayout(LegendLayout.HORIZONTAL)
-                .setAlign(EnumsAlign.CENTER);
-
-        anyChartView.setChart(pie);
     }
 }

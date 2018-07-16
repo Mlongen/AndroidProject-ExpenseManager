@@ -1,67 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:rowCount="3"
+    android:columnCount="2"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center|top"
+    android:orientation="horizontal"
     tools:context=".AddExpense">
 
 
-    <TextView
-        android:layout_marginTop="15dp"
-        android:textSize="20sp"
-        android:text="Add new expense"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <!--<com.github.florent37.materialtextfield.MaterialTextField-->
+        <!--app:mtf_cardCollapsedHeight="8dp"-->
+        <!--android:layout_width="186dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginLeft="10dp"-->
+        <!--android:scaleY="0.8"-->
+        <!--android:scaleX="0.8"-->
+        <!--app:mtf_labelColor="#666"-->
+        <!--app:mtf_openKeyboardOnFocus="true">-->
 
-    <com.github.florent37.materialtextfield.MaterialTextField
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        app:mtf_labelColor="#666"
-        >
+        <!--<EditText-->
+            <!--android:id="@+id/description"-->
+            <!--android:layout_width="172dp"-->
+            <!--android:layout_height="59dp"-->
+            <!--android:layout_marginTop="-10dp"-->
 
-    <EditText
-        android:id="@+id/description"
-        android:inputType="text"
-        android:hint="Description"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content" />
-    </com.github.florent37.materialtextfield.MaterialTextField>
-
-
-    <DatePicker
-        android:id="@+id/date"
-        android:layout_marginTop="0dp"
-        android:layout_width="300dp"
-        android:layout_height="100dp"
-        android:datePickerMode="spinner"
-        android:calendarViewShown="false"
-        android:scaleX="1.0"
-        android:scaleY="1.0"
-        />
-
-    <EditText
-        android:inputType="numberDecimal"
-        android:id="@+id/amount"
-        android:layout_marginTop="10dp"
-        android:hint="Amount"
-        android:layout_width="200dp"
-        android:layout_height="50dp" />
-    
-    <EditText
-        android:id="@+id/category"
-        android:layout_marginTop="10dp"
-        android:hint="Category"
-        android:layout_width="200dp"
-        android:layout_height="50dp" />
-    
-    <Button
-        android:id="@+id/submitButton"
-        android:text="Submit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+            <!--android:hint="Description"-->
+            <!--android:inputType="text" />-->
+    <!--</com.github.florent37.materialtextfield.MaterialTextField>-->
 
 
-</LinearLayout>
+    <!--<DatePicker-->
+        <!--android:id="@+id/date"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="92dp"-->
+        <!--android:layout_column="0"-->
+        <!--android:layout_marginLeft="-40dp"-->
+        <!--android:layout_marginTop="-20dp"-->
+        <!--android:layout_row="1"-->
+        <!--android:calendarViewShown="false"-->
+        <!--android:datePickerMode="spinner"-->
+        <!--android:scaleX="0.6"-->
+        <!--android:scaleY="0.6" />-->
+
+
+    <!--<com.github.florent37.materialtextfield.MaterialTextField-->
+        <!--android:layout_marginLeft="10dp"-->
+        <!--android:layout_width="149dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_column="1"-->
+        <!--android:layout_row="0"-->
+        <!--app:mtf_labelColor="#666"-->
+        <!--app:mtf_openKeyboardOnFocus="true">-->
+
+        <!--<EditText-->
+            <!--android:id="@+id/amount"-->
+            <!--android:layout_width="134dp"-->
+            <!--android:layout_height="62dp"-->
+            <!--android:layout_marginTop="-10dp"-->
+            <!--android:hint="Amount"-->
+            <!--android:inputType="numberDecimal"-->
+            <!--android:scaleX="0.8"-->
+            <!--android:scaleY="0.8" />-->
+    <!--</com.github.florent37.materialtextfield.MaterialTextField>-->
+
+    <!--<studio.carbonylgroup.textfieldboxes.TextFieldBoxes-->
+        <!--android:id="@+id/category"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--app:labelText="Label"-->
+        <!--&gt;-->
+
+        <!--<studio.carbonylgroup.textfieldboxes.ExtendedEditText-->
+            <!--android:id="@+id/extended_edit_text"-->
+            <!--android:layout_width="112dp"-->
+            <!--android:layout_height="wrap_content" />-->
+
+    <!--</studio.carbonylgroup.textfieldboxes.TextFieldBoxes>-->
+    <!--<Button-->
+        <!--android:id="@+id/submitButton"-->
+        <!--android:layout_width="77dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_column="1"-->
+        <!--android:layout_marginLeft="80dp"-->
+        <!--android:layout_row="2"-->
+        <!--android:text="Submit" />-->
+
+
+</GridLayout>
