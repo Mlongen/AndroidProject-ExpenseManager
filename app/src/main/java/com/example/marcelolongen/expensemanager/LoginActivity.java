@@ -44,8 +44,6 @@ import org.json.JSONObject;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private DatabaseReference ref_users;
-
     private String userFromFacebook;
     private FirebaseAuth mAuth;
 
@@ -68,8 +66,6 @@ public class LoginActivity extends AppCompatActivity {
         }
 
 
-//        FirebaseDatabase database = FirebaseDatabase.getInstance();
-//        ref_users = database.getReference("users");
 
         TextView forgotPassword = findViewById(R.id.forgotPassword);
 
