@@ -1,5 +1,6 @@
 package com.example.marcelolongen.expensemanager;
 
+import android.content.Intent;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,6 +11,9 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.ramotion.foldingcell.FoldingCell;
 
 import java.io.File;
@@ -23,8 +27,12 @@ import java.util.HashMap;
 
 public class DetailsActivity extends AppCompatActivity {
     private Database db;
+    private DatabaseReference root;
+    private DatabaseReference user;
+    private int finalI;
 
     private ArrayList<Item> displayedItems;
+    String userName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,17 +42,19 @@ public class DetailsActivity extends AppCompatActivity {
         // get our list view
         ListView theListView = (ListView)findViewById(R.id.mainListView);
 
+        Intent intent = getIntent();
+        userName = intent.getStringExtra("user");
 
+        root = FirebaseDatabase.getInstance().getReference();
+        user = root.child("users").child(userName).child("Expenses");
         // prepare elements to display
         db = new Database();
-        try {
-            db.readContentsFromFile();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        db.readContentsFromFile(userName);
+
 
         displayedItems = new ArrayList<>();
         displayedItems.addAll(db.getItemObjects());
+
 
 
 
@@ -66,8 +76,7 @@ public class DetailsActivity extends AppCompatActivity {
         });
 
 
-        // add custom btn handler to first list item
-        deleteButtonClick(adapter);
+
         RelativeLayout details = findViewById(R.id.leftTitle);
 
         final Spinner monthSpinner = findViewById(R.id.monthSpinner);
@@ -78,8 +87,10 @@ public class DetailsActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (monthSpinner.getSelectedItem().toString().equals("All")) {
                     displayedItems.clear();
+                    System.out.println(db.getItemObjects().size());
                     displayedItems.addAll(db.getItemObjects());
                     adapter.notifyDataSetChanged();
+                    deleteButtonClick(adapter);
 
 
 
@@ -89,6 +100,7 @@ public class DetailsActivity extends AppCompatActivity {
                     for (int i = 0; i < db.getItemObjects().size(); i++) {
                         if (db.getItemObjects().get(i).getMonth() == 1) {
                             displayedItems.add(db.getItemObjects().get(i));
+                            deleteButtonClick(adapter);
                         }
 
                     }
@@ -98,6 +110,7 @@ public class DetailsActivity extends AppCompatActivity {
                     for (int i = 0; i < db.getItemObjects().size(); i++) {
                         if (db.getItemObjects().get(i).getMonth() == 2) {
                             displayedItems.add(db.getItemObjects().get(i));
+                            deleteButtonClick(adapter);
                         }
 
                     }
@@ -107,6 +120,7 @@ public class DetailsActivity extends AppCompatActivity {
                     for (int i = 0; i < db.getItemObjects().size(); i++) {
                         if (db.getItemObjects().get(i).getMonth() == 3) {
                             displayedItems.add(db.getItemObjects().get(i));
+                            deleteButtonClick(adapter);
                         }
 
                     }
@@ -116,6 +130,7 @@ public class DetailsActivity extends AppCompatActivity {
                     for (int i = 0; i < db.getItemObjects().size(); i++) {
                         if (db.getItemObjects().get(i).getMonth() == 4) {
                             displayedItems.add(db.getItemObjects().get(i));
+                            deleteButtonClick(adapter);
                         }
 
                     }
@@ -125,6 +140,7 @@ public class DetailsActivity extends AppCompatActivity {
                     for (int i = 0; i < db.getItemObjects().size(); i++) {
                         if (db.getItemObjects().get(i).getMonth() == 5) {
                             displayedItems.add(db.getItemObjects().get(i));
+                            deleteButtonClick(adapter);
                         }
 
                     }
@@ -134,6 +150,7 @@ public class DetailsActivity extends AppCompatActivity {
                     for (int i = 0; i < db.getItemObjects().size(); i++) {
                         if (db.getItemObjects().get(i).getMonth() == 6) {
                             displayedItems.add(db.getItemObjects().get(i));
+                            deleteButtonClick(adapter);
                         }
 
                     }
@@ -143,6 +160,7 @@ public class DetailsActivity extends AppCompatActivity {
                     for (int i = 0; i < db.getItemObjects().size(); i++) {
                         if (db.getItemObjects().get(i).getMonth() == 7) {
                             displayedItems.add(db.getItemObjects().get(i));
+                            deleteButtonClick(adapter);
                         }
 
                     }
@@ -152,6 +170,7 @@ public class DetailsActivity extends AppCompatActivity {
                     for (int i = 0; i < db.getItemObjects().size(); i++) {
                         if (db.getItemObjects().get(i).getMonth() == 8) {
                             displayedItems.add(db.getItemObjects().get(i));
+                            deleteButtonClick(adapter);
                         }
 
                     }
@@ -161,6 +180,7 @@ public class DetailsActivity extends AppCompatActivity {
                     for (int i = 0; i < db.getItemObjects().size(); i++) {
                         if (db.getItemObjects().get(i).getMonth() == 9) {
                             displayedItems.add(db.getItemObjects().get(i));
+                            deleteButtonClick(adapter);
                         }
 
                     }
@@ -170,6 +190,7 @@ public class DetailsActivity extends AppCompatActivity {
                     for (int i = 0; i < db.getItemObjects().size(); i++) {
                         if (db.getItemObjects().get(i).getMonth() == 10) {
                             displayedItems.add(db.getItemObjects().get(i));
+                            deleteButtonClick(adapter);
                         }
 
                     }
@@ -179,6 +200,7 @@ public class DetailsActivity extends AppCompatActivity {
                     for (int i = 0; i < db.getItemObjects().size(); i++) {
                         if (db.getItemObjects().get(i).getMonth() == 11) {
                             displayedItems.add(db.getItemObjects().get(i));
+                            deleteButtonClick(adapter);
                         }
 
                     }
@@ -189,11 +211,11 @@ public class DetailsActivity extends AppCompatActivity {
                     for (int i = 0; i < db.getItemObjects().size(); i++) {
                         if (db.getItemObjects().get(i).getMonth() == 12) {
                             displayedItems.add(db.getItemObjects().get(i));
+                            deleteButtonClick(adapter);
                         }
 
                     }
                 }
-                Collections.reverse(displayedItems);
                 adapter.notifyDataSetChanged();
             }
 
@@ -202,50 +224,40 @@ public class DetailsActivity extends AppCompatActivity {
 
             }
         });
+        deleteButtonClick(adapter);
 
     }
 
     private void deleteButtonClick(final FoldingCellListAdapter adapter) {
-        for (int i = 0; i < db.getItemObjects().size();i++) {
-            final int finalI = i;
-            db.getItemObjects().get(i).setRequestBtnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+        if (!db.getItemObjects().isEmpty()) {
+            for (int i = 0; i < db.getItemObjects().size();i++) {
+                finalI = i;
+                db.getItemObjects().get(i).setRequestBtnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
 
-                    db.getItemObjects().remove(finalI);
-                    String formatted = db.getObjectsAsFormattedString();
-                    String MYFILE = Environment.getExternalStorageDirectory().toString();
 
-                    String fileName = "entries.txt";
-                    File f = new File(MYFILE,fileName);
-
-                    try (FileOutputStream fop = new FileOutputStream(f, false)) {
-
-                        // if file doesn't exists, then create it
-                        if (!f.exists()) {
-                            f.createNewFile();
-                        }
-
-                        // get the content in bytes
-                        byte[] contentInBytes = formatted.getBytes();
-
-                        fop.write(contentInBytes);
-                        fop.flush();
-                        fop.close();
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                        String id = db.getItemObjects().get(finalI).getId();
+                        user.child(id).removeValue(new DatabaseReference.CompletionListener() {
+                            @Override
+                            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                                if (databaseError == null) {
+                                    Toast.makeText(getApplicationContext(), "Successfully deleted.", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(getApplicationContext(), "Error deleted.", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+                        db.getItemObjects().remove(finalI);
+                        displayedItems.remove(finalI);
+                        adapter.notifyDataSetChanged();
+                        deleteButtonClick(adapter);
                     }
 
-                    toast("Item removed.");
-                    displayedItems.remove(finalI);
-                    adapter.notifyDataSetChanged();
-                    deleteButtonClick(adapter);
-                }
 
 
-
-            });
+                });
+            }
         }
     }
 

@@ -33,6 +33,8 @@ import com.anychart.anychart.Pie;
 import com.anychart.anychart.ValueDataEntry;
 import com.anychart.anychart.chart.common.Event;
 import com.anychart.anychart.chart.common.ListenersInterface;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.nightonke.boommenu.BoomButtons.BoomButton;
 import com.nightonke.boommenu.BoomButtons.ButtonPlaceEnum;
 import com.nightonke.boommenu.BoomButtons.HamButton;
@@ -60,20 +62,28 @@ import java.util.List;
 public class Overview extends AppCompatActivity {
     Database db;
     private BoomMenuButton bmb;
-    private ArrayList<Pair> piecesAndButtons = new ArrayList<>();
     private Double[] sum = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
-
+    private DatabaseReference root;
+    private DatabaseReference user;
+    private String userName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_overview);
+
+        Intent intent = getIntent();
+        userName = intent.getStringExtra("user");
+
+        root = FirebaseDatabase.getInstance().getReference();
+        user = root.child("users").child(userName).child("Expenses");
+        System.out.println(user);
+
+
         db = new Database();
-        try {
-            db.readContentsFromFile();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        db.readContentsFromFile(userName);
+
+
         final ArrayList<Class> classes = new ArrayList<>();
         classes.add(DetailsActivity.class);
         classes.add(GraphView.class);
@@ -152,6 +162,9 @@ public class Overview extends AppCompatActivity {
                         public void onBoomButtonClick(int index) {
                             // When the boom-button corresponding this builder is clicked.
                                 Intent intent = new Intent(getApplicationContext(), classes.get(index));
+                                if (index == 0) {
+                                    intent.putExtra("user", userName);
+                                }
                                 startActivity(intent);
                         }
                     })
@@ -172,6 +185,7 @@ public class Overview extends AppCompatActivity {
             sum[i] = 0.0;
         }
         for (int i = 0; i< db.getItemObjects().size(); i++ ) {
+            System.out.println(db.getItemObjects().size());
             for (int j = 0; j < categories.length;j++) {
                 if (db.getItemObjects().get(i).getCategory().equals(categories[j])&& db.getItemObjects().get(i).getMonth().toString().equals(thisMonth) ) {
                     sum[j] += db.getItemObjects().get(i).getValue();
@@ -218,52 +232,29 @@ public class Overview extends AppCompatActivity {
                                                 datePicker.getYear());
                                 String amount = amountText.getText().toString();
                                 String category = spinner.getSelectedItem().toString();
-//                                if (description.matches("[A-Za-z]{1,20}") &&
-//                                        amount.matches("[0-9]{1,10}") &&
-//                                        category.matches("[A-Za-z]{1,20}")) {
-//                                    String formatted = description + ";" + amount + ";" + date + ";" + category + ";";
+
 
                                     if (description.matches("[A-Za-z]{1,20}") &&
                                             amount.matches("[0-9.]{1,10}")) {
 
-                                        Item newItem = new Item(1, description, Double.valueOf(amount), datePicker.getMonth() + 1, datePicker.getDayOfMonth(), datePicker.getYear(), category);
+                                        String id = user.push().getKey();
+                                        Item newItem = new Item(id, description, Double.valueOf(amount), datePicker.getMonth() + 1, datePicker.getDayOfMonth(), datePicker.getYear(), category);
+                                        user.child(id).setValue(newItem);
+
+
                                         db.getItemObjects().add(newItem);
-                                        String formatted = db.getObjectsAsFormattedString();
-                                    String MYFILE = Environment.getExternalStorageDirectory().toString();
-                                    String fileName = "entries.txt";
-                                    File f = new File(MYFILE,fileName);
 
-                                    try (FileOutputStream fop = new FileOutputStream(f, false)) {
+                                        dialog.dismiss();
+                                       toast("Entry added.");
+                                       db.getItemObjects().clear();
 
-                                        // if file doesn't exists, then create it
-                                        if (!f.exists()) {
-                                            f.createNewFile();
-                                        }
+                                       db.readContentsFromFile(userName);
 
-                                        // get the content in bytes
-                                        byte[] contentInBytes = formatted.getBytes();
-
-                                        fop.write(contentInBytes);
-                                        fop.flush();
-                                        fop.close();
-
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
-
-                                    dialog.dismiss();
-                                    toast("Entry added.");
-                                    db.getItemObjects().clear();
-                                    try {
-                                        db.readContentsFromFile();
-                                    } catch (FileNotFoundException e) {
-                                        e.printStackTrace();
-                                    }
-                                    updateData();
-                                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                                    imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-                            } else {
-                                    toast("Please input valid data.");
+                                      updateData();
+                                      InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                                      imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                                    } else {
+                                     toast("Please input valid data.");
                                 }
 
 

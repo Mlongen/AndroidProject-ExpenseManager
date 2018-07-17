@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:background="@drawable/intro"
     android:gravity="center|top"
-    tools:context=".MainActivity">
+    tools:context=".LoginActivity">
 
     <TextView
 
@@ -51,11 +51,18 @@
             android:layout_height="wrap_content"
             android:visibility="gone"/>
 
+        <CheckBox
+            android:id="@+id/checkBox"
+            android:layout_marginLeft="35dp"
+            android:text="Remember me"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
         <Button
 
             style="@style/Base.Widget.AppCompat.Button.Colored"
             android:id="@+id/submitButton"
-            android:layout_marginTop="15dp"
+
             android:text="Submit"
             android:layout_width="200dp"
             android:layout_height="wrap_content" />
@@ -65,6 +72,21 @@
             android:id="@+id/createUserButton"
             android:text="Create user"
             android:layout_width="200dp"
+            android:layout_height="wrap_content" />
+
+        <com.facebook.login.widget.LoginButton
+            android:id="@+id/login_button"
+            android:layout_width="190dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="30dp" />
+
+        <TextView
+            android:id="@+id/forgotPassword"
+            android:textColor="@color/cpb_white"
+            android:text="Forgot password?"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
     </LinearLayout>

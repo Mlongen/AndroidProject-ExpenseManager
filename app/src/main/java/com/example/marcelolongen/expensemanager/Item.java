@@ -5,7 +5,7 @@ import android.view.View;
 import java.util.ArrayList;
 
 public class Item {
-    private int id;
+    private String id;
     private String description;
     private Double value;
     private Integer month;
@@ -15,8 +15,10 @@ public class Item {
 
     private View.OnClickListener requestBtnClickListener;
 
+    public Item() {
+    }
 
-    public Item(int id, String description, Double value, Integer month, Integer day, Integer year, String category) {
+    public Item(String id, String description, Double value, Integer month, Integer day, Integer year, String category) {
         this.id = id;
         this.description = description;
         this.value = value;
@@ -27,11 +29,11 @@ public class Item {
     }
 
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
