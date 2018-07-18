@@ -40,7 +40,6 @@
         <activity android:name=".Overview" />
 
         <activity android:name=".GraphView" />
-        <activity android:name=".DetailsActivity" />
     </application>
 
 </manifest>

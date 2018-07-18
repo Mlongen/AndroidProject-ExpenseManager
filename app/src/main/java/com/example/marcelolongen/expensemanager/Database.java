@@ -1,6 +1,7 @@
 package com.example.marcelolongen.expensemanager;
 
 import android.os.Environment;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -41,7 +42,7 @@ public class Database {
 
     private DatabaseReference root;
     private DatabaseReference user;
-    public void readContentsFromFile(String userName) {
+    public void readContentsFromFile(final String userName) {
 
         root = FirebaseDatabase.getInstance().getReference();
         user = root.child("users").child(userName).child("Expenses");
@@ -54,7 +55,7 @@ public class Database {
                 for (DataSnapshot artistSnapshot: dataSnapshot.getChildren()) {
                     Item item = artistSnapshot.getValue(Item.class); // {id: .., name: ..., genre: ...)
                     itemObjects.add(item); // add a new artist from DB to an arrayList
-                    System.out.println(itemObjects);
+
                 }
 
             }

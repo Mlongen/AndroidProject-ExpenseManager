@@ -1,10 +1,11 @@
 package com.example.marcelolongen.expensemanager;
 
-import android.content.Intent;
-import android.os.Environment;
-import android.support.v7.app.AppCompatActivity;
+
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -16,34 +17,85 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.ramotion.foldingcell.FoldingCell;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 
-public class DetailsActivity extends AppCompatActivity {
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class DetailsFragment extends Fragment {
+
+    private static final String ARG_USER_NAME= "username";
     private Database db;
     private DatabaseReference root;
     private DatabaseReference user;
     private int finalI;
-
+    private FoldingCellListAdapter foldingCellListAdapter;
     private ArrayList<Item> displayedItems;
-    String userName;
+    private String userName;
+
+    public DetailsFragment() {
+        // Required empty public constructor
+    }
+
+    public static DetailsFragment newInstance(String userName) {
+        Bundle args = new Bundle();
+        args.putSerializable(ARG_USER_NAME, userName);
+
+        DetailsFragment fragment = new DetailsFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.details_activity);
+
+        if (getArguments() != null) {
+            userName = (String) getArguments().getSerializable(ARG_USER_NAME);
+
+        }
+
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+
+        super.setUserVisibleHint(isVisibleToUser);
+        if(isVisibleToUser){
+
+            db.readContentsFromFile(userName);
+            foldingCellListAdapter.notifyDataSetChanged();
+
+        }
+        else{
+            //no
+        }
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        db.readContentsFromFile(userName);
+        foldingCellListAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View v = inflater.inflate(R.layout.fragment_details, container, false);
+
 
         // get our list view
-        ListView theListView = (ListView)findViewById(R.id.mainListView);
+        ListView theListView = (ListView)v.findViewById(R.id.mainListView);
 
-        Intent intent = getIntent();
-        userName = intent.getStringExtra("user");
+
 
         root = FirebaseDatabase.getInstance().getReference();
         user = root.child("users").child(userName).child("Expenses");
@@ -54,15 +106,15 @@ public class DetailsActivity extends AppCompatActivity {
 
         displayedItems = new ArrayList<>();
         displayedItems.addAll(db.getItemObjects());
+        Toast.makeText(getApplicationContext(), displayedItems.toString(), Toast.LENGTH_SHORT).show();
 
 
 
+        // create custom foldingCellListAdapter that holds elements and their state (we need hold a id's of unfolded elements for reusable elements)
+        foldingCellListAdapter = new FoldingCellListAdapter(v.getContext(), displayedItems);
 
-        // create custom adapter that holds elements and their state (we need hold a id's of unfolded elements for reusable elements)
-        final FoldingCellListAdapter adapter = new FoldingCellListAdapter(this, displayedItems);
-
-        // set elements to adapter
-        theListView.setAdapter(adapter);
+        // set elements to foldingCellListAdapter
+        theListView.setAdapter(foldingCellListAdapter);
 
         // set on click event listener to list view
         theListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -70,16 +122,16 @@ public class DetailsActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int pos, long l) {
                 // toggle clicked cell state
                 ((FoldingCell) view).toggle(false);
-                // register in adapter that state for selected cell is toggled
-                adapter.registerToggle(pos);
+                // register in foldingCellListAdapter that state for selected cell is toggled
+                foldingCellListAdapter.registerToggle(pos);
             }
         });
 
 
 
-        RelativeLayout details = findViewById(R.id.leftTitle);
+        RelativeLayout details = v.findViewById(R.id.leftTitle);
 
-        final Spinner monthSpinner = findViewById(R.id.monthSpinner);
+        final Spinner monthSpinner = v.findViewById(R.id.monthSpinner);
 
 
         monthSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -87,10 +139,9 @@ public class DetailsActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (monthSpinner.getSelectedItem().toString().equals("All")) {
                     displayedItems.clear();
-                    System.out.println(db.getItemObjects().size());
                     displayedItems.addAll(db.getItemObjects());
-                    adapter.notifyDataSetChanged();
-                    deleteButtonClick(adapter);
+                    foldingCellListAdapter.notifyDataSetChanged();
+                    deleteButtonClick(foldingCellListAdapter);
 
 
 
@@ -100,7 +151,7 @@ public class DetailsActivity extends AppCompatActivity {
                     for (int i = 0; i < db.getItemObjects().size(); i++) {
                         if (db.getItemObjects().get(i).getMonth() == 1) {
                             displayedItems.add(db.getItemObjects().get(i));
-                            deleteButtonClick(adapter);
+                            deleteButtonClick(foldingCellListAdapter);
                         }
 
                     }
@@ -110,7 +161,7 @@ public class DetailsActivity extends AppCompatActivity {
                     for (int i = 0; i < db.getItemObjects().size(); i++) {
                         if (db.getItemObjects().get(i).getMonth() == 2) {
                             displayedItems.add(db.getItemObjects().get(i));
-                            deleteButtonClick(adapter);
+                            deleteButtonClick(foldingCellListAdapter);
                         }
 
                     }
@@ -120,7 +171,7 @@ public class DetailsActivity extends AppCompatActivity {
                     for (int i = 0; i < db.getItemObjects().size(); i++) {
                         if (db.getItemObjects().get(i).getMonth() == 3) {
                             displayedItems.add(db.getItemObjects().get(i));
-                            deleteButtonClick(adapter);
+                            deleteButtonClick(foldingCellListAdapter);
                         }
 
                     }
@@ -130,7 +181,7 @@ public class DetailsActivity extends AppCompatActivity {
                     for (int i = 0; i < db.getItemObjects().size(); i++) {
                         if (db.getItemObjects().get(i).getMonth() == 4) {
                             displayedItems.add(db.getItemObjects().get(i));
-                            deleteButtonClick(adapter);
+                            deleteButtonClick(foldingCellListAdapter);
                         }
 
                     }
@@ -140,7 +191,7 @@ public class DetailsActivity extends AppCompatActivity {
                     for (int i = 0; i < db.getItemObjects().size(); i++) {
                         if (db.getItemObjects().get(i).getMonth() == 5) {
                             displayedItems.add(db.getItemObjects().get(i));
-                            deleteButtonClick(adapter);
+                            deleteButtonClick(foldingCellListAdapter);
                         }
 
                     }
@@ -150,7 +201,7 @@ public class DetailsActivity extends AppCompatActivity {
                     for (int i = 0; i < db.getItemObjects().size(); i++) {
                         if (db.getItemObjects().get(i).getMonth() == 6) {
                             displayedItems.add(db.getItemObjects().get(i));
-                            deleteButtonClick(adapter);
+                            deleteButtonClick(foldingCellListAdapter);
                         }
 
                     }
@@ -160,7 +211,7 @@ public class DetailsActivity extends AppCompatActivity {
                     for (int i = 0; i < db.getItemObjects().size(); i++) {
                         if (db.getItemObjects().get(i).getMonth() == 7) {
                             displayedItems.add(db.getItemObjects().get(i));
-                            deleteButtonClick(adapter);
+                            deleteButtonClick(foldingCellListAdapter);
                         }
 
                     }
@@ -170,7 +221,7 @@ public class DetailsActivity extends AppCompatActivity {
                     for (int i = 0; i < db.getItemObjects().size(); i++) {
                         if (db.getItemObjects().get(i).getMonth() == 8) {
                             displayedItems.add(db.getItemObjects().get(i));
-                            deleteButtonClick(adapter);
+                            deleteButtonClick(foldingCellListAdapter);
                         }
 
                     }
@@ -180,7 +231,7 @@ public class DetailsActivity extends AppCompatActivity {
                     for (int i = 0; i < db.getItemObjects().size(); i++) {
                         if (db.getItemObjects().get(i).getMonth() == 9) {
                             displayedItems.add(db.getItemObjects().get(i));
-                            deleteButtonClick(adapter);
+                            deleteButtonClick(foldingCellListAdapter);
                         }
 
                     }
@@ -190,7 +241,7 @@ public class DetailsActivity extends AppCompatActivity {
                     for (int i = 0; i < db.getItemObjects().size(); i++) {
                         if (db.getItemObjects().get(i).getMonth() == 10) {
                             displayedItems.add(db.getItemObjects().get(i));
-                            deleteButtonClick(adapter);
+                            deleteButtonClick(foldingCellListAdapter);
                         }
 
                     }
@@ -200,7 +251,7 @@ public class DetailsActivity extends AppCompatActivity {
                     for (int i = 0; i < db.getItemObjects().size(); i++) {
                         if (db.getItemObjects().get(i).getMonth() == 11) {
                             displayedItems.add(db.getItemObjects().get(i));
-                            deleteButtonClick(adapter);
+                            deleteButtonClick(foldingCellListAdapter);
                         }
 
                     }
@@ -211,12 +262,12 @@ public class DetailsActivity extends AppCompatActivity {
                     for (int i = 0; i < db.getItemObjects().size(); i++) {
                         if (db.getItemObjects().get(i).getMonth() == 12) {
                             displayedItems.add(db.getItemObjects().get(i));
-                            deleteButtonClick(adapter);
+                            deleteButtonClick(foldingCellListAdapter);
                         }
 
                     }
                 }
-                adapter.notifyDataSetChanged();
+                foldingCellListAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -224,13 +275,16 @@ public class DetailsActivity extends AppCompatActivity {
 
             }
         });
-        deleteButtonClick(adapter);
+        deleteButtonClick(foldingCellListAdapter);
 
+
+
+        return v;
     }
 
     private void deleteButtonClick(final FoldingCellListAdapter adapter) {
         if (!db.getItemObjects().isEmpty()) {
-            for (int i = 0; i < db.getItemObjects().size();i++) {
+            for (int i = 0; i < db.getItemObjects().size(); i++) {
                 finalI = i;
                 db.getItemObjects().get(i).setRequestBtnClickListener(new View.OnClickListener() {
                     @Override
@@ -261,8 +315,5 @@ public class DetailsActivity extends AppCompatActivity {
         }
     }
 
-    private void toast(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-    }
 
 }
