@@ -25,7 +25,7 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class DetailsFragment extends Fragment {
+public class DetailsFragment extends android.support.v4.app.Fragment {
 
     private static final String ARG_USER_NAME= "username";
     private Database db;
@@ -35,7 +35,7 @@ public class DetailsFragment extends Fragment {
     private FoldingCellListAdapter foldingCellListAdapter;
     private ArrayList<Item> displayedItems;
     private String userName;
-
+    private Spinner monthSpinner;
     public DetailsFragment() {
         // Required empty public constructor
     }
@@ -67,10 +67,7 @@ public class DetailsFragment extends Fragment {
 
         super.setUserVisibleHint(isVisibleToUser);
         if(isVisibleToUser){
-
-            db.readContentsFromFile(userName);
-            foldingCellListAdapter.notifyDataSetChanged();
-
+            monthSpinnerClickListener(monthSpinner);
         }
         else{
             //no
@@ -78,12 +75,6 @@ public class DetailsFragment extends Fragment {
 
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        db.readContentsFromFile(userName);
-        foldingCellListAdapter.notifyDataSetChanged();
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -131,9 +122,18 @@ public class DetailsFragment extends Fragment {
 
         RelativeLayout details = v.findViewById(R.id.leftTitle);
 
-        final Spinner monthSpinner = v.findViewById(R.id.monthSpinner);
+        monthSpinner = v.findViewById(R.id.monthSpinner);
 
 
+        monthSpinnerClickListener(monthSpinner);
+        deleteButtonClick(foldingCellListAdapter);
+
+
+
+        return v;
+    }
+
+    private void monthSpinnerClickListener(final Spinner monthSpinner) {
         monthSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -274,13 +274,10 @@ public class DetailsFragment extends Fragment {
             public void onNothingSelected(AdapterView<?> parent) {
 
             }
+
         });
-        deleteButtonClick(foldingCellListAdapter);
-
-
-
-        return v;
     }
+
 
     private void deleteButtonClick(final FoldingCellListAdapter adapter) {
         if (!db.getItemObjects().isEmpty()) {
