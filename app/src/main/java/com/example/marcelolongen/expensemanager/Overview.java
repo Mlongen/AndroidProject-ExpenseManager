@@ -15,64 +15,38 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Pair;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.ImageButton;
-import android.widget.ListView;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.anychart.anychart.AnyChart;
-import com.anychart.anychart.AnyChartView;
-import com.anychart.anychart.DataEntry;
-import com.anychart.anychart.EnumsAlign;
-import com.anychart.anychart.LegendLayout;
-import com.anychart.anychart.Pie;
-import com.anychart.anychart.ValueDataEntry;
-import com.anychart.anychart.chart.common.Event;
-import com.anychart.anychart.chart.common.ListenersInterface;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.nightonke.boommenu.BoomButtons.BoomButton;
-import com.nightonke.boommenu.BoomButtons.ButtonPlaceEnum;
-import com.nightonke.boommenu.BoomButtons.HamButton;
-import com.nightonke.boommenu.BoomButtons.OnBMClickListener;
-import com.nightonke.boommenu.BoomButtons.SimpleCircleButton;
-import com.nightonke.boommenu.BoomButtons.TextOutsideCircleButton;
-import com.nightonke.boommenu.BoomMenuButton;
-import com.nightonke.boommenu.ButtonEnum;
-import com.nightonke.boommenu.Piece.PiecePlaceEnum;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.OnClickListener;
-import com.orhanobut.dialogplus.OnItemClickListener;
 import com.orhanobut.dialogplus.ViewHolder;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.List;
-
 public class Overview extends AppCompatActivity {
-    public Database db;
+    private Database db;
     private String userName;
-
+    private DatabaseReference root;
+    private DatabaseReference user;
     private TabLayout myTab;
     private ViewPager myPager;
-
-
+    private Button addButton;
+    private EditText descriptionText;
+    private Spinner spinner;
+    private EditText amountText;
+    private DatePicker datePicker;
+    private DetailsFragment detailsFragment;
+    private OverviewFragment overviewFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,13 +55,15 @@ public class Overview extends AppCompatActivity {
         Intent intent = getIntent();
         userName = intent.getStringExtra("user");
 
+        root = FirebaseDatabase.getInstance().getReference();
+        user = root.child("users").child(userName).child("Expenses");
 
 //        FragmentManager fragmentManager = getSupportFragmentManager();
 //        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 //        fragmentTransaction.add(R.id.fragmentContainer, newInstance)
 //                .addToBackStack(null)
 //                .commit(); // just do it
-        db = new Database();
+        db = Database.getInstance();
         db.readContentsFromFile(userName);
 
         myTab = findViewById(R.id.tabLayout);
@@ -113,6 +89,14 @@ public class Overview extends AppCompatActivity {
         });
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.top_menu, menu);
+        return true;
+    }
+
+
 
     class MyPagerAdapter extends FragmentPagerAdapter {
         String[] data = {"Overview", "Details"};
@@ -126,10 +110,12 @@ public class Overview extends AppCompatActivity {
             switch (position) {
                 case 0:
                     myPager.getAdapter().notifyDataSetChanged();
-                    return OverviewFragment.newInstance(userName);
+                    overviewFragment = OverviewFragment.newInstance(userName);
+                    return overviewFragment;
                 case 1:
                     myPager.getAdapter().notifyDataSetChanged();
-                    return DetailsFragment.newInstance(userName);
+                    detailsFragment = DetailsFragment.newInstance(userName);
+                    return detailsFragment;
 
             }
             return null;
@@ -147,6 +133,68 @@ public class Overview extends AppCompatActivity {
         }
 
     }
+
+
+        public void addExpense(MenuItem item) {
+        DialogPlus dialog = DialogPlus.newDialog(Overview.this)
+                .setGravity(Gravity.TOP)
+                .setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(DialogPlus dialog, View view) {
+                        switch (view.getId()) {
+                            case R.id.submitButton:
+                                descriptionText = findViewById(R.id.add_description);
+                                spinner = findViewById(R.id.spinner);
+                                amountText = findViewById(R.id.amount);
+                                datePicker = findViewById(R.id.date);
+                                String description = descriptionText.getText().toString();
+                                //FIGURE OUT WHAT IS CAUSING THE DATEPICKER BUG (THAT I HAD TO USE +1 TO FIX)
+                                String date = String.valueOf(
+                                        (datePicker.getMonth() +1) + "/" +
+                                                datePicker.getDayOfMonth() + "/" +
+                                                datePicker.getYear());
+                                String amount = amountText.getText().toString();
+                                String category = spinner.getSelectedItem().toString();
+
+
+                                    if (description.matches("[A-Za-z]{1,20}") &&
+                                            amount.matches("[0-9.]{1,10}")) {
+
+                                        String id = user.push().getKey();
+                                        Item newItem = new Item(id, description, Double.valueOf(amount), datePicker.getMonth() + 1, datePicker.getDayOfMonth(), datePicker.getYear(), category);
+                                        user.child(id).setValue(newItem);
+
+                                        db.getItemObjects().add(newItem);
+
+                                        dialog.dismiss();
+
+
+                                      InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                                      imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                                      detailsFragment.getAdapter().notifyDataSetChanged();
+                                    }
+
+
+
+
+
+                        }
+
+                    }
+                })
+                .setExpanded(true, 700)  // This will enable the expand feature, (similar to android L share dialog)
+                .setContentHolder(new ViewHolder(R.layout.add))
+                .setCancelable(true)
+                .create();
+        dialog.show();
+        descriptionText = (EditText) dialog.findViewById(R.id.add_description);
+        descriptionText.requestFocus();
+        InputMethodManager imm = (InputMethodManager)  getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(descriptionText, InputMethodManager.SHOW_IMPLICIT);
+    }
+
+
+
 
 }
 

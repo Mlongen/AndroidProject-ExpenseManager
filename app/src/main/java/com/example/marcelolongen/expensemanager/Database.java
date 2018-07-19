@@ -23,6 +23,8 @@ public class Database {
         itemObjects = new ArrayList<>();
     }
 
+    private static Database db;
+
     public ArrayList<Item> getItemObjects() {
         return itemObjects;
     }
@@ -40,6 +42,13 @@ public class Database {
     }
 
 
+    public static Database getInstance(){
+        if (db == null){ //if there is no instance available... create new one
+           db = new Database();
+        }
+
+        return db;
+    }
     private DatabaseReference root;
     private DatabaseReference user;
     public void readContentsFromFile(final String userName) {

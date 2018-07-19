@@ -49,7 +49,7 @@ import java.util.List;
  * A simple {@link Fragment} subclass.
  */
 public class OverviewFragment extends Fragment {
-    public Database db;
+    private Database db;
     private BoomMenuButton bmb;
     private Double[] sum = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
     private DatabaseReference root;
@@ -58,8 +58,10 @@ public class OverviewFragment extends Fragment {
     private String userName;
     private AnyChartView anyChartView;
     private ViewHolder add;
-
-
+    private TextView highestSpending;
+    private TextView highestName;
+    private TextView totalSum;
+    private View thisView;
 
     public OverviewFragment() {
         // Required empty public constructor
@@ -74,12 +76,18 @@ public class OverviewFragment extends Fragment {
         return fragment;
     }
 
+
+
+
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             userName = (String) getArguments().getSerializable(ARG_USER_NAME);
         }
+
+
+
     }
 
     @Override
@@ -87,16 +95,14 @@ public class OverviewFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_overview, container, false);
-
+        db = Database.getInstance();
+        db.readContentsFromFile(userName);
 
 
         root = FirebaseDatabase.getInstance().getReference();
         user = root.child("users").child(userName).child("Expenses");
         System.out.println(user);
 
-
-        db = new Database();
-        db.readContentsFromFile(userName);
 
 
         final ArrayList<Class> classes = new ArrayList<>();
@@ -123,7 +129,8 @@ public class OverviewFragment extends Fragment {
         });
 
 
-        updateData(v);
+
+
 
 
         List<DataEntry> data = new ArrayList<>();
@@ -201,6 +208,7 @@ public class OverviewFragment extends Fragment {
         }
         return v;
     }
+
 
 
     private void updateData(View view) {

@@ -25,7 +25,7 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class DetailsFragment extends android.support.v4.app.Fragment {
+public class DetailsFragment extends android.support.v4.app.Fragment{
 
     private static final String ARG_USER_NAME= "username";
     private Database db;
@@ -35,7 +35,7 @@ public class DetailsFragment extends android.support.v4.app.Fragment {
     private FoldingCellListAdapter foldingCellListAdapter;
     private ArrayList<Item> displayedItems;
     private String userName;
-    private Spinner monthSpinner;
+    public Spinner monthSpinner;
     public DetailsFragment() {
         // Required empty public constructor
     }
@@ -97,12 +97,12 @@ public class DetailsFragment extends android.support.v4.app.Fragment {
 
         displayedItems = new ArrayList<>();
         displayedItems.addAll(db.getItemObjects());
-        Toast.makeText(getApplicationContext(), displayedItems.toString(), Toast.LENGTH_SHORT).show();
-
 
 
         // create custom foldingCellListAdapter that holds elements and their state (we need hold a id's of unfolded elements for reusable elements)
         foldingCellListAdapter = new FoldingCellListAdapter(v.getContext(), displayedItems);
+
+
 
         // set elements to foldingCellListAdapter
         theListView.setAdapter(foldingCellListAdapter);
@@ -133,7 +133,7 @@ public class DetailsFragment extends android.support.v4.app.Fragment {
         return v;
     }
 
-    private void monthSpinnerClickListener(final Spinner monthSpinner) {
+    public void monthSpinnerClickListener(final Spinner monthSpinner) {
         monthSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -222,6 +222,7 @@ public class DetailsFragment extends android.support.v4.app.Fragment {
                         if (db.getItemObjects().get(i).getMonth() == 8) {
                             displayedItems.add(db.getItemObjects().get(i));
                             deleteButtonClick(foldingCellListAdapter);
+
                         }
 
                     }
@@ -232,6 +233,7 @@ public class DetailsFragment extends android.support.v4.app.Fragment {
                         if (db.getItemObjects().get(i).getMonth() == 9) {
                             displayedItems.add(db.getItemObjects().get(i));
                             deleteButtonClick(foldingCellListAdapter);
+
                         }
 
                     }
@@ -242,6 +244,7 @@ public class DetailsFragment extends android.support.v4.app.Fragment {
                         if (db.getItemObjects().get(i).getMonth() == 10) {
                             displayedItems.add(db.getItemObjects().get(i));
                             deleteButtonClick(foldingCellListAdapter);
+
                         }
 
                     }
@@ -252,6 +255,7 @@ public class DetailsFragment extends android.support.v4.app.Fragment {
                         if (db.getItemObjects().get(i).getMonth() == 11) {
                             displayedItems.add(db.getItemObjects().get(i));
                             deleteButtonClick(foldingCellListAdapter);
+
                         }
 
                     }
@@ -263,6 +267,7 @@ public class DetailsFragment extends android.support.v4.app.Fragment {
                         if (db.getItemObjects().get(i).getMonth() == 12) {
                             displayedItems.add(db.getItemObjects().get(i));
                             deleteButtonClick(foldingCellListAdapter);
+
                         }
 
                     }
@@ -278,7 +283,11 @@ public class DetailsFragment extends android.support.v4.app.Fragment {
         });
     }
 
+    public  FoldingCellListAdapter getAdapter() {
+        return this.foldingCellListAdapter;
+    }
 
+    //TODO: FIX DELETE BUTTON CODE
     private void deleteButtonClick(final FoldingCellListAdapter adapter) {
         if (!db.getItemObjects().isEmpty()) {
             for (int i = 0; i < db.getItemObjects().size(); i++) {
