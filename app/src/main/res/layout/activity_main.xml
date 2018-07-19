@@ -33,15 +33,17 @@
         <EditText
             android:id="@+id/username"
             android:layout_marginTop="20dp"
+            android:background="@color/cpb_white"
             android:hint="E-mail"
-            android:layout_width="200dp"
+            android:layout_width="300dp"
             android:layout_height="wrap_content" />
 
         <EditText
             android:id="@+id/password"
+            android:background="@color/cpb_white"
             android:layout_marginTop="20dp"
             android:hint="Password"
-            android:layout_width="200dp"
+            android:layout_width="300dp"
             android:layout_height="wrap_content" />
         <EditText
             android:id="@+id/confirmPassword"
