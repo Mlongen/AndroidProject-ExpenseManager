@@ -45,6 +45,8 @@ import com.google.firebase.database.ValueEventListener;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import es.dmoral.toasty.Toasty;
+
 public class LoginActivity extends AppCompatActivity {
 
     private String userFromFacebook;
@@ -57,6 +59,7 @@ public class LoginActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
 
+
         setContentView(R.layout.activity_main);
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -65,7 +68,7 @@ public class LoginActivity extends AppCompatActivity {
             Intent intent = new Intent(getBaseContext(), Overview.class);
             intent.putExtra("user", user);
             startActivity(intent);
-            toast("Successfully logged in.");
+            toastSuccess("Successfully logged in.");
         }
 
 
@@ -95,13 +98,13 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onCancel() {
                 // App code
-                Toast.makeText(LoginActivity.this, "Canceled", Toast.LENGTH_SHORT).show();
+                Toasty.error(LoginActivity.this, "Canceled", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onError(FacebookException exception) {
                 // App code
-                Toast.makeText(LoginActivity.this, "Error. Try again", Toast.LENGTH_SHORT).show();
+                Toasty.error(LoginActivity.this, "Error. Try again", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -115,18 +118,19 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    private void createUser(String email, String password) {
+    private void createUser(final String email, String password) {
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
+
                 if (task.isSuccessful()) {
                     // Sign in success, update UI with the signed-in user's information
                     FirebaseUser user = mAuth.getCurrentUser();
-                    Toast.makeText(LoginActivity.this, "User created. Please sign-in.", Toast.LENGTH_SHORT).show();
+                    toastSuccess("User created. Please sign-in.");
 
                 } else {
                     // If sign in fails, display a message to the user.
-                    Toast.makeText(getApplicationContext(), "User already exists.",
+                    Toasty.error(getApplicationContext(), "User already exists.",
                             Toast.LENGTH_SHORT).show();
 
                 }
@@ -209,7 +213,7 @@ public class LoginActivity extends AppCompatActivity {
 //
 
                         } else {
-                            Toast.makeText(LoginActivity.this, "Please fill fields correctly.", Toast.LENGTH_SHORT).show();
+                            Toasty.error(LoginActivity.this, "Please fill fields correctly.", Toast.LENGTH_SHORT).show();
                         }
 
                     }
@@ -229,7 +233,7 @@ public class LoginActivity extends AppCompatActivity {
                         !TextUtils.isEmpty(password.getText().toString().trim())) {
                     signInUser(email.getText().toString().trim(), password.getText().toString().trim());
                 } else {
-                    Toast.makeText(LoginActivity.this, "Please input e-mail and password correctly.", Toast.LENGTH_SHORT).show();
+                    Toasty.error(LoginActivity.this, "Please input e-mail and password correctly.", Toast.LENGTH_SHORT).show();
                 }
                 
 
@@ -238,8 +242,9 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void toast(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    private void toastSuccess(String message) {
+        Toasty.Config.getInstance().setInfoColor(getResources().getColor(R.color.colorPrimary)).apply();
+        Toasty.success(this, message, Toast.LENGTH_SHORT).show();
     }
 
     private void handleFacebookAccessToken(AccessToken token) {
@@ -256,7 +261,7 @@ public class LoginActivity extends AppCompatActivity {
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
-                            Toast.makeText(getApplicationContext(), "Authentication failed.",
+                            Toasty.error(getApplicationContext(), "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                         }
 

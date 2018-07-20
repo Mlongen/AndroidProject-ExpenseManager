@@ -63,7 +63,7 @@ public class Database {
                 itemObjects.clear();
                 for (DataSnapshot artistSnapshot: dataSnapshot.getChildren()) {
                     Item item = artistSnapshot.getValue(Item.class); // {id: .., name: ..., genre: ...)
-                    itemObjects.add(item); // add a new artist from DB to an arrayList
+                    itemObjects.add(0, item); // add a new artist from DB to an arrayList
 
                 }
 

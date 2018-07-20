@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:id="@+id/fragmentContainer"
+    android:background="@drawable/background2"
     android:gravity="center|top"
     tools:context=".Overview">
 

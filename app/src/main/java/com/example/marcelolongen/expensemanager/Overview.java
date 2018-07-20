@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Environment;
+import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -26,12 +27,17 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.OnClickListener;
 import com.orhanobut.dialogplus.ViewHolder;
+
+import java.util.ArrayList;
+
+import es.dmoral.toasty.Toasty;
 
 public class Overview extends AppCompatActivity {
     private Database db;
@@ -68,6 +74,7 @@ public class Overview extends AppCompatActivity {
 
         myTab = findViewById(R.id.tabLayout);
         myPager = findViewById(R.id.pager);
+
 
         myPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
 
@@ -165,12 +172,14 @@ public class Overview extends AppCompatActivity {
                                         user.child(id).setValue(newItem);
 
                                         db.getItemObjects().add(newItem);
-
+                                        Toasty.success(getApplicationContext(), description + " added succesfully.", Toast.LENGTH_SHORT).show();
                                         dialog.dismiss();
 
 
                                       InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
                                       imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                                      ArrayList<Item> items = detailsFragment.getDisplayedItems();
+                                      items.add(0, newItem);
                                       detailsFragment.getAdapter().notifyDataSetChanged();
                                     }
 
@@ -187,6 +196,8 @@ public class Overview extends AppCompatActivity {
                 .setCancelable(true)
                 .create();
         dialog.show();
+            Toasty.Config.getInstance().setInfoColor(getResources().getColor(R.color.colorPrimary)).apply();
+            Toasty.info(getApplicationContext(), "message", Toast.LENGTH_SHORT).show();
         descriptionText = (EditText) dialog.findViewById(R.id.add_description);
         descriptionText.requestFocus();
         InputMethodManager imm = (InputMethodManager)  getSystemService(Context.INPUT_METHOD_SERVICE);

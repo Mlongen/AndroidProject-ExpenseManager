@@ -91,7 +91,7 @@ public class DetailsFragment extends android.support.v4.app.Fragment{
         root = FirebaseDatabase.getInstance().getReference();
         user = root.child("users").child(userName).child("Expenses");
         // prepare elements to display
-        db = new Database();
+        db = Database.getInstance();
         db.readContentsFromFile(userName);
 
 
@@ -131,6 +131,10 @@ public class DetailsFragment extends android.support.v4.app.Fragment{
 
 
         return v;
+    }
+
+    public ArrayList<Item> getDisplayedItems() {
+        return displayedItems;
     }
 
     public void monthSpinnerClickListener(final Spinner monthSpinner) {
@@ -311,7 +315,7 @@ public class DetailsFragment extends android.support.v4.app.Fragment{
                         db.getItemObjects().remove(finalI);
                         displayedItems.remove(finalI);
                         adapter.notifyDataSetChanged();
-                        deleteButtonClick(adapter);
+//                        deleteButtonClick(adapter);
                     }
 
 
