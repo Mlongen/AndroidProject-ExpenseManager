@@ -69,6 +69,8 @@ public class Overview extends AppCompatActivity {
 //                .addToBackStack(null)
 //                .commit(); // just do it
         db = Database.getInstance();
+                root = FirebaseDatabase.getInstance().getReference();
+        user = root.child("users").child(userName).child("Expenses");
         myTab = findViewById(R.id.tabLayout);
         myPager = findViewById(R.id.pager);
         Toasty.success(this, "Size: " + db.getItemObjects().size(), Toast.LENGTH_SHORT).show();
