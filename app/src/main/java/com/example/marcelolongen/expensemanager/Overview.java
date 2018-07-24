@@ -12,6 +12,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -55,6 +56,7 @@ public class Overview extends AppCompatActivity {
     private DetailsFragment detailsFragment;
     private OverviewFragment overviewFragment;
     private GraphFragment graphFragment;
+    private MyPagerAdapter myAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,11 +73,16 @@ public class Overview extends AppCompatActivity {
         db = Database.getInstance();
                 root = FirebaseDatabase.getInstance().getReference();
         user = root.child("users").child(userName).child("Expenses");
+
+
+
+
         myTab = findViewById(R.id.tabLayout);
         myPager = findViewById(R.id.pager);
         Toasty.success(this, "Size: " + db.getItemObjects().size(), Toast.LENGTH_SHORT).show();
 
-        myPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
+        myAdapter = new MyPagerAdapter(getSupportFragmentManager());
+        myPager.setAdapter(myAdapter);
 
         myTab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -104,7 +111,7 @@ public class Overview extends AppCompatActivity {
 
 
 
-    class MyPagerAdapter extends FragmentPagerAdapter {
+    class MyPagerAdapter extends FragmentStatePagerAdapter {
         String[] data = {"Overview", "Details", "Graph"};
 
         public MyPagerAdapter(FragmentManager fm) {
@@ -179,7 +186,19 @@ public class Overview extends AppCompatActivity {
                                       imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
                                       ArrayList<Item> items = detailsFragment.getDisplayedItems();
                                       items.add(0, newItem);
+                                      //updating details fragment
                                       detailsFragment.getAdapter().notifyDataSetChanged();
+
+                                      //updating overview fragment
+
+                                       View overView = overviewFragment.getThisView();
+                                       overviewFragment.updateData(overView);
+
+                                      //trying to update graphfragment
+
+
+
+
                                     }
 
 

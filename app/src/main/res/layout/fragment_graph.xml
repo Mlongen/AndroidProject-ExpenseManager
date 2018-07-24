@@ -39,6 +39,13 @@
             android:scaleY="0.85" />
 
 
+        <Button
+            android:id="@+id/change_data"
+            android:text="CHANGE DATA"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
     </LinearLayout>
 
 </LinearLayout>

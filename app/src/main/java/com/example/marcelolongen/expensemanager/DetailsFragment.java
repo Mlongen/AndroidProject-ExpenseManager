@@ -61,8 +61,7 @@ public class DetailsFragment extends android.support.v4.app.Fragment{
 
         super.setUserVisibleHint(isVisibleToUser);
         if(isVisibleToUser){
-            Toasty.success(getApplicationContext(), "Item objects size: " +  db.getItemObjects().size(), Toast.LENGTH_SHORT).show();
-//            monthSpinnerClickListener(monthSpinner);
+            monthSpinnerClickListener(monthSpinner);
         }
         else{
             //no
@@ -91,16 +90,12 @@ public class DetailsFragment extends android.support.v4.app.Fragment{
         ListView theListView = (ListView)v.findViewById(R.id.mainListView);
 
 
-//
-//        root = FirebaseDatabase.getInstance().getReference();
-//        user = root.child("users").child(userName).child("Expenses");
         // prepare elements to display
         db = Database.getInstance();
-//        db.readContentsFromFile(userName);
+
 
         displayedItems = new ArrayList<>();
-//        displayedItems.addAll(db.getItemObjects());
-//        Toasty.success(this.getContext(), displayedItems.toString(), Toast.LENGTH_SHORT).show();
+
 
 
 
@@ -133,7 +128,6 @@ public class DetailsFragment extends android.support.v4.app.Fragment{
         foldingCellListAdapter.notifyDataSetChanged();
         monthSpinnerClickListener(monthSpinner);
         deleteButtonClick(foldingCellListAdapter);
-        Toasty.success(getApplicationContext(), "Item objects size: " +  db.getItemObjects().size(), Toast.LENGTH_SHORT).show();
 
 
         return v;
@@ -144,15 +138,12 @@ public class DetailsFragment extends android.support.v4.app.Fragment{
     }
 
     public void monthSpinnerClickListener(final Spinner monthSpinner) {
-        Toasty.success(getApplicationContext(), "Item objects size: " +  db.getItemObjects().size(), Toast.LENGTH_SHORT).show();
         monthSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (monthSpinner.getSelectedItem().toString().equals("All")) {
-                    Toasty.success(getApplicationContext(), "Item objects size: " +  db.getItemObjects().size(), Toast.LENGTH_SHORT).show();
                     displayedItems.clear();
-                    Toasty.success(getApplicationContext(), "Item objects size: " +  db.getItemObjects().size(), Toast.LENGTH_SHORT).show();
                     displayedItems.addAll(db.getItemObjects());
 
                     foldingCellListAdapter.notifyDataSetChanged();

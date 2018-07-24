@@ -8,6 +8,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
 
 import com.anychart.anychart.AnyChart;
 import com.anychart.anychart.AnyChartView;
@@ -126,11 +128,24 @@ public class GraphFragment extends Fragment {
                 .setAlign(EnumsAlign.CENTER);
         anyChartView.setChart(pie);
 
+        Button changeData = v.findViewById(R.id.change_data);
+        changeData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                    sum[3] +=5000;
+                    Toast.makeText(getContext(), sum[3].toString(), Toast.LENGTH_SHORT).show();
+
+
+            }
+        });
+
 
 
         return v;
 
     }
+
 
 
 }

@@ -1,8 +1,10 @@
 package com.example.marcelolongen.expensemanager;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
@@ -53,6 +55,8 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private CallbackManager callbackManager;
     private Database db;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -165,14 +169,28 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
-    private void updateUI(FirebaseUser user) {
+    private void updateUI(final FirebaseUser user) {
         db = Database.getInstance();
         db.readContentsFromFile(user.getUid());
 
+        ProgressDialog progress = new ProgressDialog(this);
+
+        progress.setMessage("Retrieving data.Please wait...");
+        progress.setCancelable(false); // disable dismiss by tapping outside of the dialog
+        progress.show();
+
+        new Handler().postDelayed(new Runnable() {
+                                      @Override
+                                      public void run() {
+                                          Intent intent = new Intent(getApplicationContext(), Overview.class);
+                                          intent.putExtra("user", user.getUid());
+                                          startActivity(intent);
+                                      }
+                                  },
+                2000);
+
         Toasty.success(getApplicationContext(), "Item objects size: " +  db.getItemObjects().size(), Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(getApplicationContext(), Overview.class);
-        intent.putExtra("user", user.getUid());
-        startActivity(intent);
+
 
 
     }

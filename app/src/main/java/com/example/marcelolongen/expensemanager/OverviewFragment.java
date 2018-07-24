@@ -79,14 +79,16 @@ public class OverviewFragment extends Fragment {
     }
 
 
-
+    public View getThisView() {
+        return thisView;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Toasty.success(this.getContext(), "Successfully logged in", Toast.LENGTH_SHORT).show();
         db = Database.getInstance();
-        Toasty.success(this.getContext(), "Item size: " + db.getItemObjects().size() + this.getActivity(), Toast.LENGTH_SHORT).show();
+
 
 
 
@@ -96,16 +98,15 @@ public class OverviewFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_overview, container, false);
+        thisView = inflater.inflate(R.layout.fragment_overview, container, false);
 //        db.readContentsFromFile(userName);
-        Toasty.success(getContext(), "Item objects size: " +  db.getItemObjects().size(), Toast.LENGTH_SHORT).show();
+
 
         final ArrayList<Class> classes = new ArrayList<>();
-        classes.add(GraphView.class);
         String[] names = {"Detailed list", "Settings"};
 
 
-        bmb = (BoomMenuButton) v.findViewById(R.id.bmb);
+        bmb = (BoomMenuButton) thisView.findViewById(R.id.bmb);
         assert bmb != null;
 
 
@@ -150,47 +151,51 @@ public class OverviewFragment extends Fragment {
 
         }
 
-        return v;
+        return thisView;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        updateData(thisView);
+    }
+
+    public void updateData(View view) {
+        String[] categories = {"Food", "Bills", "Housing", "Health", "Social Life", "Apparel", "Beauty", "Education", "Other"};
+
+        @SuppressLint("SimpleDateFormat") String thisMonth = new SimpleDateFormat("M").format(Calendar.getInstance().getTime());
+
+        //clearing data
+        for (int i = 0; i < sum.length; i++) {
+            sum[i] = 0.0;
+        }
+        for (int i = 0; i< db.getItemObjects().size(); i++ ) {
+            System.out.println("hey");
+            for (int j = 0; j < categories.length;j++) {
+                if (db.getItemObjects().get(i).getCategory().equals(categories[j])&& db.getItemObjects().get(i).getMonth().toString().equals(thisMonth) ) {
+                    sum[j] += db.getItemObjects().get(i).getValue();
+                }
+            }
+        }
 
 
-//    private void updateData(View view) {
-//        String[] categories = {"Food", "Bills", "Housing", "Health", "Social Life", "Apparel", "Beauty", "Education", "Other"};
-//
-//        @SuppressLint("SimpleDateFormat") String thisMonth = new SimpleDateFormat("M").format(Calendar.getInstance().getTime());
-//
-//        //clearing data
-//        for (int i = 0; i < sum.length; i++) {
-//            sum[i] = 0.0;
-//        }
-//        for (int i = 0; i< db.getItemObjects().size(); i++ ) {
-//            System.out.println("hey");
-//            for (int j = 0; j < categories.length;j++) {
-//                if (db.getItemObjects().get(i).getCategory().equals(categories[j])&& db.getItemObjects().get(i).getMonth().toString().equals(thisMonth) ) {
-//                    sum[j] += db.getItemObjects().get(i).getValue();
-//                }
-//            }
-//        }
-//
-//
-//        TextView highestSpending = view.findViewById(R.id.highestCategory);
-//        TextView highestName = view.findViewById(R.id.highestName);
-//
-//        TextView totalSum = view.findViewById(R.id.totalSum);
-//        double sumTotal = sum[0] + sum[1] + sum[2] + sum[3] + sum[4] + sum[5] + sum[6] + sum[7] + sum[8];
-//        totalSum.setText("CAD: " + String.valueOf(sumTotal) + "0");
-//        double highestValue = sum[0];
-//        int highestIndex = 0;
-//        for (int i = 0; i < sum.length; i++) {
-//            if (sum[i] > highestValue) {
-//                highestValue = sum[i];
-//                highestIndex = i;
-//            }
-//        }
-//        highestSpending.setText("CAD: " + String.valueOf(highestValue) + "0");
-//        highestName.setText(categories[highestIndex]);
-//    }
+        TextView highestSpending = view.findViewById(R.id.highestCategory);
+        TextView highestName = view.findViewById(R.id.highestName);
+
+        TextView totalSum = view.findViewById(R.id.totalSum);
+        double sumTotal = sum[0] + sum[1] + sum[2] + sum[3] + sum[4] + sum[5] + sum[6] + sum[7] + sum[8];
+        totalSum.setText("CAD: " + String.valueOf(sumTotal) + "0");
+        double highestValue = sum[0];
+        int highestIndex = 0;
+        for (int i = 0; i < sum.length; i++) {
+            if (sum[i] > highestValue) {
+                highestValue = sum[i];
+                highestIndex = i;
+            }
+        }
+        highestSpending.setText("CAD: " + String.valueOf(highestValue) + "0");
+        highestName.setText(categories[highestIndex]);
+    }
 
 
 
