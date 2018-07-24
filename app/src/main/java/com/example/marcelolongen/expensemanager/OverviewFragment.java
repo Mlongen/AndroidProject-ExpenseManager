@@ -44,6 +44,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import es.dmoral.toasty.Toasty;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -82,9 +84,9 @@ public class OverviewFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            userName = (String) getArguments().getSerializable(ARG_USER_NAME);
-        }
+        Toasty.success(this.getContext(), "Successfully logged in", Toast.LENGTH_SHORT).show();
+        db = Database.getInstance();
+        Toasty.success(this.getContext(), "Item size: " + db.getItemObjects().size() + this.getActivity(), Toast.LENGTH_SHORT).show();
 
 
 
@@ -95,72 +97,13 @@ public class OverviewFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_overview, container, false);
-        db = Database.getInstance();
-        db.readContentsFromFile(userName);
-
-
-        root = FirebaseDatabase.getInstance().getReference();
-        user = root.child("users").child(userName).child("Expenses");
-        System.out.println(user);
-
-
+//        db.readContentsFromFile(userName);
+        Toasty.success(getContext(), "Item objects size: " +  db.getItemObjects().size(), Toast.LENGTH_SHORT).show();
 
         final ArrayList<Class> classes = new ArrayList<>();
         classes.add(GraphView.class);
         String[] names = {"Detailed list", "Settings"};
 
-        ImageButton addNew = v.findViewById(R.id.addExpense);
-        addNew.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addExpense(v);;
-
-            }
-        });
-        anyChartView = v.findViewById(R.id.any_chart_view);
-        add = new ViewHolder(R.layout.add);
-        Pie pie = AnyChart.pie();
-
-        pie.setOnClickListener(new ListenersInterface.OnClickListener(new String[]{"x", "value"}) {
-            @Override
-            public void onClick(Event event) {
-
-            }
-        });
-
-
-
-
-
-
-        List<DataEntry> data = new ArrayList<>();
-        data.add(new ValueDataEntry("Food", sum[0]));
-        data.add(new ValueDataEntry("Bills", sum[1]));
-        data.add(new ValueDataEntry("Housing", sum[2]));
-        data.add(new ValueDataEntry("Health", sum[3]));
-        data.add(new ValueDataEntry("Social Life", sum[4]));
-        data.add(new ValueDataEntry("Apparel", sum[5]));
-        data.add(new ValueDataEntry("Beauty", sum[6]));
-        data.add(new ValueDataEntry("Education", sum[7]));
-        data.add(new ValueDataEntry("Other", sum[8]));
-
-        pie.setData(data);
-
-        pie.setTitle("Detailed expenses for this month:");
-
-        pie.getLabels().setPosition("outside");
-
-        pie.getLegend().getTitle().setEnabled(true);
-        pie.getLegend().getTitle()
-                .setText("Categories")
-                .setPadding(0d, 0d, 10d, 0d);
-
-        pie.getLegend()
-                .setPosition("center-bottom")
-                .setItemsLayout(LegendLayout.HORIZONTAL)
-                .setAlign(EnumsAlign.CENTER);
-        anyChartView.setChart(pie);
-        //Adding BMB
 
         bmb = (BoomMenuButton) v.findViewById(R.id.bmb);
         assert bmb != null;
@@ -206,114 +149,50 @@ public class OverviewFragment extends Fragment {
 
 
         }
+
         return v;
     }
 
 
 
-    private void updateData(View view) {
-        String[] categories = {"Food", "Bills", "Housing", "Health", "Social Life", "Apparel", "Beauty", "Education", "Other"};
-
-        @SuppressLint("SimpleDateFormat") String thisMonth = new SimpleDateFormat("M").format(Calendar.getInstance().getTime());
-
-        //clearing data
-        for (int i = 0; i < sum.length; i++) {
-            sum[i] = 0.0;
-        }
-        for (int i = 0; i< db.getItemObjects().size(); i++ ) {
-            System.out.println(db.getItemObjects().size());
-            for (int j = 0; j < categories.length;j++) {
-                if (db.getItemObjects().get(i).getCategory().equals(categories[j])&& db.getItemObjects().get(i).getMonth().toString().equals(thisMonth) ) {
-                    sum[j] += db.getItemObjects().get(i).getValue();
-                }
-            }
-        }
-
-
-        TextView highestSpending = view.findViewById(R.id.highestCategory);
-        TextView highestName = view.findViewById(R.id.highestName);
-
-        TextView totalSum = view.findViewById(R.id.totalSum);
-        double sumTotal = sum[0] + sum[1] + sum[2] + sum[3] + sum[4] + sum[5] + sum[6] + sum[7] + sum[8];
-        totalSum.setText("CAD: " + String.valueOf(sumTotal) + "0");
-        double highestValue = sum[0];
-        int highestIndex = 0;
-        for (int i = 0; i < sum.length; i++) {
-            if (sum[i] > highestValue) {
-                highestValue = sum[i];
-                highestIndex = i;
-            }
-        }
-        highestSpending.setText("CAD: " + String.valueOf(highestValue) + "0");
-        highestName.setText(categories[highestIndex]);
-    }
-
-    private void addExpense(View view) {
-        DialogPlus dialog = DialogPlus.newDialog(view.getContext())
-                .setGravity(Gravity.TOP)
-                .setExpanded(true, 700)  // This will enable the expand feature, (similar to android L share dialog)
-                .setContentHolder(add)
-                .setCancelable(true)
-                .setOnClickListener(new OnClickListener() {
-                    @Override
-                    public void onClick(DialogPlus dialog, View view) {
-                        switch (view.getId()) {
-                            case R.id.submitButton:
-                                TextView descriptionText = add.getInflatedView().findViewById(R.id.description);
-                                final Spinner spinner = add.getInflatedView().findViewById(R.id.spinner);
-                                TextView amountText = add.getInflatedView().findViewById(R.id.amount);
-                                DatePicker datePicker = add.getInflatedView().findViewById(R.id.date);
-                                String description = descriptionText.getText().toString();
-                                //FIGURE OUT WHAT IS CAUSING THE DATEPICKER BUG (THAT I HAD TO USE +1 TO FIX)
-                                String date = String.valueOf(
-                                        (datePicker.getMonth() +1) + "/" +
-                                                datePicker.getDayOfMonth() + "/" +
-                                                datePicker.getYear());
-                                String amount = amountText.getText().toString();
-                                String category = spinner.getSelectedItem().toString();
+//    private void updateData(View view) {
+//        String[] categories = {"Food", "Bills", "Housing", "Health", "Social Life", "Apparel", "Beauty", "Education", "Other"};
+//
+//        @SuppressLint("SimpleDateFormat") String thisMonth = new SimpleDateFormat("M").format(Calendar.getInstance().getTime());
+//
+//        //clearing data
+//        for (int i = 0; i < sum.length; i++) {
+//            sum[i] = 0.0;
+//        }
+//        for (int i = 0; i< db.getItemObjects().size(); i++ ) {
+//            System.out.println("hey");
+//            for (int j = 0; j < categories.length;j++) {
+//                if (db.getItemObjects().get(i).getCategory().equals(categories[j])&& db.getItemObjects().get(i).getMonth().toString().equals(thisMonth) ) {
+//                    sum[j] += db.getItemObjects().get(i).getValue();
+//                }
+//            }
+//        }
+//
+//
+//        TextView highestSpending = view.findViewById(R.id.highestCategory);
+//        TextView highestName = view.findViewById(R.id.highestName);
+//
+//        TextView totalSum = view.findViewById(R.id.totalSum);
+//        double sumTotal = sum[0] + sum[1] + sum[2] + sum[3] + sum[4] + sum[5] + sum[6] + sum[7] + sum[8];
+//        totalSum.setText("CAD: " + String.valueOf(sumTotal) + "0");
+//        double highestValue = sum[0];
+//        int highestIndex = 0;
+//        for (int i = 0; i < sum.length; i++) {
+//            if (sum[i] > highestValue) {
+//                highestValue = sum[i];
+//                highestIndex = i;
+//            }
+//        }
+//        highestSpending.setText("CAD: " + String.valueOf(highestValue) + "0");
+//        highestName.setText(categories[highestIndex]);
+//    }
 
 
-                                if (description.matches("[A-Za-z]{1,20}") &&
-                                        amount.matches("[0-9.]{1,10}")) {
-
-                                    String id = user.push().getKey();
-                                    Item newItem = new Item(id, description, Double.valueOf(amount), datePicker.getMonth() + 1, datePicker.getDayOfMonth(), datePicker.getYear(), category);
-                                    user.child(id).setValue(newItem);
-
-
-                                    db.getItemObjects().add(newItem);
-
-                                    dialog.dismiss();
-                                    toast("Entry added.");
-                                    db.getItemObjects().clear();
-
-                                    db.readContentsFromFile(userName);
-
-                                    updateData(view.getRootView());
-
-                                    InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                                    imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
-                                } else {
-                                    toast("Please input valid data.");
-                                }
-
-
-
-
-
-                        }
-
-                    }
-                })
-
-                .create();
-        dialog.show();
-
-        TextView descriptionText = add.getInflatedView().findViewById(R.id.description);
-        descriptionText.requestFocus();
-        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.showSoftInput(descriptionText, InputMethodManager.SHOW_IMPLICIT);
-    }
 
     private void toast(String message) {
         Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();

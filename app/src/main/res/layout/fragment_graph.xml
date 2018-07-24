@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/graph_fragment"
+    tools:context=".GraphFragment">
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center|top"
+        android:background="@android:color/transparent">
+
+
+
+
+        <TextView
+            android:layout_marginTop="15dp"
+            android:textSize="30sp"
+            android:text="Graphs"
+
+            android:fontFamily="@font/din_condensed"
+            android:textColor="@color/colorPrimary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
+
+        <com.anychart.anychart.AnyChartView
+
+            android:layout_marginTop="20dp"
+            android:id="@+id/any_chart_view"
+            android:layout_width="match_parent"
+            android:layout_height="380dp"
+            android:scaleX="0.85"
+            android:scaleY="0.85" />
+
+
+    </LinearLayout>
+
+</LinearLayout>

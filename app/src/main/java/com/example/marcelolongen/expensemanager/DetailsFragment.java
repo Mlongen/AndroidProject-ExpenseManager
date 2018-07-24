@@ -2,6 +2,7 @@ package com.example.marcelolongen.expensemanager;
 
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.ramotion.foldingcell.FoldingCell;
 
 import java.util.ArrayList;
+
+import es.dmoral.toasty.Toasty;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
@@ -51,23 +54,15 @@ public class DetailsFragment extends android.support.v4.app.Fragment{
 
 
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
 
-        if (getArguments() != null) {
-            userName = (String) getArguments().getSerializable(ARG_USER_NAME);
-
-        }
-
-    }
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
 
         super.setUserVisibleHint(isVisibleToUser);
         if(isVisibleToUser){
-            monthSpinnerClickListener(monthSpinner);
+            Toasty.success(getApplicationContext(), "Item objects size: " +  db.getItemObjects().size(), Toast.LENGTH_SHORT).show();
+//            monthSpinnerClickListener(monthSpinner);
         }
         else{
             //no
@@ -75,6 +70,15 @@ public class DetailsFragment extends android.support.v4.app.Fragment{
 
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            userName = (String) getArguments().getSerializable(ARG_USER_NAME);
+
+        }
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -87,16 +91,18 @@ public class DetailsFragment extends android.support.v4.app.Fragment{
         ListView theListView = (ListView)v.findViewById(R.id.mainListView);
 
 
-
-        root = FirebaseDatabase.getInstance().getReference();
-        user = root.child("users").child(userName).child("Expenses");
+//
+//        root = FirebaseDatabase.getInstance().getReference();
+//        user = root.child("users").child(userName).child("Expenses");
         // prepare elements to display
         db = Database.getInstance();
-        db.readContentsFromFile(userName);
-
+//        db.readContentsFromFile(userName);
 
         displayedItems = new ArrayList<>();
-        displayedItems.addAll(db.getItemObjects());
+//        displayedItems.addAll(db.getItemObjects());
+//        Toasty.success(this.getContext(), displayedItems.toString(), Toast.LENGTH_SHORT).show();
+
+
 
 
         // create custom foldingCellListAdapter that holds elements and their state (we need hold a id's of unfolded elements for reusable elements)
@@ -124,10 +130,10 @@ public class DetailsFragment extends android.support.v4.app.Fragment{
 
         monthSpinner = v.findViewById(R.id.monthSpinner);
 
-
+        foldingCellListAdapter.notifyDataSetChanged();
         monthSpinnerClickListener(monthSpinner);
         deleteButtonClick(foldingCellListAdapter);
-
+        Toasty.success(getApplicationContext(), "Item objects size: " +  db.getItemObjects().size(), Toast.LENGTH_SHORT).show();
 
 
         return v;
@@ -138,12 +144,17 @@ public class DetailsFragment extends android.support.v4.app.Fragment{
     }
 
     public void monthSpinnerClickListener(final Spinner monthSpinner) {
+        Toasty.success(getApplicationContext(), "Item objects size: " +  db.getItemObjects().size(), Toast.LENGTH_SHORT).show();
         monthSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (monthSpinner.getSelectedItem().toString().equals("All")) {
+                    Toasty.success(getApplicationContext(), "Item objects size: " +  db.getItemObjects().size(), Toast.LENGTH_SHORT).show();
                     displayedItems.clear();
+                    Toasty.success(getApplicationContext(), "Item objects size: " +  db.getItemObjects().size(), Toast.LENGTH_SHORT).show();
                     displayedItems.addAll(db.getItemObjects());
+
                     foldingCellListAdapter.notifyDataSetChanged();
                     deleteButtonClick(foldingCellListAdapter);
 

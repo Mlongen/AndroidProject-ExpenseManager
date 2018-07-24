@@ -77,7 +77,7 @@
                     android:id="@+id/totalSum"
                     android:layout_marginTop="5dp"
                     android:textSize="18sp"
-                    android:text="CAD 1560.00"
+                    android:text="CAD 0.0"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
@@ -99,30 +99,12 @@
                     android:layout_height="wrap_content" />
                 <TextView
                     android:layout_marginTop="5dp"
-                    android:text="1333.67"
+                    android:text="0.0"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="18sp"
                     android:id="@+id/highestCategory"
                     />
-                <TextView
-                    android:layout_marginTop="50dp"
-                    android:textSize="28sp"
-                    android:textColor="@color/colorPrimary"
-                    android:fontFamily="@font/din_condensed"
-                    android:text="Graphs"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    />
-
-                <com.anychart.anychart.AnyChartView
-
-                    android:layout_marginTop="20dp"
-                    android:id="@+id/any_chart_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="380dp"
-                    android:scaleX="0.85"
-                    android:scaleY="0.85" />
 
 
             </LinearLayout>

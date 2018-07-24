@@ -36,6 +36,7 @@ import com.orhanobut.dialogplus.OnClickListener;
 import com.orhanobut.dialogplus.ViewHolder;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import es.dmoral.toasty.Toasty;
 
@@ -53,6 +54,7 @@ public class Overview extends AppCompatActivity {
     private DatePicker datePicker;
     private DetailsFragment detailsFragment;
     private OverviewFragment overviewFragment;
+    private GraphFragment graphFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,20 +63,15 @@ public class Overview extends AppCompatActivity {
         Intent intent = getIntent();
         userName = intent.getStringExtra("user");
 
-        root = FirebaseDatabase.getInstance().getReference();
-        user = root.child("users").child(userName).child("Expenses");
-
 //        FragmentManager fragmentManager = getSupportFragmentManager();
 //        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 //        fragmentTransaction.add(R.id.fragmentContainer, newInstance)
 //                .addToBackStack(null)
 //                .commit(); // just do it
         db = Database.getInstance();
-        db.readContentsFromFile(userName);
-
         myTab = findViewById(R.id.tabLayout);
         myPager = findViewById(R.id.pager);
-
+        Toasty.success(this, "Size: " + db.getItemObjects().size(), Toast.LENGTH_SHORT).show();
 
         myPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
 
@@ -106,7 +103,7 @@ public class Overview extends AppCompatActivity {
 
 
     class MyPagerAdapter extends FragmentPagerAdapter {
-        String[] data = {"Overview", "Details"};
+        String[] data = {"Overview", "Details", "Graph"};
 
         public MyPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -116,21 +113,21 @@ public class Overview extends AppCompatActivity {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    myPager.getAdapter().notifyDataSetChanged();
                     overviewFragment = OverviewFragment.newInstance(userName);
                     return overviewFragment;
                 case 1:
-                    myPager.getAdapter().notifyDataSetChanged();
                     detailsFragment = DetailsFragment.newInstance(userName);
                     return detailsFragment;
-
+                case 2:
+                    graphFragment = GraphFragment.newInstance(userName);
+                    return graphFragment;
             }
             return null;
         }
 
         @Override
         public int getCount() {
-            return data.length;
+            return 3;
         }
 
         @Nullable
@@ -197,7 +194,6 @@ public class Overview extends AppCompatActivity {
                 .create();
         dialog.show();
             Toasty.Config.getInstance().setInfoColor(getResources().getColor(R.color.colorPrimary)).apply();
-            Toasty.info(getApplicationContext(), "message", Toast.LENGTH_SHORT).show();
         descriptionText = (EditText) dialog.findViewById(R.id.add_description);
         descriptionText.requestFocus();
         InputMethodManager imm = (InputMethodManager)  getSystemService(Context.INPUT_METHOD_SERVICE);

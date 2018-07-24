@@ -52,6 +52,7 @@ public class LoginActivity extends AppCompatActivity {
     private String userFromFacebook;
     private FirebaseAuth mAuth;
     private CallbackManager callbackManager;
+    private Database db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,21 +119,26 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    private void createUser(final String email, String password) {
+    private void createUser(final String email, final String password) {
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
 
-                if (task.isSuccessful()) {
-                    // Sign in success, update UI with the signed-in user's information
-                    FirebaseUser user = mAuth.getCurrentUser();
-                    toastSuccess("User created. Please sign-in.");
+                if (password.length() > 5) {
+                    if (task.isSuccessful()) {
+                        // Sign in success, update UI with the signed-in user's information
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        toastSuccess("User created. Please sign-in.");
 
+                    } else {
+                        // If sign in fails, display a message to the user.
+                        Toasty.error(getApplicationContext(), "User already exists.",
+                                Toast.LENGTH_SHORT).show();
+
+                    }
                 } else {
-                    // If sign in fails, display a message to the user.
-                    Toasty.error(getApplicationContext(), "User already exists.",
+                    Toasty.error(getApplicationContext(), "Password is too short.",
                             Toast.LENGTH_SHORT).show();
-
                 }
             }
         });
@@ -150,7 +156,7 @@ public class LoginActivity extends AppCompatActivity {
 
                         } else {
                             // If sign in fails, display a message to the user.
-                            Toast.makeText(LoginActivity.this, "Auuthentication failed.",
+                            Toast.makeText(LoginActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
 
                         }
@@ -160,9 +166,15 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void updateUI(FirebaseUser user) {
+        db = Database.getInstance();
+        db.readContentsFromFile(user.getUid());
+
+        Toasty.success(getApplicationContext(), "Item objects size: " +  db.getItemObjects().size(), Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(getApplicationContext(), Overview.class);
         intent.putExtra("user", user.getUid());
         startActivity(intent);
+
+
     }
 
     @Override

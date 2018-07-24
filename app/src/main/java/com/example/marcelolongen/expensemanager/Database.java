@@ -51,22 +51,23 @@ public class Database {
     }
     private DatabaseReference root;
     private DatabaseReference user;
-    public void readContentsFromFile(final String userName) {
+
+    public void readContentsFromFile(String userName) {
 
         root = FirebaseDatabase.getInstance().getReference();
         user = root.child("users").child(userName).child("Expenses");
 
+
         user.addValueEventListener(new ValueEventListener() {
 
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(DataSnapshot
+                                             dataSnapshot) {
                 itemObjects.clear();
                 for (DataSnapshot artistSnapshot: dataSnapshot.getChildren()) {
                     Item item = artistSnapshot.getValue(Item.class); // {id: .., name: ..., genre: ...)
                     itemObjects.add(0, item); // add a new artist from DB to an arrayList
-
                 }
-
             }
 
             @Override
