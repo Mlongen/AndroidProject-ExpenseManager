@@ -34,15 +34,16 @@
             android:layout_height="wrap_content" />
 
 
-        <Spinner
-            android:id="@+id/monthSpinner"
-            android:entries="@array/monthspinner"
-            android:layout_width="380dp"
-            android:layout_height="wrap_content" />
         <com.github.mikephil.charting.charts.PieChart
             android:id="@+id/piechart"
             android:layout_width="380dp"
             android:layout_height="380dp" />
+
+        <Spinner
+            android:id="@+id/monthSpinner"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:entries="@array/monthspinner" />
 
         <com.github.mikephil.charting.charts.HorizontalBarChart
             android:layout_marginTop="50dp"

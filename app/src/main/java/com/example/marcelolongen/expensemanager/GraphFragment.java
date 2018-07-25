@@ -22,12 +22,15 @@ import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.LegendEntry;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.formatter.DefaultValueFormatter;
 import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
@@ -125,51 +128,116 @@ public class GraphFragment extends Fragment {
 
 
     public void updateBarChart() {
-        String[] months = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
         String[] categories = {"Food", "Bills", "Housing", "Health", "Social Life", "Apparel", "Beauty", "Education", "Other"};
-        double[] monthSum = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+        float[] monthSum = {0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f};
 
         for(int i = 0; i < db.getItemObjects().size(); i++) {
-            for (int j = 1; j < 13; j++) {
-                if (db.getItemObjects().get(i).getMonth() == j) {
-                    monthSum[j] += db.getItemObjects().get(i).getValue();
+            for (int j = 0; j < 9; j++) {
+                if (db.getItemObjects().get(i).getCategory().equals(categories[j])) {
+                    monthSum[j] += (float)(double)db.getItemObjects().get(i).getValue();
                 }
             }
 
         }
-        Toasty.success(getContext(), String.valueOf(monthSum[0]) +
-                String.valueOf(monthSum[1]) +
-                String.valueOf(monthSum[2]) +
-                String.valueOf(monthSum[3]) +
-                String.valueOf(monthSum[4]) +
-                String.valueOf(monthSum[5]) +
-                String.valueOf(monthSum[6]) +
-                String.valueOf(monthSum[7]) +
-                String.valueOf(monthSum[8])
-                , Toast.LENGTH_LONG).show();
+
+        mHBarChart.getXAxis().setEnabled(false);
 
 
 
 
-
-
-
-
-
-
+        ArrayList<LegendEntry> legendEntries = new ArrayList<>();
         List<BarEntry> entries = new ArrayList<>();
-        entries.add(new BarEntry(0f, new float[] { 10, 20, 30 }));
-        entries.add(new BarEntry(1f, 80f));
-        entries.add(new BarEntry(2f, 60f));
-        entries.add(new BarEntry(3f, 50f));
-        // gap of 2f
-        entries.add(new BarEntry(5f, 70f));
-        entries.add(new BarEntry(6f, 60f));
+        int current = 0;
+        int currentColor = 0;
+        if (monthSum[0] > 0) {
+            entries.add(new BarEntry((float)current, monthSum[0]));
+            LegendEntry l1=new LegendEntry("Food", Legend.LegendForm.DEFAULT,10f,2f,null, ColorTemplate.JOYFUL_COLORS[currentColor]);
+            legendEntries.add(l1);
+            current += 2;
+            currentColor ++;
+        }
+        if (monthSum[1] > 0) {
+            entries.add(new BarEntry((float)current, monthSum[1]));
+            LegendEntry l1=new LegendEntry("Bills", Legend.LegendForm.DEFAULT,10f,2f,null, ColorTemplate.JOYFUL_COLORS[currentColor]);
+            legendEntries.add(l1);
+            current += 2;
+            currentColor ++;
+        }
+        if (monthSum[2] > 0) {
+            entries.add(new BarEntry((float)current, monthSum[2]));
+            LegendEntry l1=new LegendEntry("Housing", Legend.LegendForm.DEFAULT,10f,2f,null, ColorTemplate.JOYFUL_COLORS[currentColor]);
+            legendEntries.add(l1);
+            current += 2;
+            currentColor ++;
+        }
+        if (monthSum[3] > 0) {
+            entries.add( new BarEntry((float)current, monthSum[3]));
+            LegendEntry l1=new LegendEntry("Social Life", Legend.LegendForm.DEFAULT,10f,2f,null, ColorTemplate.JOYFUL_COLORS[currentColor]);
+            legendEntries.add(l1);
+            current += 2;
+            currentColor ++;
+        }
+        if (monthSum[4] > 0) {
+            entries.add(new BarEntry((float)current, monthSum[4]));
+            LegendEntry l1=new LegendEntry("Apparel", Legend.LegendForm.DEFAULT,10f,2f,null, ColorTemplate.JOYFUL_COLORS[currentColor]);
+            legendEntries.add(l1);
+            current += 2;
+            currentColor ++;
+        }
+        if (monthSum[5] > 0) {
+            entries.add( new BarEntry((float)current, monthSum[5]));
+            LegendEntry l1=new LegendEntry("Beauty", Legend.LegendForm.DEFAULT,10f,2f,null, ColorTemplate.JOYFUL_COLORS[currentColor]);
+            legendEntries.add(l1);
+            current += 2;
+            currentColor ++;
+        }
+        if (monthSum[6] > 0) {
+            entries.add(new BarEntry((float)current, monthSum[6]));
+            LegendEntry l1=new LegendEntry("Education", Legend.LegendForm.DEFAULT,10f,2f,null, ColorTemplate.JOYFUL_COLORS[currentColor]);
+            legendEntries.add(l1);
+            current += 2;
+            currentColor ++;
+        }
+        if (monthSum[7] > 0) {
+            entries.add( new BarEntry((float)current, monthSum[7]));
+            LegendEntry l1=new LegendEntry("Other", Legend.LegendForm.DEFAULT,10f,2f,null, ColorTemplate.JOYFUL_COLORS[currentColor]);
+            legendEntries.add(l1);
+            current += 2;
+            currentColor ++;
+        }
+        if (monthSum[8] > 0) {
+            entries.add( new BarEntry((float)current, monthSum[8]));
+        }
 
         BarDataSet set = new BarDataSet(entries, "BarDataSet");
-        set.setColors(ColorTemplate.MATERIAL_COLORS);
+        set.setColors(ColorTemplate.JOYFUL_COLORS);
+
+
+
+        Legend l = mHBarChart.getLegend();
+        l.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
+        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);
+        l.setOrientation(Legend.LegendOrientation.HORIZONTAL);
+        l.setDrawInside(false);
+        l.setForm(Legend.LegendForm.SQUARE);
+        l.setFormSize(12f);
+        l.setTextSize(14f);
+        l.setXEntrySpace(8f);
+
+        l.setCustom(legendEntries);
+
+
+
+
+
         barData = new BarData(set);
+        barData.setValueTextSize(13f);
+        barData.setValueTypeface(Typeface.DEFAULT);
+
+        barData.setValueFormatter(new DefaultValueFormatter(2));
+        mHBarChart.animateY(5000, Easing.EasingOption.Linear);
         mHBarChart.setData(barData);
+
         mHBarChart.invalidate();
 
 
@@ -273,13 +341,13 @@ public class GraphFragment extends Fragment {
 
 
         PieDataSet set = new PieDataSet(entries, "");
-        set.setColors(ColorTemplate.MATERIAL_COLORS);
+        set.setColors(ColorTemplate.JOYFUL_COLORS);
         set.setHighlightEnabled(true); // allow highlighting for DataSet
 
         // set this to false to disable the drawing of highlight indicator (lines)
         pieData = new PieData(set);
         pieData.setValueFormatter(new PercentFormatter());
-        pieData.setValueTextSize(11f);
+        pieData.setValueTextSize(13f);
         pieData.setValueTextColor(Color.WHITE);
         pieData.setValueTypeface(Typeface.DEFAULT);
         mPieChart.setData(pieData);
