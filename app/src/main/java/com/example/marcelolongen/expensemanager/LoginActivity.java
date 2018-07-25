@@ -170,6 +170,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void updateUI(final FirebaseUser user) {
+        Toasty.success(getApplicationContext(), "Successfully logged in", Toast.LENGTH_SHORT).show();
         db = Database.getInstance();
         db.readContentsFromFile(user.getUid());
 
@@ -188,11 +189,6 @@ public class LoginActivity extends AppCompatActivity {
                                       }
                                   },
                 2000);
-
-        Toasty.success(getApplicationContext(), "Item objects size: " +  db.getItemObjects().size(), Toast.LENGTH_SHORT).show();
-
-
-
     }
 
     @Override

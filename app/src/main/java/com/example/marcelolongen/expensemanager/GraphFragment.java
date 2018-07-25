@@ -2,6 +2,8 @@ package com.example.marcelolongen.expensemanager;
 
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -20,6 +22,14 @@ import com.anychart.anychart.Pie;
 import com.anychart.anychart.ValueDataEntry;
 import com.anychart.anychart.chart.common.Event;
 import com.anychart.anychart.chart.common.ListenersInterface;
+import com.github.mikephil.charting.animation.Easing;
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.formatter.PercentFormatter;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.orhanobut.dialogplus.ViewHolder;
 
 import java.text.SimpleDateFormat;
@@ -32,7 +42,7 @@ import java.util.List;
  * A simple {@link Fragment} subclass.
  */
 public class GraphFragment extends Fragment {
-    private Double[] sum = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+    private double[] sum = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
     private AnyChartView anyChartView;
     private Database db;
     private static final String ARG_USER_NAME= "username";
@@ -60,6 +70,8 @@ public class GraphFragment extends Fragment {
         db = Database.getInstance();
     }
 
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -68,16 +80,16 @@ public class GraphFragment extends Fragment {
 
 
 
-        anyChartView = v.findViewById(R.id.any_chart_view);
-
-        Pie pie = AnyChart.pie();
-
-        pie.setOnClickListener(new ListenersInterface.OnClickListener(new String[]{"x", "value"}) {
-            @Override
-            public void onClick(Event event) {
-
-            }
-        });
+//        anyChartView = v.findViewById(R.id.any_chart_view);
+//
+//        Pie pie = AnyChart.pie();
+//
+//        pie.setOnClickListener(new ListenersInterface.OnClickListener(new String[]{"x", "value"}) {
+//            @Override
+//            public void onClick(Event event) {
+//
+//            }
+//        });
 
 
         String[] categories = {"Food", "Bills", "Housing", "Health", "Social Life", "Apparel", "Beauty", "Education", "Other"};
@@ -97,36 +109,146 @@ public class GraphFragment extends Fragment {
             }
         }
 
+        float totalSum = (float) sum[0] + (float) sum[1]
+                + (float) sum[2] + (float) sum[3]
+                + (float) sum[4] + (float) sum[5]
+                + (float) sum[6] + (float) sum[7] + (float) sum[8];
+
+
+        float foodSum = (float) ((sum[0] / totalSum) * 100);
+        float billsSum = (float) ((sum[1] / totalSum) * 100);
+        float housingSum = (float) ((sum[2] / totalSum) * 100);
+        float healthSum = (float) ((sum[3] / totalSum) * 100);
+        float socialLifeSum = (float) ((sum[4] / totalSum) * 100);
+        float apparelSum = (float) ((sum[5] / totalSum) * 100);
+        float beautySum = (float) ((sum[6] / totalSum) * 100);
+        float educationSum = (float) ((sum[7] / totalSum) * 100);
+        float otherSum = (float) ((sum[8] / totalSum) * 100);
+
+        PieChart mChart = (PieChart) v.findViewById(R.id.chart);
+
+        mChart.setUsePercentValues(true);
+        mChart.getDescription().setEnabled(false);
+        mChart.setExtraOffsets(5, 10, 5, 5);
+
+        mChart.setDragDecelerationFrictionCoef(0.95f);
+
+        mChart.setCenterTextTypeface(Typeface.DEFAULT);
+
+        mChart.setDrawHoleEnabled(true);
+        mChart.setHoleColor(Color.WHITE);
+
+        mChart.setTransparentCircleColor(Color.WHITE);
+        mChart.setTransparentCircleAlpha(110);
+
+        mChart.setHoleRadius(58f);
+        mChart.setTransparentCircleRadius(61f);
+
+        mChart.setDrawCenterText(true);
+
+        mChart.setRotationAngle(0);
+        // enable rotation of the chart by touch
+        mChart.setRotationEnabled(true);
+        mChart.setHighlightPerTapEnabled(true);
+
+
+
+
+        List<PieEntry> entries = new ArrayList<>();
+
+        if (foodSum > 0) {
+            entries.add(new PieEntry(foodSum, "Food"));
+        }
+        if (billsSum > 0) {
+            entries.add(new PieEntry(billsSum, "Bills"));
+        }
+        if (housingSum > 0) {
+            entries.add(new PieEntry(housingSum, "Housing"));
+        }
+        if (healthSum > 0) {
+            entries.add(new PieEntry(healthSum, "Health"));
+        }
+        if (socialLifeSum > 0) {
+            entries.add(new PieEntry(socialLifeSum, "Social Life"));
+        }
+        if (apparelSum > 0) {
+            entries.add(new PieEntry(apparelSum, "Apparel"));
+        }
+        if (beautySum > 0) {
+            entries.add(new PieEntry(beautySum, "Beauty"));
+        }
+        if (educationSum > 0) {
+            entries.add(new PieEntry(educationSum, "Education"));
+        }
+        if (otherSum > 0) {
+            entries.add(new PieEntry(otherSum, "Other"));
+        }
+
+
+        PieDataSet set = new PieDataSet(entries, "");
+        set.setColors(ColorTemplate.MATERIAL_COLORS);
+        set.setHighlightEnabled(true); // allow highlighting for DataSet
+
+        // set this to false to disable the drawing of highlight indicator (lines)
+        PieData data = new PieData(set);
+        data.setValueFormatter(new PercentFormatter());
+        data.setValueTextSize(11f);
+        data.setValueTextColor(Color.WHITE);
+        data.setValueTypeface(Typeface.DEFAULT);
+        mChart.setData(data);
+
+        mChart.animateY(1400, Easing.EasingOption.EaseInOutElastic);
+        // mChart.spin(2000, 0, 360);
+
+
+        Legend l = mChart.getLegend();
+        l.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
+        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
+        l.setOrientation(Legend.LegendOrientation.HORIZONTAL);
+        l.setDrawInside(false);
+        l.setXEntrySpace(7f);
+        l.setYEntrySpace(0f);
+        l.setYOffset(0f);
+
+        // entry label styling
+        mChart.setEntryLabelColor(Color.WHITE);
+        mChart.setEntryLabelTypeface(Typeface.DEFAULT);
+        mChart.setEntryLabelTextSize(12f);
+
+
+        mChart.invalidate(); //
+
+
 
 
 //        toast(sum[0] + " " + sum[1] + " " + sum[2] + " " + sum[3] + " " + sum[4] + " " + sum[5] + " " + sum[6] + " " + sum[7] + " " + sum[8]);
-        List<DataEntry> data = new ArrayList<>();
-        data.add(new ValueDataEntry("Food", sum[0]));
-        data.add(new ValueDataEntry("Bills", sum[1]));
-        data.add(new ValueDataEntry("Housing", sum[2]));
-        data.add(new ValueDataEntry("Health", sum[3]));
-        data.add(new ValueDataEntry("Social Life", sum[4]));
-        data.add(new ValueDataEntry("Apparel", sum[5]));
-        data.add(new ValueDataEntry("Beauty", sum[6]));
-        data.add(new ValueDataEntry("Education", sum[7]));
-        data.add(new ValueDataEntry("Other", sum[8]));
-
-        pie.setData(data);
-
-        pie.setTitle("Detailed expenses for this month:");
-
-        pie.getLabels().setPosition("outside");
-
-        pie.getLegend().getTitle().setEnabled(true);
-        pie.getLegend().getTitle()
-                .setText("Categories")
-                .setPadding(0d, 0d, 10d, 0d);
-
-        pie.getLegend()
-                .setPosition("center-bottom")
-                .setItemsLayout(LegendLayout.HORIZONTAL)
-                .setAlign(EnumsAlign.CENTER);
-        anyChartView.setChart(pie);
+//        List<DataEntry> data = new ArrayList<>();
+//        data.add(new ValueDataEntry("Food", sum[0]));
+//        data.add(new ValueDataEntry("Bills", sum[1]));
+//        data.add(new ValueDataEntry("Housing", sum[2]));
+//        data.add(new ValueDataEntry("Health", sum[3]));
+//        data.add(new ValueDataEntry("Social Life", sum[4]));
+//        data.add(new ValueDataEntry("Apparel", sum[5]));
+//        data.add(new ValueDataEntry("Beauty", sum[6]));
+//        data.add(new ValueDataEntry("Education", sum[7]));
+//        data.add(new ValueDataEntry("Other", sum[8]));
+//
+//        pie.setData(data);
+//\
+//        pie.setTitle("Detailed expenses for this month:");
+//
+//        pie.getLabels().setPosition("outside");
+//
+//        pie.getLegend().getTitle().setEnabled(true);
+//        pie.getLegend().getTitle()
+//                .setText("Categories")
+//                .setPadding(0d, 0d, 10d, 0d);
+//
+//        pie.getLegend()
+//                .setPosition("center-bottom")
+//                .setItemsLayout(LegendLayout.HORIZONTAL)
+//                .setAlign(EnumsAlign.CENTER);
+//        anyChartView.setChart(pie);
 
         Button changeData = v.findViewById(R.id.change_data);
         changeData.setOnClickListener(new View.OnClickListener() {
@@ -134,7 +256,6 @@ public class GraphFragment extends Fragment {
             public void onClick(View v) {
 
                     sum[3] +=5000;
-                    Toast.makeText(getContext(), sum[3].toString(), Toast.LENGTH_SHORT).show();
 
 
             }

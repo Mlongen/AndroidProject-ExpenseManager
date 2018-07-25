@@ -79,7 +79,6 @@ public class Overview extends AppCompatActivity {
 
         myTab = findViewById(R.id.tabLayout);
         myPager = findViewById(R.id.pager);
-        Toasty.success(this, "Size: " + db.getItemObjects().size(), Toast.LENGTH_SHORT).show();
 
         myAdapter = new MyPagerAdapter(getSupportFragmentManager());
         myPager.setAdapter(myAdapter);

@@ -86,7 +86,7 @@ public class OverviewFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Toasty.success(this.getContext(), "Successfully logged in", Toast.LENGTH_SHORT).show();
+
         db = Database.getInstance();
 
 
