@@ -177,7 +177,7 @@ public class Overview extends AppCompatActivity {
                                         user.child(id).setValue(newItem);
 
                                         db.getItemObjects().add(newItem);
-                                        Toasty.success(getApplicationContext(), description + " added succesfully.", Toast.LENGTH_SHORT).show();
+                                        Toasty.success(getApplicationContext(), "Entry added succesfully.", Toast.LENGTH_SHORT).show();
                                         dialog.dismiss();
 
 
@@ -185,6 +185,8 @@ public class Overview extends AppCompatActivity {
                                       imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
                                       ArrayList<Item> items = detailsFragment.getDisplayedItems();
                                       items.add(0, newItem);
+
+
                                       //updating details fragment
                                       detailsFragment.getAdapter().notifyDataSetChanged();
 
@@ -195,8 +197,8 @@ public class Overview extends AppCompatActivity {
 
                                       //trying to update graphfragment
 
-
-
+                                       View graphView = graphFragment.getThisView();
+                                       graphFragment.updateData(graphView);
 
                                     }
 

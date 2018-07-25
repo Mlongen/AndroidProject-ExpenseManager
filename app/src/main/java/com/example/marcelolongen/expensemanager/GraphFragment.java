@@ -47,11 +47,18 @@ public class GraphFragment extends Fragment {
     private Database db;
     private static final String ARG_USER_NAME= "username";
     private String userName;
-
+    private PieChart mChart;
+    private float housingSum;
+    private float totalSum;
+    private PieData data;
+    private View thisView;
     public GraphFragment() {
         // Required empty public constructor
     }
 
+    public View getThisView() {
+        return thisView;
+    }
 
     public static GraphFragment newInstance(String userName) {
         Bundle args = new Bundle();
@@ -76,7 +83,7 @@ public class GraphFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_graph, container, false);
+        thisView = inflater.inflate(R.layout.fragment_graph, container, false);
 
 
 
@@ -90,8 +97,29 @@ public class GraphFragment extends Fragment {
 //
 //            }
 //        });
+        mChart = thisView.findViewById(R.id.chart);
+
+        updateData(thisView);
 
 
+
+        Button changeData = thisView.findViewById(R.id.change_data);
+        changeData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                    sum[2] +=5000;
+                      updateData(v);
+            }
+        });
+
+
+
+        return thisView;
+
+    }
+
+    public void updateData(View v) {
         String[] categories = {"Food", "Bills", "Housing", "Health", "Social Life", "Apparel", "Beauty", "Education", "Other"};
 
         @SuppressLint("SimpleDateFormat") String thisMonth = new SimpleDateFormat("M").format(Calendar.getInstance().getTime());
@@ -109,7 +137,7 @@ public class GraphFragment extends Fragment {
             }
         }
 
-        float totalSum = (float) sum[0] + (float) sum[1]
+        totalSum = (float) sum[0] + (float) sum[1]
                 + (float) sum[2] + (float) sum[3]
                 + (float) sum[4] + (float) sum[5]
                 + (float) sum[6] + (float) sum[7] + (float) sum[8];
@@ -117,7 +145,7 @@ public class GraphFragment extends Fragment {
 
         float foodSum = (float) ((sum[0] / totalSum) * 100);
         float billsSum = (float) ((sum[1] / totalSum) * 100);
-        float housingSum = (float) ((sum[2] / totalSum) * 100);
+        housingSum = (float) ((sum[2] / totalSum) * 100);
         float healthSum = (float) ((sum[3] / totalSum) * 100);
         float socialLifeSum = (float) ((sum[4] / totalSum) * 100);
         float apparelSum = (float) ((sum[5] / totalSum) * 100);
@@ -125,7 +153,7 @@ public class GraphFragment extends Fragment {
         float educationSum = (float) ((sum[7] / totalSum) * 100);
         float otherSum = (float) ((sum[8] / totalSum) * 100);
 
-        PieChart mChart = (PieChart) v.findViewById(R.id.chart);
+
 
         mChart.setUsePercentValues(true);
         mChart.getDescription().setEnabled(false);
@@ -150,8 +178,6 @@ public class GraphFragment extends Fragment {
         // enable rotation of the chart by touch
         mChart.setRotationEnabled(true);
         mChart.setHighlightPerTapEnabled(true);
-
-
 
 
         List<PieEntry> entries = new ArrayList<>();
@@ -190,7 +216,7 @@ public class GraphFragment extends Fragment {
         set.setHighlightEnabled(true); // allow highlighting for DataSet
 
         // set this to false to disable the drawing of highlight indicator (lines)
-        PieData data = new PieData(set);
+        data = new PieData(set);
         data.setValueFormatter(new PercentFormatter());
         data.setValueTextSize(11f);
         data.setValueTextColor(Color.WHITE);
@@ -217,56 +243,7 @@ public class GraphFragment extends Fragment {
 
 
         mChart.invalidate(); //
-
-
-
-
-//        toast(sum[0] + " " + sum[1] + " " + sum[2] + " " + sum[3] + " " + sum[4] + " " + sum[5] + " " + sum[6] + " " + sum[7] + " " + sum[8]);
-//        List<DataEntry> data = new ArrayList<>();
-//        data.add(new ValueDataEntry("Food", sum[0]));
-//        data.add(new ValueDataEntry("Bills", sum[1]));
-//        data.add(new ValueDataEntry("Housing", sum[2]));
-//        data.add(new ValueDataEntry("Health", sum[3]));
-//        data.add(new ValueDataEntry("Social Life", sum[4]));
-//        data.add(new ValueDataEntry("Apparel", sum[5]));
-//        data.add(new ValueDataEntry("Beauty", sum[6]));
-//        data.add(new ValueDataEntry("Education", sum[7]));
-//        data.add(new ValueDataEntry("Other", sum[8]));
-//
-//        pie.setData(data);
-//\
-//        pie.setTitle("Detailed expenses for this month:");
-//
-//        pie.getLabels().setPosition("outside");
-//
-//        pie.getLegend().getTitle().setEnabled(true);
-//        pie.getLegend().getTitle()
-//                .setText("Categories")
-//                .setPadding(0d, 0d, 10d, 0d);
-//
-//        pie.getLegend()
-//                .setPosition("center-bottom")
-//                .setItemsLayout(LegendLayout.HORIZONTAL)
-//                .setAlign(EnumsAlign.CENTER);
-//        anyChartView.setChart(pie);
-
-        Button changeData = v.findViewById(R.id.change_data);
-        changeData.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                    sum[3] +=5000;
-
-
-            }
-        });
-
-
-
-        return v;
-
     }
-
 
 
 }
