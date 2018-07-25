@@ -24,6 +24,11 @@ import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.nightonke.boommenu.BoomButtons.ButtonPlaceEnum;
+import com.nightonke.boommenu.BoomButtons.HamButton;
+import com.nightonke.boommenu.BoomButtons.OnBMClickListener;
+import com.nightonke.boommenu.BoomMenuButton;
+import com.nightonke.boommenu.Piece.PiecePlaceEnum;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.OnClickListener;
 import com.orhanobut.dialogplus.ViewHolder;
@@ -35,6 +40,7 @@ import es.dmoral.toasty.Toasty;
 public class Overview extends AppCompatActivity {
     private Database db;
     private String userName;
+    private BoomMenuButton bmb;
     private DatabaseReference root;
     private DatabaseReference user;
     private TabLayout myTab;
@@ -55,15 +61,66 @@ public class Overview extends AppCompatActivity {
 
         Intent intent = getIntent();
         userName = intent.getStringExtra("user");
-
-//        FragmentManager fragmentManager = getSupportFragmentManager();
-//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//        fragmentTransaction.add(R.id.fragmentContainer, newInstance)
-//                .addToBackStack(null)
-//                .commit(); // just do it
         db = Database.getInstance();
-                root = FirebaseDatabase.getInstance().getReference();
+        root = FirebaseDatabase.getInstance().getReference();
         user = root.child("users").child(userName).child("Expenses");
+
+
+
+
+
+
+        final ArrayList<Class> classes = new ArrayList<>();
+        String[] names = {"Detailed list", "Settings"};
+
+        bmb = findViewById(R.id.bmb);
+        assert bmb != null;
+
+
+
+        ArrayList<Integer> images = new ArrayList<>();
+        images.add(R.drawable.listing_option);
+        images.add(R.drawable.settings);
+        bmb.setPiecePlaceEnum(PiecePlaceEnum.HAM_2);
+        bmb.setButtonPlaceEnum(ButtonPlaceEnum.HAM_2);
+        bmb.setButtonTopMargin(1000);
+        for (int i = 0; i < bmb.getPiecePlaceEnum().pieceNumber(); i++)
+
+        {
+            HamButton.Builder builder = new HamButton.Builder()
+                    .normalImageRes(images.get(i))
+                    .normalText(names[i])
+                    .shadowEffect(true)
+                    .listener(new OnBMClickListener() {
+                        @Override
+                        public void onBoomButtonClick(int index) {
+                            // When the boom-button corresponding this builder is clicked.
+//
+//                            Fragment newDetail = DetailsFragment.newInstance(userName);
+//                            getFragmentManager().beginTransaction().replace(R.id.fill_horizontal, newDetail).commit();
+//                            Fragment newInstance = DetailsFragment.newInstance(userName);
+//                            FragmentManager fragmentManager = getFragmentManager();
+//                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                            fragmentTransaction.add(R.id.fragmentContainer, newInstance)
+//                                    .addToBackStack(null)
+//                                    .commit(); // just do it
+
+//
+//                                Intent intent = new Intent(getApplicationContext(), classes.get(index));
+//                                if (index == 0) {
+//                                    intent.putExtra("user", userName);
+//                                }
+//                                startActivity(intent);
+                        }
+                    });
+
+            bmb.addBuilder(builder);
+
+        }
+
+
+
+
 
 
 
@@ -212,8 +269,6 @@ public class Overview extends AppCompatActivity {
         InputMethodManager imm = (InputMethodManager)  getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(descriptionText, InputMethodManager.SHOW_IMPLICIT);
     }
-
-
 
 
 }

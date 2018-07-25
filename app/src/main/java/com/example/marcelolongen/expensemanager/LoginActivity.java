@@ -51,7 +51,6 @@ import es.dmoral.toasty.Toasty;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private String userFromFacebook;
     private FirebaseAuth mAuth;
     private CallbackManager callbackManager;
     private Database db;

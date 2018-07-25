@@ -1,7 +1,7 @@
 package com.example.marcelolongen.expensemanager;
 
 
-import android.annotation.SuppressLint;
+
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -16,14 +16,14 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.Toast;
+
 
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.LegendEntry;
-import com.github.mikephil.charting.components.YAxis;
+
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
@@ -89,17 +89,6 @@ public class GraphFragment extends Fragment {
         thisView = inflater.inflate(R.layout.fragment_graph, container, false);
 
 
-
-//        anyChartView = v.findViewById(R.id.any_chart_view);
-//
-//        Pie pie = AnyChart.pie();
-//
-//        pie.setOnClickListener(new ListenersInterface.OnClickListener(new String[]{"x", "value"}) {
-//            @Override
-//            public void onClick(Event event) {
-//
-//            }
-//        });
         mPieChart = thisView.findViewById(R.id.piechart);
         mHBarChart = thisView.findViewById(R.id.horizontal_barchart);
         updatePieChart();

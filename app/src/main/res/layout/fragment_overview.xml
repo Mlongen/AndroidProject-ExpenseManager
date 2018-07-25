@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,8 +9,6 @@
     android:background="@android:color/transparent"
     android:orientation="vertical"
     android:gravity="center|top">
-
-
 
 
     <LinearLayout
@@ -118,14 +117,6 @@
 
     </ScrollView>
 
-    <com.nightonke.boommenu.BoomMenuButton
-        android:id="@+id/bmb"
-        android:layout_gravity="end|bottom"
-        android:layout_width="wrap_content"
 
-        android:layout_height="wrap_content"
-        app:bmb_buttonEnum="ham"
-        app:bmb_normalColor="@color/colorPrimary"
-        app:bmb_dotRadius="3dp" />
 
 </LinearLayout>

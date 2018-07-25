@@ -52,17 +52,11 @@ import es.dmoral.toasty.Toasty;
  */
 public class OverviewFragment extends Fragment {
     private Database db;
-    private BoomMenuButton bmb;
+
     private Double[] sum = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
-    private DatabaseReference root;
-    private DatabaseReference user;
+
     private static final String ARG_USER_NAME = "userName";
-    private String userName;
-    private AnyChartView anyChartView;
-    private ViewHolder add;
-    private TextView highestSpending;
-    private TextView highestName;
-    private TextView totalSum;
+
     private View thisView;
 
     public OverviewFragment() {
@@ -99,57 +93,7 @@ public class OverviewFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         thisView = inflater.inflate(R.layout.fragment_overview, container, false);
-//        db.readContentsFromFile(userName);
 
-
-        final ArrayList<Class> classes = new ArrayList<>();
-        String[] names = {"Detailed list", "Settings"};
-
-
-        bmb = (BoomMenuButton) thisView.findViewById(R.id.bmb);
-        assert bmb != null;
-
-
-
-        ArrayList<Integer> images = new ArrayList<>();
-        images.add(R.drawable.listing_option);
-        images.add(R.drawable.settings);
-        bmb.setPiecePlaceEnum(PiecePlaceEnum.HAM_2);
-        bmb.setButtonPlaceEnum(ButtonPlaceEnum.HAM_2);
-        bmb.setButtonTopMargin(1000);
-        for (int i = 0; i < bmb.getPiecePlaceEnum().pieceNumber(); i++) {
-            HamButton.Builder builder = new HamButton.Builder()
-                    .normalImageRes(images.get(i))
-                    .normalText(names[i])
-                    .shadowEffect(true)
-                    .listener(new OnBMClickListener() {
-                        @Override
-                        public void onBoomButtonClick(int index) {
-                            // When the boom-button corresponding this builder is clicked.
-//
-//                            Fragment newDetail = DetailsFragment.newInstance(userName);
-//                            getFragmentManager().beginTransaction().replace(R.id.fill_horizontal, newDetail).commit();
-//                            Fragment newInstance = DetailsFragment.newInstance(userName);
-//                            FragmentManager fragmentManager = getFragmentManager();
-//                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//                            fragmentTransaction.add(R.id.fragmentContainer, newInstance)
-//                                    .addToBackStack(null)
-//                                    .commit(); // just do it
-
-//
-//                                Intent intent = new Intent(getApplicationContext(), classes.get(index));
-//                                if (index == 0) {
-//                                    intent.putExtra("user", userName);
-//                                }
-//                                startActivity(intent);
-                        }
-                    })
-                    ;
-
-            bmb.addBuilder(builder);
-
-
-        }
 
         return thisView;
     }
@@ -195,12 +139,5 @@ public class OverviewFragment extends Fragment {
         highestSpending.setText("CAD: " + String.valueOf(highestValue) + "0");
         highestName.setText(categories[highestIndex]);
     }
-
-
-
-    private void toast(String message) {
-        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
-    }
-
 
 }
