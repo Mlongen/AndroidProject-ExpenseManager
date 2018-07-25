@@ -188,7 +188,7 @@ public class LoginActivity extends AppCompatActivity {
                                           startActivity(intent);
                                       }
                                   },
-                2000);
+                3000);
     }
 
     @Override

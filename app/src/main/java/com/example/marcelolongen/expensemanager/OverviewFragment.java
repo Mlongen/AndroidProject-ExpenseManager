@@ -170,7 +170,6 @@ public class OverviewFragment extends Fragment {
             sum[i] = 0.0;
         }
         for (int i = 0; i< db.getItemObjects().size(); i++ ) {
-            System.out.println("hey");
             for (int j = 0; j < categories.length;j++) {
                 if (db.getItemObjects().get(i).getCategory().equals(categories[j])&& db.getItemObjects().get(i).getMonth().toString().equals(thisMonth) ) {
                     sum[j] += db.getItemObjects().get(i).getValue();

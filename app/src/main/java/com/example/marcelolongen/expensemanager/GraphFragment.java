@@ -5,37 +5,38 @@ import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
+import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.anychart.anychart.AnyChart;
-import com.anychart.anychart.AnyChartView;
-import com.anychart.anychart.DataEntry;
-import com.anychart.anychart.EnumsAlign;
-import com.anychart.anychart.LegendLayout;
-import com.anychart.anychart.Pie;
-import com.anychart.anychart.ValueDataEntry;
-import com.anychart.anychart.chart.common.Event;
-import com.anychart.anychart.chart.common.ListenersInterface;
 import com.github.mikephil.charting.animation.Easing;
+import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
-import com.orhanobut.dialogplus.ViewHolder;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+
+import es.dmoral.toasty.Toasty;
 
 
 /**
@@ -43,15 +44,14 @@ import java.util.List;
  */
 public class GraphFragment extends Fragment {
     private double[] sum = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
-    private AnyChartView anyChartView;
     private Database db;
     private static final String ARG_USER_NAME= "username";
-    private String userName;
-    private PieChart mChart;
-    private float housingSum;
-    private float totalSum;
-    private PieData data;
+    private PieChart mPieChart;
+    private HorizontalBarChart mHBarChart;
+    private PieData pieData;
+    private BarData barData;
     private View thisView;
+    private String currentMonth;
     public GraphFragment() {
         // Required empty public constructor
     }
@@ -97,11 +97,14 @@ public class GraphFragment extends Fragment {
 //
 //            }
 //        });
-        mChart = thisView.findViewById(R.id.chart);
+        mPieChart = thisView.findViewById(R.id.piechart);
+        mHBarChart = thisView.findViewById(R.id.horizontal_barchart);
+        updatePieChart();
+        updateBarChart();
 
-        updateData(thisView);
 
-
+        Spinner monthSpinner = thisView.findViewById(R.id.monthSpinner);
+        monthSpinnerClickListener(monthSpinner);
 
         Button changeData = thisView.findViewById(R.id.change_data);
         changeData.setOnClickListener(new View.OnClickListener() {
@@ -109,7 +112,8 @@ public class GraphFragment extends Fragment {
             public void onClick(View v) {
 
                     sum[2] +=5000;
-                      updateData(v);
+                      updatePieChart();
+                      updateBarChart();
             }
         });
 
@@ -119,10 +123,67 @@ public class GraphFragment extends Fragment {
 
     }
 
-    public void updateData(View v) {
+
+    public void updateBarChart() {
+        String[] months = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+        String[] categories = {"Food", "Bills", "Housing", "Health", "Social Life", "Apparel", "Beauty", "Education", "Other"};
+        double[] monthSum = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+
+        for(int i = 0; i < db.getItemObjects().size(); i++) {
+            for (int j = 1; j < 13; j++) {
+                if (db.getItemObjects().get(i).getMonth() == j) {
+                    monthSum[j] += db.getItemObjects().get(i).getValue();
+                }
+            }
+
+        }
+        Toasty.success(getContext(), String.valueOf(monthSum[0]) +
+                String.valueOf(monthSum[1]) +
+                String.valueOf(monthSum[2]) +
+                String.valueOf(monthSum[3]) +
+                String.valueOf(monthSum[4]) +
+                String.valueOf(monthSum[5]) +
+                String.valueOf(monthSum[6]) +
+                String.valueOf(monthSum[7]) +
+                String.valueOf(monthSum[8])
+                , Toast.LENGTH_LONG).show();
+
+
+
+
+
+
+
+
+
+
+        List<BarEntry> entries = new ArrayList<>();
+        entries.add(new BarEntry(0f, new float[] { 10, 20, 30 }));
+        entries.add(new BarEntry(1f, 80f));
+        entries.add(new BarEntry(2f, 60f));
+        entries.add(new BarEntry(3f, 50f));
+        // gap of 2f
+        entries.add(new BarEntry(5f, 70f));
+        entries.add(new BarEntry(6f, 60f));
+
+        BarDataSet set = new BarDataSet(entries, "BarDataSet");
+        set.setColors(ColorTemplate.MATERIAL_COLORS);
+        barData = new BarData(set);
+        mHBarChart.setData(barData);
+        mHBarChart.invalidate();
+
+
+
+    }
+
+
+
+    public void updatePieChart() {
         String[] categories = {"Food", "Bills", "Housing", "Health", "Social Life", "Apparel", "Beauty", "Education", "Other"};
 
-        @SuppressLint("SimpleDateFormat") String thisMonth = new SimpleDateFormat("M").format(Calendar.getInstance().getTime());
+        if (currentMonth == null) {
+            currentMonth = new SimpleDateFormat("M").format(Calendar.getInstance().getTime());
+        }
 
         for (int i = 0; i < sum.length; i++) {
             sum[i] = 0.0;
@@ -131,13 +192,13 @@ public class GraphFragment extends Fragment {
         for (int i = 0; i< db.getItemObjects().size(); i++ ) {
 
             for (int j = 0; j < categories.length;j++) {
-                if (db.getItemObjects().get(i).getCategory().equals(categories[j])&& db.getItemObjects().get(i).getMonth().toString().equals(thisMonth) ) {
+                if (db.getItemObjects().get(i).getCategory().equals(categories[j])&& db.getItemObjects().get(i).getMonth().toString().equals(currentMonth) ) {
                     sum[j] += db.getItemObjects().get(i).getValue();
                 }
             }
         }
 
-        totalSum = (float) sum[0] + (float) sum[1]
+        float totalSum = (float) sum[0] + (float) sum[1]
                 + (float) sum[2] + (float) sum[3]
                 + (float) sum[4] + (float) sum[5]
                 + (float) sum[6] + (float) sum[7] + (float) sum[8];
@@ -145,7 +206,7 @@ public class GraphFragment extends Fragment {
 
         float foodSum = (float) ((sum[0] / totalSum) * 100);
         float billsSum = (float) ((sum[1] / totalSum) * 100);
-        housingSum = (float) ((sum[2] / totalSum) * 100);
+        float housingSum = (float) ((sum[2] / totalSum) * 100);
         float healthSum = (float) ((sum[3] / totalSum) * 100);
         float socialLifeSum = (float) ((sum[4] / totalSum) * 100);
         float apparelSum = (float) ((sum[5] / totalSum) * 100);
@@ -155,29 +216,29 @@ public class GraphFragment extends Fragment {
 
 
 
-        mChart.setUsePercentValues(true);
-        mChart.getDescription().setEnabled(false);
-        mChart.setExtraOffsets(5, 10, 5, 5);
+        mPieChart.setUsePercentValues(true);
+        mPieChart.getDescription().setEnabled(false);
+        mPieChart.setExtraOffsets(5, 10, 5, 5);
 
-        mChart.setDragDecelerationFrictionCoef(0.95f);
+        mPieChart.setDragDecelerationFrictionCoef(0.95f);
 
-        mChart.setCenterTextTypeface(Typeface.DEFAULT);
+        mPieChart.setCenterTextTypeface(Typeface.DEFAULT);
 
-        mChart.setDrawHoleEnabled(true);
-        mChart.setHoleColor(Color.WHITE);
+        mPieChart.setDrawHoleEnabled(true);
+        mPieChart.setHoleColor(Color.WHITE);
 
-        mChart.setTransparentCircleColor(Color.WHITE);
-        mChart.setTransparentCircleAlpha(110);
+        mPieChart.setTransparentCircleColor(Color.WHITE);
+        mPieChart.setTransparentCircleAlpha(110);
 
-        mChart.setHoleRadius(58f);
-        mChart.setTransparentCircleRadius(61f);
+        mPieChart.setHoleRadius(58f);
+        mPieChart.setTransparentCircleRadius(61f);
 
-        mChart.setDrawCenterText(true);
+        mPieChart.setDrawCenterText(true);
 
-        mChart.setRotationAngle(0);
+        mPieChart.setRotationAngle(0);
         // enable rotation of the chart by touch
-        mChart.setRotationEnabled(true);
-        mChart.setHighlightPerTapEnabled(true);
+        mPieChart.setRotationEnabled(true);
+        mPieChart.setHighlightPerTapEnabled(true);
 
 
         List<PieEntry> entries = new ArrayList<>();
@@ -216,18 +277,25 @@ public class GraphFragment extends Fragment {
         set.setHighlightEnabled(true); // allow highlighting for DataSet
 
         // set this to false to disable the drawing of highlight indicator (lines)
-        data = new PieData(set);
-        data.setValueFormatter(new PercentFormatter());
-        data.setValueTextSize(11f);
-        data.setValueTextColor(Color.WHITE);
-        data.setValueTypeface(Typeface.DEFAULT);
-        mChart.setData(data);
+        pieData = new PieData(set);
+        pieData.setValueFormatter(new PercentFormatter());
+        pieData.setValueTextSize(11f);
+        pieData.setValueTextColor(Color.WHITE);
+        pieData.setValueTypeface(Typeface.DEFAULT);
+        mPieChart.setData(pieData);
 
-        mChart.animateY(1400, Easing.EasingOption.EaseInOutElastic);
-        // mChart.spin(2000, 0, 360);
+        mPieChart.animateY(5000, Easing.EasingOption.Linear);
+        // mPieChart.spin(2000, 0, 360);
 
-
-        Legend l = mChart.getLegend();
+        SpannableString s = new SpannableString("Monthly\ndetails by category");
+        s.setSpan(new RelativeSizeSpan(1.4f), 0, 15, 0);
+        s.setSpan(new StyleSpan(Typeface.NORMAL), 7, s.length() , 0);
+        s.setSpan(new ForegroundColorSpan(Color.GRAY), 7, s.length(), 0);
+        s.setSpan(new RelativeSizeSpan(1.2f), 7, s.length(), 0);
+        s.setSpan(new StyleSpan(Typeface.ITALIC), s.length() - 21, s.length(), 0);
+        s.setSpan(new ForegroundColorSpan(ColorTemplate.getHoloBlue()), s.length() - 12, s.length(), 0);
+        mPieChart.setCenterText(s);
+        Legend l = mPieChart.getLegend();
         l.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
         l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
         l.setOrientation(Legend.LegendOrientation.HORIZONTAL);
@@ -237,13 +305,77 @@ public class GraphFragment extends Fragment {
         l.setYOffset(0f);
 
         // entry label styling
-        mChart.setEntryLabelColor(Color.WHITE);
-        mChart.setEntryLabelTypeface(Typeface.DEFAULT);
-        mChart.setEntryLabelTextSize(12f);
+        mPieChart.setEntryLabelColor(Color.WHITE);
+        mPieChart.setEntryLabelTypeface(Typeface.DEFAULT);
+        mPieChart.setEntryLabelTextSize(12f);
 
 
-        mChart.invalidate(); //
+        mPieChart.invalidate(); //
     }
 
+
+    public void monthSpinnerClickListener(final Spinner monthSpinner) {
+        monthSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (monthSpinner.getSelectedItem().toString().equals("January")) {
+                    currentMonth = String.valueOf(1);
+                    updatePieChart();
+                }
+                else if (monthSpinner.getSelectedItem().toString().equals("February")) {
+                    currentMonth = String.valueOf(2);
+                    updatePieChart();
+                }
+                else if (monthSpinner.getSelectedItem().toString().equals("March")) {
+                    currentMonth = String.valueOf(3);
+                    updatePieChart();
+                }
+                else if (monthSpinner.getSelectedItem().toString().equals("April")) {
+                    currentMonth = String.valueOf(4);
+                    updatePieChart();
+                }
+                else if (monthSpinner.getSelectedItem().toString().equals("May")) {
+                    currentMonth = String.valueOf(5);
+                    updatePieChart();
+                }
+                else if (monthSpinner.getSelectedItem().toString().equals("June")) {
+                    currentMonth = String.valueOf(6);
+                    updatePieChart();
+                }
+                else if (monthSpinner.getSelectedItem().toString().equals("July")) {
+                    currentMonth = String.valueOf(7);
+                    updatePieChart();
+                }
+                else if (monthSpinner.getSelectedItem().toString().equals("August")) {
+                    currentMonth = String.valueOf(8);
+                    updatePieChart();
+                }
+                else if (monthSpinner.getSelectedItem().toString().equals("September")) {
+                    currentMonth = String.valueOf(9);
+                    updatePieChart();
+                }
+                else if (monthSpinner.getSelectedItem().toString().equals("October")) {
+                    currentMonth = String.valueOf(10);
+                    updatePieChart();
+                }
+                else if (monthSpinner.getSelectedItem().toString().equals("November")) {
+                    currentMonth = String.valueOf(11);
+                    updatePieChart();
+                }
+
+                else if (monthSpinner.getSelectedItem().toString().equals("December")) {
+                    currentMonth = String.valueOf(12);
+                    updatePieChart();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+
+        });
+    }
 
 }

@@ -7,6 +7,12 @@
     android:id="@+id/graph_fragment"
     tools:context=".GraphFragment">
 
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -27,19 +33,30 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
+
+        <Spinner
+            android:id="@+id/monthSpinner"
+            android:entries="@array/monthspinner"
+            android:layout_width="380dp"
+            android:layout_height="wrap_content" />
         <com.github.mikephil.charting.charts.PieChart
-            android:id="@+id/chart"
+            android:id="@+id/piechart"
+            android:layout_width="380dp"
+            android:layout_height="380dp" />
+
+        <com.github.mikephil.charting.charts.HorizontalBarChart
+            android:layout_marginTop="50dp"
+            android:id="@+id/horizontal_barchart"
             android:layout_width="350dp"
             android:layout_height="350dp" />
-
         <!--<com.anychart.anychart.AnyChartView-->
 
-            <!--android:layout_marginTop="20dp"-->
-            <!--android:id="@+id/any_chart_view"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="380dp"-->
-            <!--android:scaleX="0.85"-->
-            <!--android:scaleY="0.85" />-->
+        <!--android:layout_marginTop="20dp"-->
+        <!--android:id="@+id/any_chart_view"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="380dp"-->
+        <!--android:scaleX="0.85"-->
+        <!--android:scaleY="0.85" />-->
 
 
         <Button
@@ -50,5 +67,11 @@
 
 
     </LinearLayout>
+
+
+
+
+
+</ScrollView>
 
 </LinearLayout>

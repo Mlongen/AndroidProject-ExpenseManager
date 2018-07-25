@@ -1,19 +1,12 @@
 package com.example.marcelolongen.expensemanager;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Environment;
-import android.support.annotation.ColorInt;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -27,7 +20,6 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
@@ -37,7 +29,6 @@ import com.orhanobut.dialogplus.OnClickListener;
 import com.orhanobut.dialogplus.ViewHolder;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 import es.dmoral.toasty.Toasty;
 
@@ -198,7 +189,7 @@ public class Overview extends AppCompatActivity {
                                       //trying to update graphfragment
 
                                        View graphView = graphFragment.getThisView();
-                                       graphFragment.updateData(graphView);
+                                       graphFragment.updatePieChart();
 
                                     }
 
