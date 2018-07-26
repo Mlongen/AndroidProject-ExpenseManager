@@ -19,24 +19,14 @@
 
 
         <TextView
-            android:layout_marginTop="0dp"
+            android:gravity="center"
             android:textSize="40sp"
             android:textColor="@color/colorPrimary"
             android:fontFamily="@font/din_condensed"
             android:text="Overview"
-            android:layout_marginLeft="140dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             />
-        <ImageButton
-            android:background="#00ffffff"
-            android:id="@+id/addExpense"
-            android:src="@drawable/pluss"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:scaleX="0.5"
-            android:scaleY="0.5"
-            android:layout_marginLeft="70dp"/>
 
 
 

@@ -17,6 +17,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import static android.graphics.Color.BLACK;
+import static com.github.mikephil.charting.utils.ColorTemplate.rgb;
 
 /**
  * Simple example of ListAdapter for using with Folding Cell
@@ -83,31 +84,36 @@ public class FoldingCellListAdapter extends ArrayAdapter<Item> {
         viewHolder.category2.setText(item.getCategory());
         viewHolder.description2.setText(item.getDescription());
 
+        String[] categories = {"Food", "Bills", "Housing", "Health", "Social Life", "Apparel", "Beauty", "Education", "Other"};
         if (item.getCategory().equals("Food")) {
-            viewHolder.layout.setBackgroundColor(0xFFFFA500);
-            viewHolder.layout2.setBackgroundColor(0xFFFFA500);
+            viewHolder.layout.setBackgroundColor(rgb("#f1c40f"));
+            viewHolder.layout2.setBackgroundColor(rgb("#f1c40f"));
             viewHolder.headImage.setImageResource(R.drawable.food);
         } else if (item.getCategory().equals("Bills")) {
-            viewHolder.layout.setBackgroundColor(Color.RED);
-            viewHolder.layout2.setBackgroundColor(Color.RED);
+            viewHolder.layout.setBackgroundColor(rgb("#e74c3c"));
+            viewHolder.layout2.setBackgroundColor(rgb("#e74c3c"));
             viewHolder.headImage.setImageResource(R.drawable.bills);
         } else if (item.getCategory().equals("Housing")) {
-            viewHolder.layout.setBackgroundColor(Color.GRAY);
-            viewHolder.layout2.setBackgroundColor(Color.GRAY);
+            viewHolder.layout.setBackgroundColor(rgb("#9E9E9E"));
+            viewHolder.layout2.setBackgroundColor(rgb("#9E9E9E"));
             viewHolder.headImage.setImageResource(R.drawable.housing);
 
         } else if (item.getCategory().equals("Health")) {
-            viewHolder.layout.setBackgroundColor(0xFF008000);
-            viewHolder.layout2.setBackgroundColor(0xFF008000);
+            viewHolder.layout.setBackgroundColor(rgb("#2ecc71"));
+            viewHolder.layout2.setBackgroundColor(rgb("#2ecc71"));
             viewHolder.headImage.setImageResource(R.drawable.health);
         } else if (item.getCategory().equals("Beauty")) {
-            viewHolder.layout.setBackgroundColor(0xFF800080);
-            viewHolder.layout2.setBackgroundColor(0xFF800080);
+            viewHolder.layout.setBackgroundColor(rgb("#E91E63"));
+            viewHolder.layout2.setBackgroundColor(rgb("#E91E63"));
             viewHolder.headImage.setImageResource(R.drawable.beauty);
         } else if (item.getCategory().equals("Social Life")) {
             viewHolder.headImage.setImageResource(R.drawable.party);
-            viewHolder.layout.setBackgroundColor(0xFFFF80FF);
-            viewHolder.layout2.setBackgroundColor(0xFFFF80FF);
+            viewHolder.layout.setBackgroundColor(rgb("#9C27B0"));
+            viewHolder.layout2.setBackgroundColor(rgb("#9C27B0"));
+        } else if (item.getCategory().equals("Apparel")) {
+            viewHolder.headImage.setImageResource(R.drawable.housing);
+            viewHolder.layout.setBackgroundColor(rgb("#009688"));
+            viewHolder.layout2.setBackgroundColor(rgb("#009688"));
         }
 
 

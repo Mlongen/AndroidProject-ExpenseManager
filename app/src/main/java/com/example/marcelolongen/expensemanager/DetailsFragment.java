@@ -18,7 +18,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.ramotion.foldingcell.FoldingCell;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import es.dmoral.toasty.Toasty;
 
@@ -39,6 +41,9 @@ public class DetailsFragment extends android.support.v4.app.Fragment{
     private ArrayList<Item> displayedItems;
     private String userName;
     public Spinner monthSpinner;
+    private String currentMonth;
+    private OverviewFragment overviewFragment;
+    private GraphFragment graphFragment;
     private double currentRate;
     public DetailsFragment() {
         // Required empty public constructor
@@ -78,7 +83,8 @@ public class DetailsFragment extends android.support.v4.app.Fragment{
 
         }
         currentRate = Overview.getCurrentRate();
-
+        root = FirebaseDatabase.getInstance().getReference();
+        user = root.child("users").child(userName).child("Expenses");
     }
 
     @Override
@@ -118,6 +124,7 @@ public class DetailsFragment extends android.support.v4.app.Fragment{
                 ((FoldingCell) view).toggle(false);
                 // register in foldingCellListAdapter that state for selected cell is toggled
                 foldingCellListAdapter.registerToggle(pos);
+                finalI = pos;
             }
         });
 
@@ -127,6 +134,17 @@ public class DetailsFragment extends android.support.v4.app.Fragment{
 
         monthSpinner = v.findViewById(R.id.monthSpinner);
 
+        if (currentMonth == null) {
+            currentMonth = new SimpleDateFormat("M").format(Calendar.getInstance().getTime());
+        }
+
+
+
+        for (int i = 0; i < 13;i++) {
+            if (Integer.valueOf(currentMonth) == i) {
+                monthSpinner.setSelection(i);
+            }
+        }
         foldingCellListAdapter.notifyDataSetChanged();
         monthSpinnerClickListener(monthSpinner);
         deleteButtonClick(foldingCellListAdapter);
@@ -296,30 +314,33 @@ public class DetailsFragment extends android.support.v4.app.Fragment{
     }
 
     //TODO: FIX DELETE BUTTON CODE
-    private void deleteButtonClick(final FoldingCellListAdapter adapter) {
+   public void deleteButtonClick(final FoldingCellListAdapter adapter) {
         if (!db.getItemObjects().isEmpty()) {
             for (int i = 0; i < db.getItemObjects().size(); i++) {
-                finalI = i;
+                final int finalI1 = i;
                 db.getItemObjects().get(i).setRequestBtnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
 
-                        String id = db.getItemObjects().get(finalI).getId();
+                        String id = db.getItemObjects().get(finalI1).getId();
+
                         user.child(id).removeValue(new DatabaseReference.CompletionListener() {
                             @Override
                             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
                                 if (databaseError == null) {
                                     Toast.makeText(getApplicationContext(), "Successfully deleted.", Toast.LENGTH_SHORT).show();
                                 } else {
-                                    Toast.makeText(getApplicationContext(), "Error deleted.", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getApplicationContext(), "Error deleting.", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
                         db.getItemObjects().remove(finalI);
                         displayedItems.remove(finalI);
                         adapter.notifyDataSetChanged();
-//                        deleteButtonClick(adapter);
+                        Overview.updateFragments();
+                        deleteButtonClick(adapter);
+
                     }
 
 

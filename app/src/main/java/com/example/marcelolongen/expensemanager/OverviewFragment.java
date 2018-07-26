@@ -107,6 +107,18 @@ public class OverviewFragment extends Fragment {
         super.onStart();
         updateData(thisView);
     }
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+
+        super.setUserVisibleHint(isVisibleToUser);
+        if(isVisibleToUser){
+
+        }
+        else{
+            //no
+        }
+
+    }
 
     public void updateData(View view) {
         currentRate = Overview.getCurrentRate();

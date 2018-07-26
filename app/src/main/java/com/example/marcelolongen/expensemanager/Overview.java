@@ -63,13 +63,12 @@ public class Overview extends AppCompatActivity {
     private DatabaseReference user;
     private TabLayout myTab;
     private ViewPager myPager;
-    private Button addButton;
     private EditText descriptionText;
     private Spinner spinner;
     private EditText amountText;
     private DatePicker datePicker;
-    private DetailsFragment detailsFragment;
-    private OverviewFragment overviewFragment;
+    private static DetailsFragment detailsFragment;
+    private static OverviewFragment overviewFragment;
     private GraphFragment graphFragment;
     private MyPagerAdapter myAdapter;
     private FirebaseAuth mAuth;
@@ -206,10 +205,13 @@ public class Overview extends AppCompatActivity {
 
 
     private void updateTitle(Menu menu) {
-        if (baseString != "CAD") {
+        if (!baseString.equals("CAD")) {
             MenuItem currencyText = menu.findItem(R.id.current_currency);
             currencyText.setTitle("Converting to: " + baseString);
 
+        } else {
+            MenuItem currencyText = menu.findItem(R.id.current_currency);
+            currencyText.setTitle("");
         }
     }
 
@@ -252,9 +254,12 @@ public class Overview extends AppCompatActivity {
 
 
         public void addExpense(MenuItem item) {
+
         DialogPlus dialog = DialogPlus.newDialog(Overview.this)
                 .setGravity(Gravity.TOP)
                 .setOnClickListener(new OnClickListener() {
+
+
                     @Override
                     public void onClick(DialogPlus dialog, View view) {
                         switch (view.getId()) {
@@ -273,6 +278,7 @@ public class Overview extends AppCompatActivity {
                                 String category = spinner.getSelectedItem().toString();
 
 
+
                                     if (description.matches("[A-Za-z]{1,20}") &&
                                             amount.matches("[0-9.]{1,10}")) {
 
@@ -289,8 +295,8 @@ public class Overview extends AppCompatActivity {
                                       imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
                                       ArrayList<Item> items = detailsFragment.getDisplayedItems();
                                       items.add(0, newItem);
-                                        updateFragments();
 
+                                        updateFragments();
 
                                     }
 
@@ -312,12 +318,18 @@ public class Overview extends AppCompatActivity {
         descriptionText.requestFocus();
         InputMethodManager imm = (InputMethodManager)  getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(descriptionText, InputMethodManager.SHOW_IMPLICIT);
+
+            TextView alert = (TextView) dialog.findViewById(R.id.currency_alert);
+            alert.setVisibility(View.INVISIBLE);
+            if (!getBaseString().equals("CAD")) {
+                alert.setVisibility(View.VISIBLE);
+            }
     }
 
-    private void updateFragments() {
+    public static void updateFragments() {
         //updating details fragment
         detailsFragment.getAdapter().notifyDataSetChanged();
-
+       detailsFragment.deleteButtonClick(detailsFragment.getAdapter());
         //updating overview fragment
 
         View overView = overviewFragment.getThisView();
@@ -346,7 +358,7 @@ public class Overview extends AppCompatActivity {
         updateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!currencySpinner.getSelectedItem().toString().trim().equals("--")) {
+                if (!currencySpinner.getSelectedItem().toString().trim().equals("None")) {
                     showCurrencyDialog();
 
                     double thisRate = rates.getRates().get(currencySpinner.getSelectedItem().toString().trim());
@@ -369,8 +381,20 @@ public class Overview extends AppCompatActivity {
                     Toasty.success(getApplicationContext(),  "Currency changed to: " + baseString, Toast.LENGTH_SHORT).show();
                     updateTitle(menu);
                 } else {
+                    currentRate = 1.00;
+                    baseString = "CAD";
+
+                    SharedPreferences.Editor editor = getSharedPreferences(MY_PREFERENCES, MODE_PRIVATE).edit();
+                    editor.putString("base", baseString);
+                    editor.putString("rate", String.valueOf(currentRate));
+                    editor.apply();
+                    //updating details fragment
+                    updateFragments();
 
 
+
+                    Toasty.success(getApplicationContext(),  "Currency changed to: " + baseString, Toast.LENGTH_SHORT).show();
+                    updateTitle(menu);
                     alertDialog.dismiss();
                 }
 

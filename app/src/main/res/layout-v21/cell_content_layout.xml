@@ -137,7 +137,8 @@
             android:text="@string/request_btn_text"
             android:textAlignment="center"
             android:textColor="@color/mainTextColor"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:onClick="deleteEntryButton"/>
 
 
     </LinearLayout>

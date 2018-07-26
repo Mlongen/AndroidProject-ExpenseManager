@@ -61,7 +61,6 @@ public class GraphFragment extends Fragment {
     private BarData barData;
     private View thisView;
     private String currentMonth;
-    private String content;
     private double currentRate;
     public GraphFragment() {
         // Required empty public constructor
@@ -87,6 +86,7 @@ public class GraphFragment extends Fragment {
         super.onCreate(savedInstanceState);
         db = Database.getInstance();
         currentRate = Overview.getCurrentRate();
+
     }
 
 
@@ -105,6 +105,18 @@ public class GraphFragment extends Fragment {
 
 
         Spinner monthSpinner = thisView.findViewById(R.id.monthSpinner);
+        if (currentMonth == null) {
+            currentMonth = new SimpleDateFormat("M").format(Calendar.getInstance().getTime());
+        }
+
+
+
+        for (int i = 0; i < 13;i++) {
+            if (Integer.valueOf(currentMonth) == i) {
+                monthSpinner.setSelection(i - 1);
+            }
+        }
+
         monthSpinnerClickListener(monthSpinner);
 
         Button changeData = thisView.findViewById(R.id.change_data);
@@ -135,9 +147,17 @@ public class GraphFragment extends Fragment {
         String[] categories = {"Food", "Bills", "Housing", "Health", "Social Life", "Apparel", "Beauty", "Education", "Other"};
         float[] monthSum = {0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f};
 
+
+        if (currentMonth == null) {
+            currentMonth = new SimpleDateFormat("M").format(Calendar.getInstance().getTime());
+        }
+
+
+
+
         for(int i = 0; i < db.getItemObjects().size(); i++) {
             for (int j = 0; j < 9; j++) {
-                if (db.getItemObjects().get(i).getCategory().equals(categories[j])) {
+                if (db.getItemObjects().get(i).getCategory().equals(categories[j])&& db.getItemObjects().get(i).getMonth().toString().equals(currentMonth)) {
                     monthSum[j] += (float)(double)db.getItemObjects().get(i).getValue();
                 }
             }
@@ -155,56 +175,56 @@ public class GraphFragment extends Fragment {
         int currentColor = 0;
         if (monthSum[0] > 0) {
             entries.add(new BarEntry((float)current, monthSum[0] * (float)currentRate));
-            LegendEntry l1=new LegendEntry("Food", Legend.LegendForm.DEFAULT,10f,2f,null, ColorTemplate.JOYFUL_COLORS[currentColor]);
+            LegendEntry l1=new LegendEntry("Food", Legend.LegendForm.DEFAULT,10f,2f,null, MyColors.MATERIAL_COLORS[currentColor]);
             legendEntries.add(l1);
             current += 2;
             currentColor ++;
         }
         if (monthSum[1] > 0) {
             entries.add(new BarEntry((float)current, monthSum[1] * (float)currentRate));
-            LegendEntry l1=new LegendEntry("Bills", Legend.LegendForm.DEFAULT,10f,2f,null, ColorTemplate.JOYFUL_COLORS[currentColor]);
+            LegendEntry l1=new LegendEntry("Bills", Legend.LegendForm.DEFAULT,10f,2f,null, MyColors.MATERIAL_COLORS[currentColor]);
             legendEntries.add(l1);
             current += 2;
             currentColor ++;
         }
         if (monthSum[2] > 0) {
             entries.add(new BarEntry((float)current, monthSum[2] * (float)currentRate));
-            LegendEntry l1=new LegendEntry("Housing", Legend.LegendForm.DEFAULT,10f,2f,null, ColorTemplate.JOYFUL_COLORS[currentColor]);
+            LegendEntry l1=new LegendEntry("Housing", Legend.LegendForm.DEFAULT,10f,2f,null, MyColors.MATERIAL_COLORS[currentColor]);
             legendEntries.add(l1);
             current += 2;
             currentColor ++;
         }
         if (monthSum[3] > 0) {
             entries.add( new BarEntry((float)current, monthSum[3] * (float)currentRate));
-            LegendEntry l1=new LegendEntry("Social Life", Legend.LegendForm.DEFAULT,10f,2f,null, ColorTemplate.JOYFUL_COLORS[currentColor]);
+            LegendEntry l1=new LegendEntry("Social Life", Legend.LegendForm.DEFAULT,10f,2f,null, MyColors.MATERIAL_COLORS[currentColor]);
             legendEntries.add(l1);
             current += 2;
             currentColor ++;
         }
         if (monthSum[4] > 0) {
             entries.add(new BarEntry((float)current, monthSum[4] * (float)currentRate));
-            LegendEntry l1=new LegendEntry("Apparel", Legend.LegendForm.DEFAULT,10f,2f,null, ColorTemplate.JOYFUL_COLORS[currentColor]);
+            LegendEntry l1=new LegendEntry("Apparel", Legend.LegendForm.DEFAULT,10f,2f,null, MyColors.MATERIAL_COLORS[currentColor]);
             legendEntries.add(l1);
             current += 2;
             currentColor ++;
         }
         if (monthSum[5] > 0) {
             entries.add( new BarEntry((float)current, monthSum[5] * (float)currentRate));
-            LegendEntry l1=new LegendEntry("Beauty", Legend.LegendForm.DEFAULT,10f,2f,null, ColorTemplate.JOYFUL_COLORS[currentColor]);
+            LegendEntry l1=new LegendEntry("Beauty", Legend.LegendForm.DEFAULT,10f,2f,null, MyColors.MATERIAL_COLORS[currentColor]);
             legendEntries.add(l1);
             current += 2;
             currentColor ++;
         }
         if (monthSum[6] > 0) {
             entries.add(new BarEntry((float)current, monthSum[6] * (float)currentRate));
-            LegendEntry l1=new LegendEntry("Education", Legend.LegendForm.DEFAULT,10f,2f,null, ColorTemplate.JOYFUL_COLORS[currentColor]);
+            LegendEntry l1=new LegendEntry("Education", Legend.LegendForm.DEFAULT,10f,2f,null, MyColors.MATERIAL_COLORS[currentColor]);
             legendEntries.add(l1);
             current += 2;
             currentColor ++;
         }
         if (monthSum[7] > 0) {
             entries.add( new BarEntry((float)current, monthSum[7] * (float)currentRate));
-            LegendEntry l1=new LegendEntry("Other", Legend.LegendForm.DEFAULT,10f,2f,null, ColorTemplate.JOYFUL_COLORS[currentColor]);
+            LegendEntry l1=new LegendEntry("Other", Legend.LegendForm.DEFAULT,10f,2f,null, MyColors.MATERIAL_COLORS[currentColor]);
             legendEntries.add(l1);
             current += 2;
             currentColor ++;
@@ -214,28 +234,21 @@ public class GraphFragment extends Fragment {
         }
 
         BarDataSet set = new BarDataSet(entries, "BarDataSet");
-        set.setColors(ColorTemplate.JOYFUL_COLORS);
+        set.setColors(MyColors.MATERIAL_COLORS);
 
 
 
         Legend l = mHBarChart.getLegend();
-        l.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
-        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);
-        l.setOrientation(Legend.LegendOrientation.HORIZONTAL);
-        l.setDrawInside(false);
-        l.setForm(Legend.LegendForm.SQUARE);
-        l.setFormSize(12f);
-        l.setTextSize(14f);
-        l.setXEntrySpace(8f);
 
-        l.setCustom(legendEntries);
+
+        l.setEnabled(false);
 
 
 
 
 
         barData = new BarData(set);
-        barData.setValueTextSize(13f);
+        barData.setValueTextSize(12f);
         barData.setValueTypeface(Typeface.DEFAULT);
 
         barData.setValueFormatter(new DefaultValueFormatter(2));
@@ -302,8 +315,8 @@ public class GraphFragment extends Fragment {
         mPieChart.setTransparentCircleColor(Color.WHITE);
         mPieChart.setTransparentCircleAlpha(110);
 
-        mPieChart.setHoleRadius(58f);
-        mPieChart.setTransparentCircleRadius(61f);
+        mPieChart.setHoleRadius(38f);
+        mPieChart.setTransparentCircleRadius(42f);
 
         mPieChart.setDrawCenterText(true);
 
@@ -345,13 +358,13 @@ public class GraphFragment extends Fragment {
 
 
         PieDataSet set = new PieDataSet(entries, "");
-        set.setColors(ColorTemplate.JOYFUL_COLORS);
+        set.setColors(MyColors.MATERIAL_COLORS);
         set.setHighlightEnabled(true); // allow highlighting for DataSet
 
         // set this to false to disable the drawing of highlight indicator (lines)
         pieData = new PieData(set);
         pieData.setValueFormatter(new PercentFormatter());
-        pieData.setValueTextSize(13f);
+        pieData.setValueTextSize(15f);
         pieData.setValueTextColor(Color.WHITE);
         pieData.setValueTypeface(Typeface.DEFAULT);
         mPieChart.setData(pieData);
@@ -372,9 +385,10 @@ public class GraphFragment extends Fragment {
         l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
         l.setOrientation(Legend.LegendOrientation.HORIZONTAL);
         l.setDrawInside(false);
-        l.setXEntrySpace(7f);
-        l.setYEntrySpace(0f);
+        l.setTextSize(12f);
+        l.setYEntrySpace(-5f);
         l.setYOffset(0f);
+        l.setWordWrapEnabled(true);
 
         // entry label styling
         mPieChart.setEntryLabelColor(Color.WHITE);
@@ -394,51 +408,63 @@ public class GraphFragment extends Fragment {
                 if (monthSpinner.getSelectedItem().toString().equals("January")) {
                     currentMonth = String.valueOf(1);
                     updatePieChart();
+                    updateBarChart();
                 }
                 else if (monthSpinner.getSelectedItem().toString().equals("February")) {
                     currentMonth = String.valueOf(2);
                     updatePieChart();
+                    updateBarChart();
                 }
                 else if (monthSpinner.getSelectedItem().toString().equals("March")) {
                     currentMonth = String.valueOf(3);
                     updatePieChart();
+                    updateBarChart();
                 }
                 else if (monthSpinner.getSelectedItem().toString().equals("April")) {
                     currentMonth = String.valueOf(4);
                     updatePieChart();
+                    updateBarChart();
                 }
                 else if (monthSpinner.getSelectedItem().toString().equals("May")) {
                     currentMonth = String.valueOf(5);
                     updatePieChart();
+                    updateBarChart();
                 }
                 else if (monthSpinner.getSelectedItem().toString().equals("June")) {
                     currentMonth = String.valueOf(6);
                     updatePieChart();
+                    updateBarChart();
                 }
                 else if (monthSpinner.getSelectedItem().toString().equals("July")) {
                     currentMonth = String.valueOf(7);
                     updatePieChart();
+                    updateBarChart();
                 }
                 else if (monthSpinner.getSelectedItem().toString().equals("August")) {
                     currentMonth = String.valueOf(8);
                     updatePieChart();
+                    updateBarChart();
                 }
                 else if (monthSpinner.getSelectedItem().toString().equals("September")) {
                     currentMonth = String.valueOf(9);
                     updatePieChart();
+                    updateBarChart();
                 }
                 else if (monthSpinner.getSelectedItem().toString().equals("October")) {
                     currentMonth = String.valueOf(10);
                     updatePieChart();
+                    updateBarChart();
                 }
                 else if (monthSpinner.getSelectedItem().toString().equals("November")) {
                     currentMonth = String.valueOf(11);
                     updatePieChart();
+                    updateBarChart();
                 }
 
                 else if (monthSpinner.getSelectedItem().toString().equals("December")) {
                     currentMonth = String.valueOf(12);
                     updatePieChart();
+                    updateBarChart();
                 }
             }
 
