@@ -67,7 +67,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         app:bmb_buttonEnum="ham"
-        app:bmb_normalColor="@color/colorPrimary"
+        app:bmb_normalColor="@color/com_facebook_blue"
         app:bmb_dotRadius="3dp" />
 </RelativeLayout>
 

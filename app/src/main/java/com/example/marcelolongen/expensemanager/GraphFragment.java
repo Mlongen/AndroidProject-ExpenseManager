@@ -89,6 +89,19 @@ public class GraphFragment extends Fragment {
 
     }
 
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+
+        super.setUserVisibleHint(isVisibleToUser);
+        if(isVisibleToUser){
+            updateBarChart();
+            updatePieChart();
+        }
+        else{
+            //no
+        }
+
+    }
 
 
     @Override
@@ -252,7 +265,7 @@ public class GraphFragment extends Fragment {
         barData.setValueTypeface(Typeface.DEFAULT);
 
         barData.setValueFormatter(new DefaultValueFormatter(2));
-        mHBarChart.animateY(5000, Easing.EasingOption.Linear);
+        mHBarChart.animateY(2000, Easing.EasingOption.Linear);
         mHBarChart.setData(barData);
 
         mHBarChart.invalidate();
@@ -369,7 +382,7 @@ public class GraphFragment extends Fragment {
         pieData.setValueTypeface(Typeface.DEFAULT);
         mPieChart.setData(pieData);
 
-        mPieChart.animateY(5000, Easing.EasingOption.Linear);
+        mPieChart.animateY(2000, Easing.EasingOption.Linear);
         // mPieChart.spin(2000, 0, 360);
 
         SpannableString s = new SpannableString("Monthly\ndetails by category");

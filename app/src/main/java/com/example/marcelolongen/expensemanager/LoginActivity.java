@@ -9,15 +9,19 @@ import android.os.StrictMode;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,6 +52,8 @@ import com.google.firebase.database.ValueEventListener;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+
 import es.dmoral.toasty.Toasty;
 
 public class LoginActivity extends AppCompatActivity {
@@ -56,7 +62,9 @@ public class LoginActivity extends AppCompatActivity {
     private CallbackManager callbackManager;
     private Database db;
     private String base = "CAD";
-
+    private FirebaseUser user;
+    private boolean firstLogin = false;
+    private AlertDialog alertDialog;
 
 
     @Override
@@ -66,8 +74,11 @@ public class LoginActivity extends AppCompatActivity {
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         base = preferences.getString("Base", "CAD");
-
         setContentView(R.layout.activity_main);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setLogo(R.drawable.logo);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
 
         if (android.os.Build.VERSION.SDK_INT > 9)
         {
@@ -109,6 +120,17 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+
+        TextView forgot = findViewById(R.id.forgotPassword);
+        forgot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                forgotPasswordDialog();
+            }
+
+
+        });
+
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -127,7 +149,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (password.length() > 5) {
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
-                        FirebaseUser user = mAuth.getCurrentUser();
+                        user = mAuth.getCurrentUser();
                         toastSuccess("User created. Please sign-in.");
 
                     } else {
@@ -136,9 +158,6 @@ public class LoginActivity extends AppCompatActivity {
                                 Toast.LENGTH_SHORT).show();
 
                     }
-                } else {
-                    Toasty.error(getApplicationContext(), "Password is too short.",
-                            Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -150,8 +169,10 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            user = mAuth.getCurrentUser();
                             // Sign in success, update UI with the signed-in user's information
-                            FirebaseUser user = mAuth.getCurrentUser();
+                             firstLogin = task.getResult().getAdditionalUserInfo().isNewUser();
+
                             updateUI(user);
 
                         } else {
@@ -166,34 +187,42 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void updateUI(final FirebaseUser user) {
-        Toasty.success(getApplicationContext(), "Successfully logged in", Toast.LENGTH_SHORT).show();
+
         db = Database.getInstance();
         db.readContentsFromFile(user.getUid());
 
         ProgressDialog progress = new ProgressDialog(this);
 
-        progress.setMessage("Retrieving data.Please wait...");
+        progress.setMessage("Retrieving data. Please wait...");
         progress.setCancelable(false); // disable dismiss by tapping outside of the dialog
         progress.show();
+        try {
+            Overview.fetchContent();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
 
         new Handler().postDelayed(new Runnable() {
                                       @Override
                                       public void run() {
-                                          Intent intent = new Intent(getApplicationContext(), Overview.class);
-                                          intent.putExtra("user", user.getUid());
-                                          intent.putExtra("base", base);
-                                          startActivity(intent);
+
+                                              Intent intent = new Intent(getApplicationContext(), Overview.class);
+                                              intent.putExtra("user", user.getUid());
+                                              intent.putExtra("base", base);
+                                              startActivity(intent);
+
                                       }
                                   },
-                3500);
+                6000);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (currentUser != null) {
-            updateUI(currentUser);
+        user = mAuth.getCurrentUser();
+        if (user != null) {
+            updateUI(user);
         }
 
 
@@ -227,7 +256,7 @@ public class LoginActivity extends AppCompatActivity {
                         if (!TextUtils.isEmpty(email.getText().toString().trim()) &&
                                 !TextUtils.isEmpty(password.getText().toString().trim()) &&
                                 !TextUtils.isEmpty(confirmPassword.getText().toString().trim()) &&
-                                password.getText().toString().trim().equals(confirmPassword.getText().toString().trim())) {
+                                password.getText().toString().trim().equals(confirmPassword.getText().toString().trim()) && password.getText().toString().trim().length() < 6) {
                             createUser(email.getText().toString().trim(), password.getText().toString().trim());
                             confirmPassword.setVisibility(View.GONE);
                             submitButton.setText("Login");
@@ -236,7 +265,12 @@ public class LoginActivity extends AppCompatActivity {
 //
 
                         } else {
-                            Toasty.error(LoginActivity.this, "Please fill fields correctly.", Toast.LENGTH_SHORT).show();
+                            if (password.getText().toString().trim().length() < 6) {
+                                Toasty.error(LoginActivity.this, "Password needs to be at least 6 digits long.", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toasty.error(LoginActivity.this, "Please fill fields correctly.", Toast.LENGTH_SHORT).show();
+                            }
+
                         }
 
                     }
@@ -280,7 +314,7 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
 
-                            FirebaseUser user = mAuth.getCurrentUser();
+                            user = mAuth.getCurrentUser();
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -293,5 +327,25 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
+    private void forgotPasswordDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.forgot_password, null);
+        builder.setView(dialogView);
+
+
+        Button updateBtn = dialogView.findViewById(R.id.send_recovery);
+        updateBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                alertDialog.dismiss();
+            }
+
+        });
+
+        alertDialog = builder.create();
+        alertDialog.show();
+    }
 
 }

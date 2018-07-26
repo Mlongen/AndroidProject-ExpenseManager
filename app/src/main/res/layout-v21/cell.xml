@@ -4,8 +4,9 @@
     xmlns:folding-cell="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+
     folding-cell:additionalFlipsCount="0"
-    folding-cell:animationDuration="1300"
+    folding-cell:animationDuration="800"
     folding-cell:backSideColor="@color/bgBackSideColor"
     folding-cell:cameraHeight="30">
 

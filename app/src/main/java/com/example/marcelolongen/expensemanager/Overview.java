@@ -21,6 +21,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -30,6 +31,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -43,6 +45,7 @@ import com.nightonke.boommenu.Piece.PiecePlaceEnum;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.OnClickListener;
 import com.orhanobut.dialogplus.ViewHolder;
+import com.tooltip.Tooltip;
 
 import org.w3c.dom.Text;
 
@@ -83,7 +86,7 @@ public class Overview extends AppCompatActivity {
 
     private Rates rates;
     private AlertDialog alertDialog;
-    private String jSON;
+    private static String jSON;
     private String ratesLastUpdated;
 
     public static String getBaseString() {
@@ -97,7 +100,12 @@ public class Overview extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_overview);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setLogo(R.drawable.logo);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
 
         Intent intent = getIntent();
         userName = intent.getStringExtra("user");
@@ -123,7 +131,7 @@ public class Overview extends AppCompatActivity {
             currentRate = Double.valueOf(prefs.getString("rate", "1.00"));
         }
 
-        String[] names = {"Detailed list", "Settings"};
+        String[] names = {"Settings", "Log out"};
 
 
         bmb = findViewById(R.id.bmb);
@@ -132,8 +140,8 @@ public class Overview extends AppCompatActivity {
 
 
         ArrayList<Integer> images = new ArrayList<>();
-        images.add(R.drawable.arrow);
         images.add(R.drawable.settings);
+        images.add(R.drawable.logout);
         bmb.setPiecePlaceEnum(PiecePlaceEnum.HAM_2);
         bmb.setButtonPlaceEnum(ButtonPlaceEnum.HAM_2);
         bmb.setButtonTopMargin(1000);
@@ -145,12 +153,13 @@ public class Overview extends AppCompatActivity {
                     .listener(new OnBMClickListener() {
                         @Override
                         public void onBoomButtonClick(int index) {
-                            if (index == 0) {
-                                mAuth.signOut();
+                            if (index == 1) {
+                                FirebaseAuth.getInstance().signOut();
+                                LoginManager.getInstance().logOut();
                                 Toasty.success(getApplicationContext(), "Successfully logged out.").show();
                                 Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                                 startActivity(intent);
-                            } else if (index == 1) {
+                            } else if (index == 0) {
                                 showUpdateDialog();
                             }
 
@@ -192,6 +201,9 @@ public class Overview extends AppCompatActivity {
 
             }
         });
+
+
+
     }
 
     @Override
@@ -408,7 +420,7 @@ public class Overview extends AppCompatActivity {
 
 
 
-    private static String fetchContent() throws IOException {
+    public static String fetchContent() throws IOException {
 
         final int OK = 200;
         URL url = new URL("https://frankfurter.app/current?from=CAD");
@@ -426,6 +438,7 @@ public class Overview extends AppCompatActivity {
             }
             in.close();
 
+            jSON = response.toString();
             return response.toString();
         }
 
