@@ -39,6 +39,7 @@ public class DetailsFragment extends android.support.v4.app.Fragment{
     private ArrayList<Item> displayedItems;
     private String userName;
     public Spinner monthSpinner;
+    private double currentRate;
     public DetailsFragment() {
         // Required empty public constructor
     }
@@ -76,6 +77,7 @@ public class DetailsFragment extends android.support.v4.app.Fragment{
             userName = (String) getArguments().getSerializable(ARG_USER_NAME);
 
         }
+        currentRate = Overview.getCurrentRate();
 
     }
 

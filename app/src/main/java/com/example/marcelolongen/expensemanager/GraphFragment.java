@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 
 import com.github.mikephil.charting.animation.Easing;
@@ -34,6 +35,11 @@ import com.github.mikephil.charting.formatter.DefaultValueFormatter;
 import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -55,6 +61,8 @@ public class GraphFragment extends Fragment {
     private BarData barData;
     private View thisView;
     private String currentMonth;
+    private String content;
+    private double currentRate;
     public GraphFragment() {
         // Required empty public constructor
     }
@@ -78,6 +86,7 @@ public class GraphFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         db = Database.getInstance();
+        currentRate = Overview.getCurrentRate();
     }
 
 
@@ -106,6 +115,10 @@ public class GraphFragment extends Fragment {
                     sum[2] +=5000;
                       updatePieChart();
                       updateBarChart();
+
+
+
+
             }
         });
 
@@ -114,6 +127,8 @@ public class GraphFragment extends Fragment {
         return thisView;
 
     }
+
+
 
 
     public void updateBarChart() {
@@ -139,63 +154,63 @@ public class GraphFragment extends Fragment {
         int current = 0;
         int currentColor = 0;
         if (monthSum[0] > 0) {
-            entries.add(new BarEntry((float)current, monthSum[0]));
+            entries.add(new BarEntry((float)current, monthSum[0] * (float)currentRate));
             LegendEntry l1=new LegendEntry("Food", Legend.LegendForm.DEFAULT,10f,2f,null, ColorTemplate.JOYFUL_COLORS[currentColor]);
             legendEntries.add(l1);
             current += 2;
             currentColor ++;
         }
         if (monthSum[1] > 0) {
-            entries.add(new BarEntry((float)current, monthSum[1]));
+            entries.add(new BarEntry((float)current, monthSum[1] * (float)currentRate));
             LegendEntry l1=new LegendEntry("Bills", Legend.LegendForm.DEFAULT,10f,2f,null, ColorTemplate.JOYFUL_COLORS[currentColor]);
             legendEntries.add(l1);
             current += 2;
             currentColor ++;
         }
         if (monthSum[2] > 0) {
-            entries.add(new BarEntry((float)current, monthSum[2]));
+            entries.add(new BarEntry((float)current, monthSum[2] * (float)currentRate));
             LegendEntry l1=new LegendEntry("Housing", Legend.LegendForm.DEFAULT,10f,2f,null, ColorTemplate.JOYFUL_COLORS[currentColor]);
             legendEntries.add(l1);
             current += 2;
             currentColor ++;
         }
         if (monthSum[3] > 0) {
-            entries.add( new BarEntry((float)current, monthSum[3]));
+            entries.add( new BarEntry((float)current, monthSum[3] * (float)currentRate));
             LegendEntry l1=new LegendEntry("Social Life", Legend.LegendForm.DEFAULT,10f,2f,null, ColorTemplate.JOYFUL_COLORS[currentColor]);
             legendEntries.add(l1);
             current += 2;
             currentColor ++;
         }
         if (monthSum[4] > 0) {
-            entries.add(new BarEntry((float)current, monthSum[4]));
+            entries.add(new BarEntry((float)current, monthSum[4] * (float)currentRate));
             LegendEntry l1=new LegendEntry("Apparel", Legend.LegendForm.DEFAULT,10f,2f,null, ColorTemplate.JOYFUL_COLORS[currentColor]);
             legendEntries.add(l1);
             current += 2;
             currentColor ++;
         }
         if (monthSum[5] > 0) {
-            entries.add( new BarEntry((float)current, monthSum[5]));
+            entries.add( new BarEntry((float)current, monthSum[5] * (float)currentRate));
             LegendEntry l1=new LegendEntry("Beauty", Legend.LegendForm.DEFAULT,10f,2f,null, ColorTemplate.JOYFUL_COLORS[currentColor]);
             legendEntries.add(l1);
             current += 2;
             currentColor ++;
         }
         if (monthSum[6] > 0) {
-            entries.add(new BarEntry((float)current, monthSum[6]));
+            entries.add(new BarEntry((float)current, monthSum[6] * (float)currentRate));
             LegendEntry l1=new LegendEntry("Education", Legend.LegendForm.DEFAULT,10f,2f,null, ColorTemplate.JOYFUL_COLORS[currentColor]);
             legendEntries.add(l1);
             current += 2;
             currentColor ++;
         }
         if (monthSum[7] > 0) {
-            entries.add( new BarEntry((float)current, monthSum[7]));
+            entries.add( new BarEntry((float)current, monthSum[7] * (float)currentRate));
             LegendEntry l1=new LegendEntry("Other", Legend.LegendForm.DEFAULT,10f,2f,null, ColorTemplate.JOYFUL_COLORS[currentColor]);
             legendEntries.add(l1);
             current += 2;
             currentColor ++;
         }
         if (monthSum[8] > 0) {
-            entries.add( new BarEntry((float)current, monthSum[8]));
+            entries.add( new BarEntry((float)current, monthSum[8] * (float)currentRate));
         }
 
         BarDataSet set = new BarDataSet(entries, "BarDataSet");

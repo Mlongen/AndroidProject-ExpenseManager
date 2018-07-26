@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
+import android.os.StrictMode;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
@@ -54,6 +55,7 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private CallbackManager callbackManager;
     private Database db;
+    private String base = "CAD";
 
 
 
@@ -62,25 +64,20 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         mAuth = FirebaseAuth.getInstance();
 
-
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        base = preferences.getString("Base", "CAD");
 
         setContentView(R.layout.activity_main);
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String user = preferences.getString("User", "");
-        if (!user.equals("")) {
-            Intent intent = new Intent(getBaseContext(), Overview.class);
-            intent.putExtra("user", user);
-            startActivity(intent);
-            toastSuccess("Successfully logged in.");
+        if (android.os.Build.VERSION.SDK_INT > 9)
+        {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
         }
-
 
 
         TextView forgotPassword = findViewById(R.id.forgotPassword);
 
-
-        Drawable thumb = ContextCompat.getDrawable(getBaseContext(), R.drawable.bg);
 
         final Button submitButton = findViewById(R.id.submitButton);
 
@@ -184,6 +181,7 @@ public class LoginActivity extends AppCompatActivity {
                                       public void run() {
                                           Intent intent = new Intent(getApplicationContext(), Overview.class);
                                           intent.putExtra("user", user.getUid());
+                                          intent.putExtra("base", base);
                                           startActivity(intent);
                                       }
                                   },

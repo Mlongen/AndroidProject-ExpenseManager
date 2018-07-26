@@ -39,6 +39,7 @@ import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.OnClickListener;
 import com.orhanobut.dialogplus.ViewHolder;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -62,6 +63,8 @@ public class OverviewFragment extends Fragment {
     public OverviewFragment() {
         // Required empty public constructor
     }
+    private double currentRate;
+    private String currentRateName;
 
     public static OverviewFragment newInstance(String userName) {
         Bundle args = new Bundle();
@@ -82,7 +85,8 @@ public class OverviewFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         db = Database.getInstance();
-
+        currentRate = Overview.getCurrentRate();
+        currentRateName = Overview.getBaseString();
 
 
 
@@ -105,6 +109,8 @@ public class OverviewFragment extends Fragment {
     }
 
     public void updateData(View view) {
+        currentRate = Overview.getCurrentRate();
+        currentRateName = Overview.getBaseString();
         String[] categories = {"Food", "Bills", "Housing", "Health", "Social Life", "Apparel", "Beauty", "Education", "Other"};
 
         @SuppressLint("SimpleDateFormat") String thisMonth = new SimpleDateFormat("M").format(Calendar.getInstance().getTime());
@@ -126,8 +132,8 @@ public class OverviewFragment extends Fragment {
         TextView highestName = view.findViewById(R.id.highestName);
 
         TextView totalSum = view.findViewById(R.id.totalSum);
-        double sumTotal = sum[0] + sum[1] + sum[2] + sum[3] + sum[4] + sum[5] + sum[6] + sum[7] + sum[8];
-        totalSum.setText("CAD: " + String.valueOf(sumTotal) + "0");
+        double sumTotal = (sum[0] + sum[1] + sum[2] + sum[3] + sum[4] + sum[5] + sum[6] + sum[7] + sum[8]) * currentRate;
+        totalSum.setText(currentRateName + ": " + String.format("%.2f", sumTotal));
         double highestValue = sum[0];
         int highestIndex = 0;
         for (int i = 0; i < sum.length; i++) {
@@ -136,7 +142,7 @@ public class OverviewFragment extends Fragment {
                 highestIndex = i;
             }
         }
-        highestSpending.setText("CAD: " + String.valueOf(highestValue) + "0");
+        highestSpending.setText(currentRateName + ": " +String.format("%.2f", highestValue * currentRate));
         highestName.setText(categories[highestIndex]);
     }
 
