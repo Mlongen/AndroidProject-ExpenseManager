@@ -3,6 +3,7 @@ package com.example.marcelolongen.expensemanager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -71,6 +72,8 @@ public class Overview extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private static String baseString = "CAD";
 
+    public static final String MY_PREFERENCES = "myPrefs";
+
     private static double currentRate = 1.00;
 
     private Rates rates;
@@ -108,6 +111,12 @@ public class Overview extends AppCompatActivity {
         rates = gson.fromJson(jSON, Rates.class);
         ratesLastUpdated = rates.getDate();
 
+        SharedPreferences prefs = getSharedPreferences(MY_PREFERENCES, MODE_PRIVATE);
+        String restoredBaseString = prefs.getString("base", null);
+        if (restoredBaseString != null) {
+            baseString = prefs.getString("base", "CAD");//"No name defined" is the default value.
+            currentRate = Double.valueOf(prefs.getString("rate", "1.00"));
+        }
 
         String[] names = {"Detailed list", "Settings"};
 
@@ -327,6 +336,14 @@ public class Overview extends AppCompatActivity {
                     double thisRate = rates.getRates().get(currencySpinner.getSelectedItem().toString().trim());
                     currentRate = thisRate;
                     baseString = currencySpinner.getSelectedItem().toString().trim();
+
+                    SharedPreferences.Editor editor = getSharedPreferences(MY_PREFERENCES, MODE_PRIVATE).edit();
+                    editor.putString("base", baseString);
+                    editor.putString("rate", String.valueOf(currentRate));
+                    editor.apply();
+
+
+
 
                     //updating details fragment
                     updateFragments();
