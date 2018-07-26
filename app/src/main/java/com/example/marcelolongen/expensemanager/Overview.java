@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -43,6 +44,8 @@ import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.OnClickListener;
 import com.orhanobut.dialogplus.ViewHolder;
 
+import org.w3c.dom.Text;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -71,6 +74,9 @@ public class Overview extends AppCompatActivity {
     private MyPagerAdapter myAdapter;
     private FirebaseAuth mAuth;
     private static String baseString = "CAD";
+
+    private Menu menu;
+
 
     public static final String MY_PREFERENCES = "myPrefs";
 
@@ -193,9 +199,19 @@ public class Overview extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.top_menu, menu);
+        updateTitle(menu);
+        this.menu = menu;
         return true;
     }
 
+
+    private void updateTitle(Menu menu) {
+        if (baseString != "CAD") {
+            MenuItem currencyText = menu.findItem(R.id.current_currency);
+            currencyText.setTitle("Converting to: " + baseString);
+
+        }
+    }
 
 
     class MyPagerAdapter extends FragmentStatePagerAdapter {
@@ -351,16 +367,8 @@ public class Overview extends AppCompatActivity {
 
 
                     Toasty.success(getApplicationContext(),  "Currency changed to: " + baseString, Toast.LENGTH_SHORT).show();
+                    updateTitle(menu);
                 } else {
-
-
-
-
-
-
-
-
-
 
 
                     alertDialog.dismiss();

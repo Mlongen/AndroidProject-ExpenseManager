@@ -73,8 +73,8 @@ public class FoldingCellListAdapter extends ArrayAdapter<Item> {
             return cell;
 
         // bind data from selected element to view through view holder
-        viewHolder.price.setText("$" +(item.getValue() * Overview.getCurrentRate()) + "0");
-        viewHolder.price2.setText("$" + (item.getValue() * Overview.getCurrentRate()) + "0");
+        viewHolder.price.setText("$" + String.format("%.2f",(item.getValue() * Overview.getCurrentRate())));
+        viewHolder.price2.setText("$" + String.format("%.2f",(item.getValue() * Overview.getCurrentRate())));
         viewHolder.time.setText(item.getCategory());
         viewHolder.date.setText(item.getMonth()+"/"+item.getDay());
         viewHolder.date2.setText(item.getMonth()+"/"+item.getDay());

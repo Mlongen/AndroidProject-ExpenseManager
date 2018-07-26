@@ -3,10 +3,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
+        android:id="@+id/current_currency"
+        android:title="Show subtitle"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/add_button"
         android:icon="@drawable/plus"
         android:title="Add new"
-        app:showAsAction="ifRoom"
+        app:showAsAction="ifRoom|withText"
         android:onClick="addExpense"/>
 
 
