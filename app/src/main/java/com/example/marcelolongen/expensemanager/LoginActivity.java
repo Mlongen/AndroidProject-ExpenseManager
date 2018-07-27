@@ -333,11 +333,25 @@ public class LoginActivity extends AppCompatActivity {
         View dialogView = inflater.inflate(R.layout.forgot_password, null);
         builder.setView(dialogView);
 
+        final EditText email = dialogView.findViewById(R.id.forgottenEmail);
 
         Button updateBtn = dialogView.findViewById(R.id.send_recovery);
         updateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                FirebaseAuth.getInstance().sendPasswordResetEmail(email.getText().toString().trim())
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    Toasty.success(getApplicationContext(), "Email sent! Check your inbox..",
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+
+
 
                 alertDialog.dismiss();
             }
