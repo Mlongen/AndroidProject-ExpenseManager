@@ -3,6 +3,8 @@ package com.example.marcelolongen.expensemanager;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.StrictMode;
@@ -103,6 +105,7 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
+                showProgress();
                 handleFacebookAccessToken(loginResult.getAccessToken());
             }
 
@@ -191,11 +194,7 @@ public class LoginActivity extends AppCompatActivity {
         db = Database.getInstance();
         db.readContentsFromFile(user.getUid());
 
-        ProgressDialog progress = new ProgressDialog(this);
-
-        progress.setMessage("Retrieving data. Please wait...");
-        progress.setCancelable(false); // disable dismiss by tapping outside of the dialog
-        progress.show();
+        showProgress();
         try {
             Overview.fetchContent();
         } catch (IOException e) {
@@ -215,6 +214,14 @@ public class LoginActivity extends AppCompatActivity {
                                       }
                                   },
                 6000);
+    }
+
+    private void showProgress() {
+        ProgressDialog progress = new ProgressDialog(this);
+
+        progress.setMessage("Retrieving data. Please wait...");
+        progress.setCancelable(false); // disable dismiss by tapping outside of the dialog
+        progress.show();
     }
 
     @Override
@@ -256,7 +263,7 @@ public class LoginActivity extends AppCompatActivity {
                         if (!TextUtils.isEmpty(email.getText().toString().trim()) &&
                                 !TextUtils.isEmpty(password.getText().toString().trim()) &&
                                 !TextUtils.isEmpty(confirmPassword.getText().toString().trim()) &&
-                                password.getText().toString().trim().equals(confirmPassword.getText().toString().trim()) && password.getText().toString().trim().length() < 6) {
+                                password.getText().toString().trim().equals(confirmPassword.getText().toString().trim()) && password.getText().toString().trim().length() > 5) {
                             createUser(email.getText().toString().trim(), password.getText().toString().trim());
                             confirmPassword.setVisibility(View.GONE);
                             submitButton.setText("Login");
@@ -265,7 +272,7 @@ public class LoginActivity extends AppCompatActivity {
 //
 
                         } else {
-                            if (password.getText().toString().trim().length() < 6) {
+                            if (password.getText().toString().trim().length() > 5) {
                                 Toasty.error(LoginActivity.this, "Password needs to be at least 6 digits long.", Toast.LENGTH_SHORT).show();
                             } else {
                                 Toasty.error(LoginActivity.this, "Please fill fields correctly.", Toast.LENGTH_SHORT).show();
@@ -315,6 +322,7 @@ public class LoginActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
 
                             user = mAuth.getCurrentUser();
+
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -345,7 +353,10 @@ public class LoginActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
-                                    Toasty.success(getApplicationContext(), "Email sent! Check your inbox..",
+                                    Toasty.success(getApplicationContext(), "Email sent. Check your inbox.",
+                                            Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toasty.error(getApplicationContext(), "Error. User doesn't exist.",
                                             Toast.LENGTH_SHORT).show();
                                 }
                             }
@@ -359,6 +370,7 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         alertDialog = builder.create();
+        alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         alertDialog.show();
     }
 

@@ -12,35 +12,47 @@
 
 
     <LinearLayout
+        android:layout_marginBottom="20dp"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:orientation="horizontal"
-        android:gravity="center">
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
 
 
         <TextView
-            android:gravity="center"
-            android:textSize="40sp"
-            android:textColor="@color/colorPrimary"
-            android:fontFamily="@font/din_condensed"
-            android:text="Overview"
+            android:layout_marginTop="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            />
-
-
-
-
-
+            android:fontFamily="@font/din_condensed"
+            android:gravity="center"
+            android:text="Overview"
+            android:textColor="@color/colorPrimary"
+            android:textSize="32sp" />
 
 
     </LinearLayout>
-
-
-    <ScrollView
-
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="440dp">
+        android:layout_height="50dp">
+
+        <TextView
+            android:layout_marginLeft="200dp"
+            android:gravity="center"
+            android:textSize="13sp"
+            android:text="Month: "
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+        <Spinner
+            android:id="@+id/monthSpinner"
+            android:entries="@array/monthspinner2"
+            android:textAlignment="center"
+            android:layout_width="140dp"
+            android:layout_height="50dp">
+
+        </Spinner>
+
+
+    </LinearLayout>
 
         <LinearLayout
             android:focusableInTouchMode="true"
@@ -52,48 +64,275 @@
                 android:layout_marginTop="30dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
+                android:gravity="left"
                 android:orientation="vertical">
 
-                <TextView
-                    android:fontFamily="@font/din_condensed"
-                    android:layout_marginTop="5dp"
-                    android:textSize="22sp"
-                    android:text="Total spent this month"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <TextView
-                    android:id="@+id/totalSum"
-                    android:layout_marginTop="5dp"
-                    android:textSize="18sp"
-                    android:text="CAD 0.0"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                <LinearLayout
 
-                <TextView
+                    android:weightSum="2"
+                    android:layout_marginBottom="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-                    android:textSize="22sp"
-                    android:fontFamily="@font/din_condensed"
-                    android:layout_marginTop="20dp"
-                    android:text="Category with highest spending this month:"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    />
-                <TextView
-                    android:layout_marginTop="5dp"
-                    android:id="@+id/highestName"
-                    android:textSize="18sp"
-                    android:text="Social Life"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <TextView
-                    android:layout_marginTop="5dp"
-                    android:text="0.0"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="18sp"
-                    android:id="@+id/highestCategory"
-                    />
+                    <TextView
+                        android:id="@+id/totalLabel"
+                        android:gravity="right"
+                        android:paddingLeft="60dp"
+                        android:text="No data"
+                        android:textSize="18sp"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/totalSum"
+                        android:paddingRight="60dp"
+                        android:gravity="right"
+                        android:text=""
+                        android:textSize="18sp"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layoutApparel"
+                    android:visibility="gone"
+                    android:weightSum="2"
+                    android:layout_marginBottom="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:paddingLeft="60dp"
+                        android:text="Apparel: "
+                        android:textSize="18sp"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/apparel_value"
+                        android:paddingRight="60dp"
+                        android:gravity="right"
+                        android:text="CAD 1000.00"
+                        android:textSize="18sp"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/layoutBeauty"
+                    android:visibility="gone"
+                    android:weightSum="2"
+                    android:layout_marginBottom="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:paddingLeft="60dp"
+                        android:text="Beauty: "
+                        android:textSize="18sp"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/beauty_value"
+                        android:paddingRight="60dp"
+                        android:gravity="right"
+                        android:text="CAD 1000.00"
+                        android:textSize="18sp"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/layoutBills"
+                    android:visibility="gone"
+                    android:weightSum="2"
+                    android:layout_marginBottom="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:paddingLeft="60dp"
+                        android:text="Bills: "
+                        android:textSize="18sp"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/bills_value"
+                        android:paddingRight="60dp"
+                        android:gravity="right"
+                        android:text="CAD 1000.00"
+                        android:textSize="18sp"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/layoutEducation"
+                    android:visibility="gone"
+                    android:weightSum="2"
+                    android:layout_marginBottom="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:paddingLeft="60dp"
+                        android:text="Education: "
+                        android:textSize="18sp"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/education_value"
+                        android:paddingRight="60dp"
+                        android:gravity="right"
+                        android:text="CAD 1000.00"
+                        android:textSize="18sp"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layoutFood"
+                    android:visibility="gone"
+                    android:weightSum="2"
+                    android:layout_marginBottom="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:paddingLeft="60dp"
+                        android:text="Food: "
+                        android:textSize="18sp"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/food_value"
+                        android:paddingRight="60dp"
+                        android:gravity="right"
+                        android:text="CAD 1000.00"
+                        android:textSize="18sp"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/layoutHealth"
+                    android:visibility="gone"
+                    android:weightSum="2"
+                    android:layout_marginBottom="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:paddingLeft="60dp"
+                        android:text="Health: "
+                        android:textSize="18sp"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/health_value"
+                        android:paddingRight="60dp"
+                        android:gravity="right"
+                        android:text="CAD 1000.00"
+                        android:textSize="18sp"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/layoutHousing"
+                    android:visibility="gone"
+                    android:weightSum="2"
+                    android:layout_marginBottom="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:paddingLeft="60dp"
+                        android:text="Housing: "
+                        android:textSize="18sp"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/housing_value"
+                        android:paddingRight="60dp"
+                        android:gravity="right"
+                        android:text="CAD 1000.00"
+                        android:textSize="18sp"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layoutSocialLife"
+                    android:visibility="gone"
+                    android:weightSum="2"
+                    android:layout_marginBottom="60dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:paddingLeft="60dp"
+                        android:text="Social Life: "
+                        android:textSize="18sp"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/social_life_value"
+                        android:paddingRight="60dp"
+                        android:gravity="right"
+                        android:text="CAD 1000.00"
+                        android:textSize="18sp"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/layoutOther"
+                    android:weightSum="2"
+                    android:visibility="gone"
+                    android:layout_marginBottom="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:paddingLeft="60dp"
+                        android:text="Other: "
+                        android:textSize="18sp"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/other_value"
+                        android:paddingRight="60dp"
+                        android:gravity="right"
+                        android:text="CAD 1000.00"
+                        android:textSize="18sp"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+
 
 
             </LinearLayout>
@@ -105,7 +344,6 @@
         </LinearLayout>
 
 
-    </ScrollView>
 
 
 

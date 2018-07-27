@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -145,10 +147,13 @@ public class Overview extends AppCompatActivity {
         bmb.setPiecePlaceEnum(PiecePlaceEnum.HAM_2);
         bmb.setButtonPlaceEnum(ButtonPlaceEnum.HAM_2);
         bmb.setButtonTopMargin(1000);
+        bmb.setBackgroundEffect(true);
+
         for (int i = 0; i < bmb.getPiecePlaceEnum().pieceNumber(); i++) {
             HamButton.Builder builder = new HamButton.Builder()
                     .normalImageRes(images.get(i))
                     .normalText(names[i])
+                    .pieceColor(Color.WHITE)
                     .shadowEffect(true)
                     .listener(new OnBMClickListener() {
                         @Override
@@ -183,6 +188,7 @@ public class Overview extends AppCompatActivity {
         myPager = findViewById(R.id.pager);
 
         myAdapter = new MyPagerAdapter(getSupportFragmentManager());
+        myPager.setOffscreenPageLimit(3);
         myPager.setAdapter(myAdapter);
 
         myTab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -361,6 +367,7 @@ public class Overview extends AppCompatActivity {
         View dialogView = inflater.inflate(R.layout.settings_dialog, null);
         builder.setView(dialogView);
 
+
         TextView rate = dialogView.findViewById(R.id.rateUpdatedOn);
         rate.setText("Rates were last updated on: " + ratesLastUpdated);
 
@@ -415,6 +422,7 @@ public class Overview extends AppCompatActivity {
 
 
         alertDialog = builder.create();
+        alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         alertDialog.show();
     }
 

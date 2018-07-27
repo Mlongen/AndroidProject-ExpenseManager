@@ -39,6 +39,7 @@ p
             android:layout_height="wrap_content" />
 
         <EditText
+            android:inputType="textPassword"
             android:id="@+id/password"
             android:layout_marginTop="20dp"
             android:hint="Password"
@@ -46,6 +47,7 @@ p
             android:layout_gravity="center"
             android:layout_height="wrap_content" />
         <EditText
+            android:inputType="textPassword"
             android:id="@+id/confirmPassword"
             android:layout_marginTop="20dp"
             android:hint="Confirm password"
