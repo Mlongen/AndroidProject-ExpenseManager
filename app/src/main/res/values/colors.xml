@@ -17,4 +17,5 @@
     <color name="black_overlay">#66000000</color>
     <color name="black">#000000</color>
     <color name="green">#2ecc71</color>
+    <color name="cpb_white">#ffffff</color>
 </resources>

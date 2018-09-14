@@ -47,7 +47,8 @@
             android:entries="@array/monthspinner2"
             android:textAlignment="center"
             android:layout_width="140dp"
-            android:layout_height="50dp">
+            android:layout_height="50dp"
+            android:layout_marginBottom="50dp">
 
         </Spinner>
 
@@ -75,6 +76,7 @@
                     android:layout_height="wrap_content">
 
                     <TextView
+                        android:textStyle="bold|italic"
                         android:id="@+id/totalLabel"
                         android:gravity="right"
                         android:paddingLeft="60dp"
@@ -85,6 +87,7 @@
                         android:layout_height="wrap_content" />
 
                     <TextView
+                        android:textStyle="bold|italic"
                         android:id="@+id/totalSum"
                         android:paddingRight="60dp"
                         android:gravity="right"

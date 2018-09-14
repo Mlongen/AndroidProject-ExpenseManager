@@ -88,11 +88,11 @@ public class FoldingCellListAdapter extends ArrayAdapter<Item> {
         if (item.getCategory().equals("Food")) {
             viewHolder.layout.setBackgroundColor(rgb("#f1c40f"));
             viewHolder.layout2.setBackgroundColor(rgb("#f1c40f"));
-            viewHolder.headImage.setImageResource(R.drawable.food);
+            viewHolder.headImage.setImageResource(R.drawable.food2);
         } else if (item.getCategory().equals("Bills")) {
             viewHolder.layout.setBackgroundColor(rgb("#e74c3c"));
             viewHolder.layout2.setBackgroundColor(rgb("#e74c3c"));
-            viewHolder.headImage.setImageResource(R.drawable.bills);
+            viewHolder.headImage.setImageResource(R.drawable.bills2);
         } else if (item.getCategory().equals("Housing")) {
             viewHolder.layout.setBackgroundColor(rgb("#9E9E9E"));
             viewHolder.layout2.setBackgroundColor(rgb("#9E9E9E"));
@@ -101,17 +101,17 @@ public class FoldingCellListAdapter extends ArrayAdapter<Item> {
         } else if (item.getCategory().equals("Health")) {
             viewHolder.layout.setBackgroundColor(rgb("#2ecc71"));
             viewHolder.layout2.setBackgroundColor(rgb("#2ecc71"));
-            viewHolder.headImage.setImageResource(R.drawable.health);
+            viewHolder.headImage.setImageResource(R.drawable.health2);
         } else if (item.getCategory().equals("Beauty")) {
             viewHolder.layout.setBackgroundColor(rgb("#E91E63"));
             viewHolder.layout2.setBackgroundColor(rgb("#E91E63"));
-            viewHolder.headImage.setImageResource(R.drawable.beauty);
+            viewHolder.headImage.setImageResource(R.drawable.beauty2);
         } else if (item.getCategory().equals("Social Life")) {
-            viewHolder.headImage.setImageResource(R.drawable.party);
+            viewHolder.headImage.setImageResource(R.drawable.party2);
             viewHolder.layout.setBackgroundColor(rgb("#9C27B0"));
             viewHolder.layout2.setBackgroundColor(rgb("#9C27B0"));
         } else if (item.getCategory().equals("Apparel")) {
-            viewHolder.headImage.setImageResource(R.drawable.housing);
+            viewHolder.headImage.setImageResource(R.drawable.housing2);
             viewHolder.layout.setBackgroundColor(rgb("#009688"));
             viewHolder.layout2.setBackgroundColor(rgb("#009688"));
         }

@@ -2,53 +2,17 @@ package com.example.marcelolongen.expensemanager;
 
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.DatePicker;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.anychart.anychart.AnyChart;
-import com.anychart.anychart.AnyChartView;
-import com.anychart.anychart.DataEntry;
-import com.anychart.anychart.EnumsAlign;
-import com.anychart.anychart.LegendLayout;
-import com.anychart.anychart.Pie;
-import com.anychart.anychart.ValueDataEntry;
-import com.anychart.anychart.chart.common.Event;
-import com.anychart.anychart.chart.common.ListenersInterface;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.nightonke.boommenu.BoomButtons.ButtonPlaceEnum;
-import com.nightonke.boommenu.BoomButtons.HamButton;
-import com.nightonke.boommenu.BoomButtons.OnBMClickListener;
-import com.nightonke.boommenu.BoomMenuButton;
-import com.nightonke.boommenu.Piece.PiecePlaceEnum;
-import com.orhanobut.dialogplus.DialogPlus;
-import com.orhanobut.dialogplus.OnClickListener;
-import com.orhanobut.dialogplus.ViewHolder;
-
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
-
-import es.dmoral.toasty.Toasty;
-
 
 /**
  * A simple {@link Fragment} subclass.
@@ -118,6 +82,7 @@ public class OverviewFragment extends Fragment {
             }
         }
         monthSpinnerClickListener(monthSpinner);
+
         return thisView;
     }
 
@@ -162,14 +127,24 @@ public class OverviewFragment extends Fragment {
         TextView totalSum = view.findViewById(R.id.totalSum);
         totalSum.setText(currentRateName + ": " + String.format("%.2f",currentRate * sumTotal));
 
+
         TextView totalLabel = view.findViewById(R.id.totalLabel);
-        totalLabel.setText("Total: ");
+
+        if (sumTotal == 0) {
+            totalLabel.setText("No data");
+        } else {
+            totalLabel.setText("Total: ");
+        }
+
 
         LinearLayout foodLayout = view.findViewById(R.id.layoutFood);
         foodLayout.setVisibility(View.GONE);
+
         LinearLayout billsLayout = view.findViewById(R.id.layoutBills);
         billsLayout.setVisibility(View.GONE);
 
+        LinearLayout housingLayout = view.findViewById(R.id.layoutHousing);
+        housingLayout.setVisibility(View.GONE);
 
         LinearLayout healthLayout = view.findViewById(R.id.layoutHealth);
         healthLayout.setVisibility(View.GONE);
@@ -204,7 +179,7 @@ public class OverviewFragment extends Fragment {
         if (monthSum[2] > 0) {
             TextView housingSum = view.findViewById(R.id.housing_value);
 
-            billsLayout.setVisibility(View.VISIBLE);
+            housingLayout.setVisibility(View.VISIBLE);
             housingSum.setText(currentRateName + ": " + String.format("%.2f",currentRate * monthSum[2]));
         }
         if (monthSum[3] > 0) {

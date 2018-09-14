@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -16,26 +15,23 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseError;
+
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
@@ -47,9 +43,6 @@ import com.nightonke.boommenu.Piece.PiecePlaceEnum;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.OnClickListener;
 import com.orhanobut.dialogplus.ViewHolder;
-import com.tooltip.Tooltip;
-
-import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -74,7 +67,7 @@ public class Overview extends AppCompatActivity {
     private DatePicker datePicker;
     private static DetailsFragment detailsFragment;
     private static OverviewFragment overviewFragment;
-    private GraphFragment graphFragment;
+    private static GraphFragment graphFragment;
     private MyPagerAdapter myAdapter;
     private FirebaseAuth mAuth;
     private static String baseString = "CAD";
@@ -141,6 +134,7 @@ public class Overview extends AppCompatActivity {
 
 
 
+
         ArrayList<Integer> images = new ArrayList<>();
         images.add(R.drawable.settings);
         images.add(R.drawable.logout);
@@ -176,6 +170,7 @@ public class Overview extends AppCompatActivity {
             bmb.addBuilder(builder);
 
         }
+
 
 
 
@@ -354,8 +349,8 @@ public class Overview extends AppCompatActivity {
         overviewFragment.updateData(overView);
 
         //trying to update graphfragment
-//        View graphView = graphFragment.getThisView();
-//        graphFragment.updatePieChart();
+        View graphView = graphFragment.getThisView();
+        graphFragment.updatePieChart();
 //        graphFragment.updateBarChart();
     }
 
@@ -419,13 +414,10 @@ public class Overview extends AppCompatActivity {
 
             }
         });
-
-
         alertDialog = builder.create();
         alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         alertDialog.show();
     }
-
 
 
     public static String fetchContent() throws IOException {
@@ -445,7 +437,6 @@ public class Overview extends AppCompatActivity {
                 response.append(inputLine);
             }
             in.close();
-
             jSON = response.toString();
             return response.toString();
         }
