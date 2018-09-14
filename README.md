@@ -10,7 +10,7 @@
 
 An Android application developed to help control day-to-day expenses.
 
- <img src="http://marcelo.co.technology/img/expensemanager.gif?raw=true" width="250px" height="500px">
+ <img src="http://marcelo.co.technology/img/expensemanager.gif?raw=true" width="300px" height="550px">
 
  -The data is displayed on a table, which can be filtered by month. 
  
