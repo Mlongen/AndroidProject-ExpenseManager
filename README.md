@@ -19,13 +19,27 @@ An Android application developed to help control day-to-day expenses.
  -User can convert its expenses on the go by selecting a currency. Utilizes an external currency conversion API.
 
  ## Libraries used
+
  [Material TextField](https://github.com/florent37/MaterialTextField) - TextField library
+
+
  [FoldingCell](https://github.com/Ramotion/folding-cell) - ListView library
+
+
  [BoomMenu](https://github.com/Nightonke/BoomMenu) - Menu button
+
+
  [DialogPlus](https://github.com/orhanobut/dialogplus) - Custom dialog for adding expenses
+
+
  [Toasty](https://github.com/GrenderG/Toasty) - Colorful toasts
+
+
   [MPAndroidChart](https://github.com/PhilJay/MPAndroidCharty) - Charts
+
+
   [GSON](https://github.com/google/gson) - Parse JSON data
+  
 
 ## Author
 
