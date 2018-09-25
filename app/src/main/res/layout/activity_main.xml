@@ -1,78 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="top"
-    android:orientation="vertical"
-    android:background="@drawable/intro"
 
-    tools:context=".LoginActivity">
+    android:background="@drawable/intro"
+    tools:context="com.marcelolongen.expensemanager.LoginActivity">
 
     <TextView
 
-        android:textColor="@color/colorPrimary"
-        android:fontFamily="@font/din_condensed"
-        android:textSize="50sp"
-        android:layout_gravity="center|top"
-        android:layout_marginTop="40dp"
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:fontFamily="@font/din_condensed"
         android:shadowColor="@color/cpb_white"
         android:text="Login"
-        />
+        android:textColor="@color/colorPrimary"
+        android:textSize="50sp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="140dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
+        android:layout_marginStart="32dp"
         android:background="@color/red_transparent"
-        android:layout_marginTop="50dp"
-        android:layout_width="320dp"
         android:orientation="vertical"
-        android:layout_gravity="center"
-        android:layout_height="wrap_content">
-p
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView">
+
+
         <EditText
             android:id="@+id/username"
-            android:layout_marginTop="20dp"
-            android:hint="E-mail"
             android:layout_width="300dp"
-            android:layout_gravity="center"
-            android:layout_height="wrap_content" />
-
-        <EditText
-            android:inputType="textPassword"
-            android:id="@+id/password"
-            android:layout_marginTop="20dp"
-            android:hint="Password"
-            android:layout_width="300dp"
-            android:layout_gravity="center"
-            android:layout_height="wrap_content" />
-        <EditText
-            android:inputType="textPassword"
-            android:id="@+id/confirmPassword"
-            android:layout_marginTop="20dp"
-            android:hint="Confirm password"
-            android:layout_width="300dp"
-            android:layout_gravity="center"
             android:layout_height="wrap_content"
-            android:visibility="gone"/>
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:hint="E-mail" />
+
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:hint="@string/password"
+            android:inputType="textPassword" />
+
+        <EditText
+            android:id="@+id/confirmPassword"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:hint="@string/confirm_password"
+            android:inputType="textPassword"
+            android:visibility="gone" />
 
         <Button
 
-            style="@style/Base.Widget.AppCompat.Button.Colored"
             android:id="@+id/submitButton"
-            android:layout_gravity="center"
-            android:text="Submit"
+            style="@style/Base.Widget.AppCompat.Button.Colored"
             android:layout_width="200dp"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/submit" />
+
         <Button
 
-            style="@style/Base.Widget.AppCompat.Button.Colored"
             android:id="@+id/createUserButton"
-            android:text="Create user"
-            android:layout_gravity="center"
+            style="@style/Base.Widget.AppCompat.Button.Colored"
             android:layout_width="200dp"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/create_user" />
 
 
         <com.facebook.login.widget.LoginButton
@@ -80,20 +96,19 @@ p
             android:layout_width="190dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="0dp"
-            android:layout_marginBottom="30dp" />
-
+            android:layout_marginBottom="30dp"
+            android:layout_marginTop="0dp" />
 
 
         <TextView
             android:id="@+id/forgotPassword"
-            android:textColor="@color/black"
-            android:text="Forgot password?"
-            android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"/>
+            android:layout_gravity="center"
+            android:layout_marginBottom="20dp"
+            android:text="@string/forgot_password"
+            android:textColor="@color/black" />
 
     </LinearLayout>
 
-</LinearLayout>
+</android.support.constraint.ConstraintLayout>

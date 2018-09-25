@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:id="@+id/graph_fragment"
-    tools:context=".GraphFragment">
+    tools:context="com.marcelolongen.expensemanager.GraphFragment">
 
 <ScrollView
     android:layout_width="match_parent"
@@ -26,7 +26,7 @@
         <TextView
             android:layout_marginTop="15dp"
             android:textSize="30sp"
-            android:text="Graphs"
+            android:text="@string/graphs"
 
             android:fontFamily="@font/din_condensed"
             android:textColor="@color/colorPrimary"
@@ -41,7 +41,7 @@
                 android:layout_marginLeft="200dp"
                 android:gravity="center"
                 android:textSize="13sp"
-                android:text="Month: "
+                android:text="@string/month"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent" />
             <Spinner
@@ -67,7 +67,8 @@
             android:layout_marginTop="50dp"
             android:id="@+id/horizontal_barchart"
             android:layout_width="350dp"
-            android:layout_height="350dp" />
+            android:layout_height="350dp"
+            android:visibility="gone"/>
         <!--<com.anychart.anychart.AnyChartView-->
 
         <!--android:layout_marginTop="20dp"-->
@@ -80,9 +81,10 @@
 
         <Button
             android:id="@+id/change_data"
-            android:text="CHANGE DATA"
+            android:text="@string/change_data"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:visibility="gone"/>
 
 
     </LinearLayout>

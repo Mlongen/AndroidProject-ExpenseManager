@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:827067864615:android:0f1ec4b03a7eab36",
         "android_client_info": {
-          "package_name": "com.example.marcelolongen.expensemanager"
+          "package_name": "com.marcelolongen.expensemanager"
         }
       },
       "oauth_client": [
@@ -18,7 +18,7 @@
           "client_id": "827067864615-1j7tdtu5qum917c1r71l8s39ff3tosgh.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.marcelolongen.expensemanager",
+            "package_name": "com.marcelolongen.expensemanager",
             "certificate_hash": "1c5a6d056eb9dc09c9d1af45413297c8ee13fb73"
           }
         },

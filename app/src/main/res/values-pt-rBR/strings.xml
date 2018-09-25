@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="change_data">ALTERAR DADOS</string>
+    <string name="graphs">Graficos</string>
+    <string name="month">Mes:</string>
+    <string name="password">Senha</string>
+    <string name="confirm_password">Confirmar senha</string>
+    <string name="submit">Enviar</string>
+    <string name="create_user">Criar usuario</string>
+    <string name="forgot_password">Esqueceu a senha?</string>
+    <string name="overview">Visao geral</string>
+    <string name="details">Detalhes</string>
+    <string name="graph">Graficos</string>
+    <string name="add_new_expense">Adicionar nova despesa</string>
+    <string name="please_input_amount_using_canadian_dollars_cad">ATENCAO! SEMPRE USAR DOLARES CANADENSES (CAD)</string>
+    <string name="description">Descricao</string>
+
+</resources>

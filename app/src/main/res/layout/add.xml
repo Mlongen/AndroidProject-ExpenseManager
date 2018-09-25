@@ -11,7 +11,7 @@
         android:layout_marginTop="15dp"
         android:textSize="26sp"
         android:layout_marginLeft="40dp"
-        android:text="Add new Expense"
+        android:text="@string/add_new_expense"
         android:fontFamily="@font/din_condensed"
         android:textColor="@color/colorPrimary"
         android:layout_width="wrap_content"
@@ -32,7 +32,7 @@
             android:layout_width="179dp"
             android:layout_height="60dp"
             android:paddingTop="-20dp"
-            app:labelText="Description">
+            app:labelText="@string/description">
 
             <studio.carbonylgroup.textfieldboxes.ExtendedEditText
                 android:id="@+id/add_description"
@@ -101,6 +101,7 @@
             android:id="@+id/spinner"
             android:layout_width="165dp"
             android:layout_height="50dp"
+            android:spinnerMode="dropdown"
             android:entries="@array/spinner"
 
             />
@@ -110,7 +111,7 @@
             android:layout_width="150dp"
             android:layout_height="60dp"
             android:layout_marginLeft="25dp"
-            android:text="Submit" />
+            android:text="@string/submit" />
 
 
 
@@ -124,7 +125,7 @@
     android:textSize="11sp"
     android:layout_gravity="center"
     android:textColor="@color/A400red"
-    android:text="PLEASE INPUT AMOUNT USING CANADIAN DOLLARS (CAD)"
+    android:text="@string/please_input_amount_using_canadian_dollars_cad"
     android:id="@+id/currency_alert"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content" />

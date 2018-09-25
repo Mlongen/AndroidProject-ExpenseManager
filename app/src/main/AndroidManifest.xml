@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.marcelolongen.expensemanager">
+    package="com.marcelolongen.expensemanager">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -29,15 +29,15 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginActivity"
-            android:windowSoftInputMode="stateHidden|adjustResize">
+        <activity android:name="com.marcelolongen.expensemanager.LoginActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Overview"
+        <activity android:name="com.marcelolongen.expensemanager.Overview"
             android:logo="@drawable/logo"/>
 
     </application>

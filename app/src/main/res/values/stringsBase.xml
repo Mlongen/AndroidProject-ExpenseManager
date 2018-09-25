@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">ExpenseManager</string>
     <string-array name="spinner">
-        <item>Category:</item>
         <item>Food</item>
         <item>Bills</item>
         <item>Housing</item>

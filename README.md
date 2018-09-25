@@ -10,13 +10,16 @@
 
 An Android application developed to help control day-to-day expenses.
 
- <img src="http://marcelo.co.technology/img/expensemanager.gif?raw=true" width="300px" height="550px">
+ <img src="http://marcelo.co.technology/img/expensemanager.gif?raw=true">
 
- -The data is displayed on a table, which can be filtered by month. 
+ <br>
+ <br>
+
+ - The data is displayed on a table, which can be filtered by month. 
  
- -User can easily track their expenses and visualize information on different kinds of charts.
+ - User can easily track their expenses and visualize information on different kinds of charts.
  
- -User can convert its expenses on the go by selecting a currency. Utilizes an external currency conversion API.
+ - User can convert its expenses on the go by selecting a currency. Utilizes an external currency conversion API.
 
  ## Libraries used
 
@@ -39,7 +42,7 @@ An Android application developed to help control day-to-day expenses.
 
 
   [GSON](https://github.com/google/gson) - Parse JSON data
-  
+
 
 ## Author
 

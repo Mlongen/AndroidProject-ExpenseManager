@@ -2,5 +2,20 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="change_data">CHANGE DATA</string>
+    <string name="graphs">Graphs</string>
+    <string name="month">Month:</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="submit">Submit</string>
+    <string name="create_user">Create user</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="overview">Overview</string>
+    <string name="details">Details</string>
+    <string name="graph">Graph</string>
+    <string name="add_new_expense">Add new Expense</string>
+    <string name="please_input_amount_using_canadian_dollars_cad">PLEASE INPUT AMOUNT USING CANADIAN DOLLARS (CAD)</string>
+    <string name="description">Description</string>
+    <string name="category">Category:</string>
 
 </resources>
