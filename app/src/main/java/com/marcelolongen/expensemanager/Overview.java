@@ -324,7 +324,7 @@ public class Overview extends AppCompatActivity {
 
                     }
                 })
-                .setExpanded(true, (int)(height / 2.5))  // This will enable the expand feature, (similar to android L share dialog)
+                .setExpanded(true, (int)(height / 2.2))  // This will enable the expand feature, (similar to android L share dialog)
                 .setContentHolder(new ViewHolder(R.layout.add))
                 .setCancelable(true)
                 .create();

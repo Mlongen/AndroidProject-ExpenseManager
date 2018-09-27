@@ -10,7 +10,6 @@ import java.util.ArrayList;
 
 public class Database {
     private ArrayList<Item> itemObjects;
-    private ArrayList categories;
 
     public Database() {
         itemObjects = new ArrayList<>();
@@ -22,17 +21,6 @@ public class Database {
         return itemObjects;
     }
 
-    public void setItemObjects(ArrayList<Item> itemObjects) {
-        this.itemObjects = itemObjects;
-    }
-
-    public ArrayList getCategories() {
-        return categories;
-    }
-
-    public void setCategories(ArrayList categories) {
-        this.categories = categories;
-    }
 
 
     public static Database getInstance(){
